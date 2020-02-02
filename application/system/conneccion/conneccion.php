@@ -5,7 +5,7 @@ class  ObtenerConexiondb{
     public static function conectarEmpresa($name_db){
 
         $Conexion_entidad = null;
-        $host     ='adminnub_entidad_dental';
+        $host     = 'localhost';
         $database = "$name_db";
         $username = 'adminnub_entidad_dental'; #USUARIO
         $password = 'Pablo_1997'; #PASSWORD
