@@ -7,8 +7,8 @@ class  ObtenerConexiondb{
         $Conexion_entidad = null;
         $host     ='adminnub_entidad_dental';
         $database = "$name_db";
-        $username = 'Pablo_1997';
-        $password = '';
+        $username = 'adminnub_entidad_dental'; #USUARIO
+        $password = 'Pablo_1997'; #PASSWORD
         $utf8mb4  = 'utf8mb4'; //mysql utf8
 
         try{
