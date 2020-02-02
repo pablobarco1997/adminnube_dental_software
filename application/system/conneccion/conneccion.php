@@ -5,9 +5,9 @@ class  ObtenerConexiondb{
     public static function conectarEmpresa($name_db){
 
         $Conexion_entidad = null;
-        $host     ='localhost';
+        $host     ='adminnub_entidad_dental';
         $database = "$name_db";
-        $username = 'root';
+        $username = 'Pablo_1997';
         $password = '';
         $utf8mb4  = 'utf8mb4'; //mysql utf8
 

@@ -6,9 +6,9 @@ class CONECCION_ENTIDAD{
 
         $conexion = null;
         $host     = 'localhost';
-        $database = 'schema_dental_entity_login'; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
-        $username = 'root';
-        $password = '';
+        $database = 'adminnub_schema_dental_entity_login'; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
+        $username = 'adminnub_entidad_dental';
+        $password = 'Pablo_1997';
         $utf8mb4  = 'utf8mb4';
 
         try{
