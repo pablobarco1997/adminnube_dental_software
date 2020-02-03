@@ -60,6 +60,9 @@
             if(!empty($view ))
             {
                 include_once DOL_DOCUMENT.'/admin_entidades_dentales/view/'.$view.'.php';
+
+            }else{
+
             }
 
         ?>

@@ -11,11 +11,14 @@
             <table class="table" id="list_clinicas" width="100%">
                 <thead>
                     <th>ID ENTIDAD</th>
+                    <th>SCHEMA</th>
+
                     <th>NOMBRE CLINICA</th>
                     <th>DIRECCION</th>
                     <th>EMAIL</th>
                     <th>PAIS</th>
                     <th>CIUDAD</th>
+
                 </thead>
             </table>
         </div>

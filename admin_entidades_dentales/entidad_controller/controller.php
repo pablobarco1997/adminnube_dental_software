@@ -26,6 +26,53 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             echo json_encode($output);
             break;
+
+        case 'validar_clinica':
+
+            $errores = [];
+            $error   = 0;
+
+            $nombre_clinica = GETPOST('nomb_clinica');
+            $nomb_schema    = GETPOST('nomb_schema');
+            $num_entidad    = GETPOST('num_entidad');
+
+            $sqlResult   = " select * from tab_entidades_dental where nombre_db_entity = '$nomb_schema' or numero_entity = '$num_entidad' or nombre = '$nombre_clinica' ";
+            $resul       = $dbEntidad->query($sqlResult);
+
+            if($resul && $resul->rowCount() > 0)
+            {
+
+                while( $ob = $resul->fetchObject() )
+                {
+
+                    if($ob->nombre_db_entity == $nomb_schema) #nombre de la schema de la clinica
+                    {
+                        $errores['nomb_schema'] = 'El nombre de el schema de la clinica ya existe no puede registrar el mismo';
+                        $error++;
+                    }
+
+                    if($ob->numero_entity == $num_entidad)
+                    {
+                        $error++;
+                        $errores['num_entidad'] = 'El numero de la entidad ya existe no puede registrar el mismo';
+                    }
+
+                    if($ob->nombre == $nombre_clinica)
+                    {
+                        $error++;
+                        $errores['nom_clinica'] = 'El nombre de la clinica ya existe no puede registrar el mismo';
+                    }
+                }
+            }
+
+
+            $output = [
+                'error'     => $error,
+                'respuesta' => $errores
+            ];
+
+            echo json_encode($output);
+            break;
     }
 
 }
@@ -69,6 +116,7 @@ function list_entidades()
             $row = array();
 
             $row[] = $ob1->num_entidad;
+            $row[] = $ob1->db_dental;
             $row[] = $ob1->nom_clinica;
             $row[] = $ob1->direccion;
             $row[] = $ob1->email;
