@@ -1,6 +1,25 @@
 <?php
 
+
     include_once '../application/config/lib.global.php';
+
+    session_start();
+
+    if(isset($_SESSION['is_open']))
+    {
+        session_unset();
+        session_destroy();
+    }
+
+    $login = 0;
+
+    if(isset($_SESSION['is_open_admin']) && $_SESSION['is_open_admin'] == '1')
+    {
+        $login = 1;
+
+    }
+
+//    print_r($login); die();
 
 ?>
 
@@ -13,12 +32,14 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <title>Document</title>
 
+    <script src="<?php echo DOL_HTTP.'/admin_entidades_dentales/js/ohsnap/ohsnap.js'?>"></script>
     <!-- jQuery 3 -->
     <script src="<?php echo DOL_HTTP.'/public/bower_components/jquery/dist/jquery.js'?>"></script>
 
-
-    <!--    bootstrap-->
+    <!-- Bootstrap 3.4 -->
     <link rel="stylesheet" href="<?php echo  DOL_HTTP.'/public/bower_components/bootstrap/dist/css/bootstrap.min.css' ?>">
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/dist/js/bootstrap.min.js'?>"></script>
+
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/font-awesome/css/font-awesome.min.css'?>">
 
@@ -49,6 +70,8 @@
 
 <body>
 
+<div id="ohsnap"></div>
+
 <!--    BARRA DE NAVEGACION-->
     <?php include_once DOL_DOCUMENT .'/admin_entidades_dentales/view/nav_barra_navegacion.php'?>
 
@@ -57,15 +80,16 @@
 
         <?php
 
-            if(!empty($view ))
+            if(!empty($view) && $login == 1)
             {
                 include_once DOL_DOCUMENT.'/admin_entidades_dentales/view/'.$view.'.php';
-
-            }else{
-
             }
 
-        ?>
+            if($login==0){
+
+                include_once DOL_DOCUMENT.'/admin_entidades_dentales/view/login_admin.php';
+
+            } ?>
     </div>
 
 </body>

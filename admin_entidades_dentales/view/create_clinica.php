@@ -22,7 +22,7 @@
                     <label class="control-label col-sm-4 " style="text-align: center" for="nom_schema">Nombre del schema</label>
                     <div class="col-sm-8">
                         <div class="input-group">
-                            <span class="input-group-addon">adminnub_</span>
+                            <span class="input-group-addon">adminnub_schema_</span>
                             <input id="nom_schema" type="text" class="form-control presionar"   style="z-index:1">
                             <small style="color: red" id="mensaje_nom_schema"></small>
                         </div>
@@ -34,6 +34,22 @@
                     <div class="col-sm-8">
                         <input type="text" class="form-control presionar" id="num_entidad" >
                         <small style="color: red" id="mensaje_num_entidad"></small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4 " style="text-align: center" for="clinica_email">Clinica E-mail</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control presionar" id="clinica_email" >
+                        <small style="color: red" id="mensaje_clinica_email"></small>
+                    </div>
+                </div>
+
+                <div class="form-group">
+                    <label class="control-label col-sm-4 " style="text-align: center" for="password_clinica_email">Clinica - Password E-mail</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control presionar" id="password_clinica_email" >
+                        <small style="color: red" id="mensaje_clinica_email"></small>
                     </div>
                 </div>
 
@@ -93,28 +109,40 @@
 
 <script>
 
+    // $('#errores_modal_create_clinica').modal('show');
+
     $('#crear_clinica').click(function(){
 
-        var nombreClinica = $('#nom_clinica').val();
-        var nombre_schema = 'adminnub_'+$('#nom_schema').val();
-        var numeroEntidad = $('#num_entidad').val();
+        var nombreClinica                = $('#nom_clinica').val();
+        var nombre_schema                = 'adminnub_schema_' + $('#nom_schema').val();
+        var numeroEntidad                = $('#num_entidad').val();
+        var clinicaEmail                 = $('#clinica_email').val();
+        var PasswordClinicaEmil          = $('#password_clinica_email').val();
 
         /** CREARCION DE USUARIO **/
 
-        var nombre   = $('#nombre_doc').val();
-        var apellido = $('#apellido_doc').val();
-        var usuario  = $('#nom_usuario').val();
-        var password = $('#usu_password').val();
+        var nombre          = $('#nombre_doc').val();
+        var apellido        = $('#apellido_doc').val();
+        var usuario         = $('#nom_usuario').val();
+        var password        = $('#usu_password').val();
 
+        /*  array de usuario */
         var createUsuario = {nombre, apellido, usuario, password};
+
         var datos = {
-            'ajaxSend'     : 'ajaxSend' ,
-            'accion'       : 'crear_clinica_dental' ,
-            'nomb_clinica' : nombreClinica,
-            'nomb_schema'  : nombre_schema,
-            'num_entidad'  : numeroEntidad,
-            'create'       : createUsuario,
+            'ajaxSend'            : 'ajaxSend' ,
+            'accion'              : 'crear_clinica_dental' ,
+            'nomb_clinica'        : nombreClinica,
+            'nomb_schema'         : nombre_schema,
+            'num_entidad'         : numeroEntidad,
+            'clinica_email'       : clinicaEmail,
+            'password_clinica'    : PasswordClinicaEmil,
+
+            'createUsuario'       : createUsuario,
+
         };
+
+        console.log( datos );
 
         if( INVALIC_REPETIR_CLINICA_CREDENCIALES(nombreClinica, nombre_schema, numeroEntidad) == 0)
         {
@@ -126,6 +154,41 @@
                 async:false,
                 success:function(resp){
 
+                    if( resp.error.error_text == '' && resp.error.arror_table.length == 0)
+                    {
+                        ohSnap('Información Actualizada', { color: 'green'});
+                    }
+
+                    //mensajes de errores
+                    if(resp.error.error_text != '')
+                    {
+                        notificacion(resp.error.error_text , {color: 'red'});
+                    }
+
+                    //Lista de Errores con al creacion de tablas
+                    if(resp.error.arror_table.length > 0)
+                    {
+                        var list_err = resp.error.arror_table;
+                        var table = "" +
+                            "<tbody>";
+
+                        var i = 0;
+                        while(i <= list_err.length -1)
+                        {
+                            table += "<tr>";
+                                table +=  "<td> "+ list_err[i][0] +" </td>";
+                            table += "</tr>";
+                            i++;
+                        }
+
+                        table += "</tbody>";
+
+                        $('#list_errores').html( table );
+
+                        $('#errores_modal_create_clinica').modal('show');
+                    }
+
+                    console.log(resp);
                 }
 
             });

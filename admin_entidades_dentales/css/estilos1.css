@@ -8,3 +8,57 @@ body{
 .form-control{
     border-radius: 0px; !important;
 }
+
+.login{
+    padding: 30px;
+    box-shadow: 0 5px 8px 0 rgba(0, 0, 0, 0.2), 0 9px 26px 0 rgba(0, 0, 0, 0.19);
+}
+
+/*COL-CENTER BLOCK COL- BOOSTRAP*/
+
+.col-center-block {
+    float: none;
+    display: block;
+    margin: 0 auto;
+    /* margin-left: auto; margin-right: auto; */
+}
+
+
+/*ALERTA OHSANP*/
+/* ALERTS */
+/* inspired by Twitter Bootstrap */
+
+.alert {
+    padding: 15px;
+    margin-bottom: 20px;
+    border: 1px solid #eed3d7;
+    border-radius: 4px;
+    position: absolute;
+    bottom: 0px;
+    right: 21px;
+    /* Each alert has its own width */
+    float: right;
+    clear: right;
+    background-color: white;
+}
+
+.alert-red {
+    color: white;
+    background-color: #DA4453;
+}
+.alert-green {
+    color: white;
+    background-color: #37BC9B;
+}
+.alert-blue {
+    color: white;
+    background-color: #4A89DC;
+}
+.alert-yellow {
+    color: white;
+    background-color: #F6BB42;
+}
+.alert-orange {
+    color:white;
+    background-color: #E9573F;
+}

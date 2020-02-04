@@ -3,7 +3,7 @@
 
 require_once '../../application/config/lib.global.php';
 require_once DOL_DOCUMENT.'/application/config/conneccion_entidad.php';
-
+require_once DOL_DOCUMENT.'/admin_entidades_dentales/class/create_clinica.class.php';
 
 global $dbEntidad;
 
@@ -63,6 +63,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         $errores['nom_clinica'] = 'El nombre de la clinica ya existe no puede registrar el mismo';
                     }
                 }
+
             }
 
 
@@ -73,6 +74,97 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             echo json_encode($output);
             break;
+
+
+        case 'crear_clinica_dental':
+
+            $errores = "";
+
+            $nomb_clinica        = GETPOST('nomb_clinica');
+            $nomb_schema         = GETPOST('nomb_schema');
+            $nu_entity           = GETPOST('num_entidad');
+            $clinicaEmail        = GETPOST('clinica_email');
+            $passwordClinica     = GETPOST('password_clinica');
+
+            $Clinica = new CREAR_CLINICA_DENTAL($dbEntidad);
+
+            $Clinica->nombre_clinica     =  $nomb_clinica;
+            $Clinica->nombre_schema      =  str_replace(' ', '_', $nomb_schema);
+            $Clinica->numero_entidad     =  $nu_entity;
+            $Clinica->email_clinica      =  $clinicaEmail;
+            $Clinica->password_email     =  $passwordClinica;
+
+            $errores = $Clinica->create_clinica();
+
+            $output = [
+                'error'     => $errores,
+            ];
+
+            echo json_encode($output);
+            break;
+
+
+        case 'inicio_sesion_admin':
+
+            $errores = "";
+
+            $usuario  = GETPOST('usuario');
+            $password = GETPOST('password');
+
+            if(isset($_SESSION['is_open']))
+            {
+                session_start();
+                session_unset();
+                session_destroy();
+            }
+            if(isset($_SESSION['is_open_admin']))
+            {
+                $errores = 'LA SESION YA ESTA INICIADA';
+
+            }else{
+
+                if(invalic_comparar_sesion_admin($usuario, $password) != false)
+                {
+                    $compare = invalic_comparar_sesion_admin($usuario, $password);
+
+                    session_start();
+
+                    $_SESSION['is_open_admin']  = "1";  #INICIO DE SESION CON 1
+
+                    $_SESSION['USUARIO']        = $compare['USUARIO'];
+                    $_SESSION['ESTADO_LOGIN']   = $compare['ESTADO_LOGIN'];
+                    $_SESSION['PASSWORD']       = $compare['PASSWORD'];
+
+
+                }else{
+
+                    $errores = 'El usuario o password ingresados estan Incorrecto';
+                }
+
+            }
+
+//            echo '<pre>';
+//            print_r($errores);
+//            die();
+            $output = [
+                'errores' => $errores
+            ];
+
+            echo json_encode($output);
+            break;
+
+        case 'cerrar_sesion':
+
+            session_start();
+            session_unset();
+            session_destroy();
+
+            $output = ["res" => "cerrar"];
+
+            echo json_encode($output);
+            break;
+
+
     }
 
 }
@@ -81,7 +173,33 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
 
 
+function invalic_comparar_sesion_admin($usuario, $password)
+{
 
+    global $dbEntidad;
+
+    $objetUsuario = array();
+
+    $sqlComp = "SELECT s.nombre usuario, estado_login, password, password2 FROM tab_sesion_admin s where s.password = md5('$password') and s.nombre = '$usuario' limit 1";
+    $rsComp  = $dbEntidad->query($sqlComp);
+
+    if($rsComp && $rsComp->rowCount() > 0)
+    {
+        $ob1 = $rsComp->fetchObject();
+
+        $objetUsuario = array(
+            'USUARIO'               =>  $ob1->usuario ,
+            'ESTADO_LOGIN'          =>  $ob1->estado_login ,
+            'PASSWORD'              =>  $ob1->password2 ,
+        );
+
+    }else{
+
+        return false;
+    }
+
+    return $objetUsuario;
+}
 
 
 
