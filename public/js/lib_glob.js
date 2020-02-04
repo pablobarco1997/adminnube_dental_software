@@ -274,7 +274,7 @@ $("#Update_entidad").click(function() {
 
             if(resp.error == 1)
             {
-                location.reload(true);
+                location.reload(); 
             }
         }
     });
