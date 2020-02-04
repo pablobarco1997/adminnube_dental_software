@@ -62,7 +62,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             if($rs == 0) //No se Update
             {
-                if($link != false)
+                if($link == false) //Si el link me retorna un false entonces se envia
                 {
                     unlink($link);
                 }
