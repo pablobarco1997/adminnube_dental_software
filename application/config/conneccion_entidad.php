@@ -31,7 +31,7 @@ class CONECCION_ENTIDAD{
 
         $sql = "";
 
-        $sql  = " UPDATE schema_dental_entity_login.tab_entidades_dental SET";
+        $sql  = " UPDATE tab_entidades_dental SET";
         $sql .= " nombre    = '$nombre' ,";
         $sql .= " direccion = '$direccion' ,";
         $sql .= " telefono = '$telefono' ,";
