@@ -320,7 +320,7 @@
             $host     = 'localhost';
             $database = $schema; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
             $username = 'adminnub_entidad_dental'; #USUARIO
-            $password = 'Pablo_9707'; #PASSWIRD
+            $password = 'Pablo_1997';  #PASSWIRD #PASSWORD SERVIDOR REMOTO ==> Pablo_1997
 
             $db_conneccion = mysqli_connect( $host, $username, $password, $database );
 
