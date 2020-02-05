@@ -5,10 +5,10 @@ class CONECCION_ENTIDAD{
     public static function CONNECT_ENTITY(){
 
         $conexion = null;
-        $host     = 'localhost';
+        $host     = 'galapagos2';
         $database = 'adminnub_schema_dental_entity_login'; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
         $username = 'adminnub_entidad_dental'; #USUARIO
-        $password = 'Pablo_1997'; #PASSWIRD
+        $password = 'Pablo_9707'; #PASSWIRD
         $utf8mb4  = 'utf8mb4';
 
         try{
