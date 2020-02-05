@@ -134,7 +134,7 @@
             {
                 $Obj = $rs->fetchObject();
 
-                $img = $url."/logos_icon/logo_default/doct-icon.jpg"; //Icon por default
+                $img = $url."/logos_icon/logo_default/doct-icon2.png"; //Icon por default
                 if(!empty($Obj->icon))
                 {
                     $img = $url."/logos_icon/".$directorio_url."/".$Obj->icon;

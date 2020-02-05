@@ -296,7 +296,8 @@
             {
                 for ($i = 0; $i <= count($SQL_ARRAY) -1; $i++)
                 {
-                    $mysql_consulta = $SQL_ARRAY[$i];
+                    $mysql_consulta = utf8_decode( $SQL_ARRAY[$i] ); #CONVIERTE LA CADENA CORRECTA - PARA EXECUTAR EL SCRIPT MYSQL
+
                     if($mysql_consulta != ";")
                     {
                         $rs = $connecion->query($mysql_consulta);
@@ -318,8 +319,8 @@
 
             $host     = 'localhost';
             $database = $schema; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
-            $username = 'root'; #USUARIO
-            $password = ''; #PASSWIRD
+            $username = 'adminnub_entidad_dental'; #USUARIO
+            $password = 'Pablo_9707'; #PASSWIRD
 
             $db_conneccion = mysqli_connect( $host, $username, $password, $database );
 
