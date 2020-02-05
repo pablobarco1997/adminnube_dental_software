@@ -5,7 +5,7 @@ class CONECCION_ENTIDAD{
     public static function CONNECT_ENTITY(){
 
         $conexion = null;
-        $host     = 'galapagos2';
+        $host     = '116.202.133.113'; #ip o nombre del servidor remoto o local
         $database = 'adminnub_schema_dental_entity_login'; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
         $username = 'adminnub_entidad_dental'; #USUARIO
         $password = 'Pablo_9707'; #PASSWIRD
