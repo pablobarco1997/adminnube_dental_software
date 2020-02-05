@@ -14,10 +14,11 @@
 
 
         /** REGISTRO DE USUARIO **/
-        var $nombre_usuario   = "";
-        var $apellido_usuario = "";
-        var $usuario          = "";
-        var $password         = "";
+        var $usu_nombre_usuario   = "";
+        var $usu_apellido_usuario = "";
+        var $usu_usuario          = "";
+        var $usu_password         = "";
+        var $usu_email         = "";
 
 
         function __construct($db)
@@ -28,10 +29,12 @@
         public  function create_clinica()
         {
 
+            $id_entity_Glob = 0;
+
             $errores['error_text'] = "";
             $errores['arror_table'] = "";
 
-            $sql_clinica_create = "insert into schema_dental_entity_login.tab_entidades_dental (nombre_db_entity, numero_entity, nombre, email, conf_email, conf_password, pais )";
+            $sql_clinica_create = "insert into tab_entidades_dental (nombre_db_entity, numero_entity, nombre, email, conf_email, conf_password, pais )";
             $sql_clinica_create .= "value(";
             $sql_clinica_create .= " '". str_replace(' ', '_', $this->nombre_schema) ."'  , ";
             $sql_clinica_create .= " '".$this->numero_entidad."' ,";
@@ -45,8 +48,9 @@
 //            echo '<pre>';  print_r($sql_clinica_create); die() ;
 
             $result = $this->Connecion_corp->query($sql_clinica_create);
+            $id_entity_Glob = $this->Connecion_corp->lastInsertId('tab_entidades_dental');
 
-            if($result)
+            if($result && $id_entity_Glob > 0)
             {
                 #CREAMOS LA BASDE DE DATOS DE LA ENTIDAD DE LA CLINICA
                 $respuesta = $this->create_clinica_db(true, false, $this->nombre_schema);
@@ -66,6 +70,19 @@
                         {
                             $errores['arror_table'][] = $stringMysqlError;
                         }
+
+                        #CREAMOS EL USUARIO PARA EL LOGEO
+                        $err = $this->create_UserClinicaEntidades($id_entity_Glob);
+
+                        if($err > 0){
+                            #err => contien el ultimo id insertado en el login
+                            #CREAR USUARIO Y ODONTOLOGO
+                            $this->create_UserClinica($this->nombre_schema, $err);
+
+                        }else{
+                            $errores[] = "Ocurrio un error al crear el usuario para la clinica: tab_login_entity";
+                        }
+
                     }
                 }
 
@@ -78,6 +95,69 @@
 //            die();
 
             return $errores;
+        }
+
+        public function create_UserClinicaEntidades( $identity )
+        {
+
+            $sql =  " insert into tab_login_entity (nombre_user, password_user, email, fk_entidad, nombre, apellido, estado )";
+            $sql .= " value( ";
+            $sql .= " '".$this->usu_usuario."', ";
+            $sql .= " md5('".$this->usu_password."'), ";
+            $sql .= " '". $this->usu_email ."', ";
+            $sql .= " $identity , ";
+            $sql .= " '" .$this->usu_nombre_usuario. "' , ";
+            $sql .= " '" .$this->usu_apellido_usuario. "' , ";
+            $sql .= " 'A'  ";
+            $sql .= " ) ;";
+
+//            print_r($sql); die();
+            $resul = $this->Connecion_corp->query($sql);
+            $UltiIdLoginEntity = $this->Connecion_corp->lastInsertId('tab_login_entity');
+
+            if(!$resul){
+                return false;
+            }else{
+                return $UltiIdLoginEntity;
+            }
+
+        }
+
+        public function create_UserClinica($nombre_db_entidad, $idloginEntity)
+        {
+            #CREAMOS UNA CONEXCION TEMPORAL HACIA LA BASE DE DATOS RECIEN CREADA
+            $connecion = $this::Conneccion($nombre_db_entidad);
+
+            #INSERTP EL ODONTOLOGO
+            $sqldoct  = " insert into `tab_odontologos` (`nombre_doc`, `apellido_doc`, `estado`, `email`) ";
+            $sqldoct .= "VALUE(";
+            $sqldoct .= " '". $this->usu_nombre_usuario."' ,";
+            $sqldoct .= " '". $this->usu_apellido_usuario."', ";
+            $sqldoct .= " 'A' ,";
+            $sqldoct .= " '". $this->usu_email."' ";
+            $sqldoct .= ")";
+            $rs = $connecion->query($sqldoct);
+
+            $iddoct = mysqli_insert_id($connecion); #obtengo el ultimo id
+
+            #UPDATE ENTYTI LOGIN  - se update el idusuario que contiene el id del doctor
+            $sqlupdate = "UPDATE `tab_login_entity` SET `id_usuario`='$iddoct' WHERE `rowid`='$idloginEntity';";
+            $this->Connecion_corp->query($sqlupdate);
+
+            #LOGIN tab_login_users
+            $sql  = " insert into tab_login_users (usuario, passwords, fk_doc, permisos, tipo_usuario, passwor_abc, estado)";
+            $sql .= "value(";
+            $sql .= " '" . $this->usu_usuario . "' ,";
+            $sql .= " md5('" . $this->usu_password . "') ,";
+            $sql .= " '" . $iddoct . "' ,";
+            $sql .= " '{\"consultar\":\"true\",\"agregar\":\"true\",\"modificar\":\"true\",\"eliminar\":\"true\"}' ,";
+            $sql .= " 1 ,";
+            $sql .= " '" . base64_encode($this->usu_password) . "' ,";
+            $sql .= " 'A' ";
+            $sql .= ")";
+//            print_r($sql);
+            $connecion->query($sql);
+
         }
 
         /*CREAR LA BASE DE DATOS*/

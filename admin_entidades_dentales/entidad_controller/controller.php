@@ -86,6 +86,21 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $clinicaEmail        = GETPOST('clinica_email');
             $passwordClinica     = GETPOST('password_clinica');
 
+
+            #USUARIO - REGISTRO
+            $nomb_usu                = GETPOST('nombre_usu');
+            $apell_usu               = GETPOST('apellido_usu');
+            $usurio_usu              = GETPOST('usuario_usu');
+            $passwd_usu              = GETPOST('password_usu');
+            $email_usuario           = GETPOST('email_usuario');
+
+
+//            print_r($nomb_usu);
+//            print_r($apell_usu);
+//            print_r($usurio_usu);
+//            print_r($passwd_usu);
+//            die();
+
             $Clinica = new CREAR_CLINICA_DENTAL($dbEntidad);
 
             $Clinica->nombre_clinica     =  $nomb_clinica;
@@ -93,6 +108,13 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $Clinica->numero_entidad     =  $nu_entity;
             $Clinica->email_clinica      =  $clinicaEmail;
             $Clinica->password_email     =  $passwordClinica;
+
+            #PARAMETROS USUARIO
+            $Clinica->usu_nombre_usuario        = $nomb_usu;
+            $Clinica->usu_apellido_usuario      = $apell_usu;
+            $Clinica->usu_usuario               = $usurio_usu;
+            $Clinica->usu_password              = $passwd_usu;
+            $Clinica->usu_email                 = $email_usuario;
 
             $errores = $Clinica->create_clinica();
 

@@ -79,6 +79,13 @@
                 </div>
 
                 <div class="form-group">
+                    <label class="control-label col-sm-4 " style="text-align: center" for="usu_email">Usuario - Email</label>
+                    <div class="col-sm-8">
+                        <input type="text" class="form-control presionar" id="usu_email" >
+                    </div>
+                </div>
+
+                <div class="form-group">
                     <label class="control-label col-sm-4 " style="text-align: center" for="usu_password">Password</label>
                     <div class="col-sm-8">
                         <div class="input-group">
@@ -121,13 +128,12 @@
 
         /** CREARCION DE USUARIO **/
 
-        var nombre          = $('#nombre_doc').val();
-        var apellido        = $('#apellido_doc').val();
-        var usuario         = $('#nom_usuario').val();
-        var password        = $('#usu_password').val();
+        var nombre               = $('#nombre_doc').val();
+        var apellido             = $('#apellido_doc').val();
+        var usuario              = $('#nom_usuario').val();
+        var password             = $('#usu_password').val();
+        var email_usuario        = $('#usu_email').val();
 
-        /*  array de usuario */
-        var createUsuario = {nombre, apellido, usuario, password};
 
         var datos = {
             'ajaxSend'            : 'ajaxSend' ,
@@ -138,13 +144,16 @@
             'clinica_email'       : clinicaEmail,
             'password_clinica'    : PasswordClinicaEmil,
 
-            'createUsuario'       : createUsuario,
-
+            'nombre_usu'        : nombre ,
+            'apellido_usu'      : apellido,
+            'usuario_usu'       : usuario,
+            'password_usu'      : password,
+            'email_usuario'     : email_usuario,
         };
 
         console.log( datos );
 
-        if( INVALIC_REPETIR_CLINICA_CREDENCIALES(nombreClinica, nombre_schema, numeroEntidad) == 0)
+        if( INVALIC_REPETIR_CLINICA_CREDENCIALES(nombreClinica, nombre_schema, numeroEntidad, usuario) == 0)
         {
             $.ajax({
                 url:  "<?= DOL_HTTP ?>" + "/admin_entidades_dentales/entidad_controller/controller.php",
@@ -156,7 +165,11 @@
 
                     if( resp.error.error_text == '' && resp.error.arror_table.length == 0)
                     {
+
                         ohSnap('Información Actualizada', { color: 'green'});
+                        setTimeout(function() {
+                            window.location = "<?= DOL_HTTP ?>" + "/admin_entidades_dentales/index.php?view=inicio";
+                        }, 1000);
                     }
 
                     //mensajes de errores
@@ -169,16 +182,31 @@
                     if(resp.error.arror_table.length > 0)
                     {
                         var list_err = resp.error.arror_table;
+
+                        var puedo = 0;
+                        var c = 0;
+                        while(c <= list_err.length -1)
+                        {
+                            if(list_err[i][0]!="")
+                            {
+                                puedo++;
+                            }
+                            c++;
+                        }
+
                         var table = "" +
                             "<tbody>";
 
-                        var i = 0;
-                        while(i <= list_err.length -1)
+                        if(puedo == 0)
                         {
-                            table += "<tr>";
+                            var i = 0;
+                            while(i <= list_err.length -1)
+                            {
+                                table += "<tr>";
                                 table +=  "<td> "+ list_err[i][0] +" </td>";
-                            table += "</tr>";
-                            i++;
+                                table += "</tr>";
+                                i++;
+                            }
                         }
 
                         table += "</tbody>";
@@ -197,7 +225,7 @@
 
 
     //SE VALIDA SI LOS DATOS A INGRESAR YA ESTAN INGRESADO O ES DIFERENSTES
-    function  INVALIC_REPETIR_CLINICA_CREDENCIALES(nom_clinica , nomb_schema, num_entidad )
+    function  INVALIC_REPETIR_CLINICA_CREDENCIALES(nom_clinica , nomb_schema, num_entidad,  usuario)
     {
 
         var puedo = 0;
