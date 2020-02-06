@@ -1,6 +1,8 @@
 
 <?php
 
+    include_once '../lib_cpanel/cpaneluapi.class.php';
+
     class CREAR_CLINICA_DENTAL{
 
         var $Connecion_corp; #VARIABLE DE CONEXCION DE LA ENTIDAD PRINCIPAL - TABLA ENTIDADES PADRES
