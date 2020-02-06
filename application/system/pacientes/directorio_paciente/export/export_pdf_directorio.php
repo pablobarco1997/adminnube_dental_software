@@ -148,21 +148,22 @@ $mpdf->WriteHTML($body.$pdf);
 //para evitar errores por los mensajes de avertencias que salen por pantalles bloqueando la salida del pdf
 
 ob_start();
-error_reporting(E_ALL & ~E_NOTICE);
+//error_reporting(E_ALL & ~E_NOTICE);
 
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
+//ini_set('display_errors', 0);
+//ini_set('log_errors', 1);
 
 //limpieza del búfer antes de la salida () antes de generar elarchivo pdf
-ob_end_clean(); // cleaning the buffer before Output()
+//ob_end_clean(); // cleaning the buffer before Output()
 
+ob_end_flush();
 error_reporting(E_ALL);
 
 #Muestro la Informacion
 
 //$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
 //$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
-$mpdf->Output(); 
+$mpdf->Output();
 
 exit;
 
