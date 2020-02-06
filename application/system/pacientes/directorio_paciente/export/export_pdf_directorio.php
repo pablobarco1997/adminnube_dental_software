@@ -11,6 +11,14 @@ require_once DOL_DOCUMENT .'/application/config/main.php';
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 
 
+//para evitar errores por los mensajes de avertencias que salen por pantalles bloqueando la salida del pdf
+
+ob_start();
+error_reporting(E_ALL & ~E_NOTICE);
+
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
+
 $id = GETPOST('id');
 
 $datos = [];
