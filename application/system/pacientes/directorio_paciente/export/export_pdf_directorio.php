@@ -156,6 +156,8 @@ ini_set('log_errors', 1);
 //limpieza del búfer antes de la salida () antes de generar elarchivo pdf
 ob_clean(); // cleaning the buffer before Output()
 
+error_reporting(E_ALL);
+
 #Muestro la Informacion
 $mpdf->Output('DirectorioPacientes.pdf', 'I');
 
