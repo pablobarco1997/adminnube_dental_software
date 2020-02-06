@@ -104,7 +104,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $Clinica = new CREAR_CLINICA_DENTAL($dbEntidad);
 
             $Clinica->nombre_clinica     =  $nomb_clinica;
-            $Clinica->nombre_schema      =  'adminnub_schema_'.str_replace(' ', '_', $nomb_schema);
+            $Clinica->nombre_schema      =  'schema_'.str_replace(' ', '_', $nomb_schema);
             $Clinica->numero_entidad     =  $nu_entity;
             $Clinica->email_clinica      =  $clinicaEmail;
             $Clinica->password_email     =  $passwordClinica;

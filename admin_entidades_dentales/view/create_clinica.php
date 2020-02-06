@@ -192,9 +192,11 @@
                                 puedo++;
                             }
 
+                            console.log(puedo);
+                            console.log('error');
+                            console.log(list_err[c].length);
                             c++;
                         }
-
 
                         if(puedo == 0)
                         {
