@@ -5,6 +5,13 @@
 
         var $Connecion_corp; #VARIABLE DE CONEXCION DE LA ENTIDAD PRINCIPAL - TABLA ENTIDADES PADRES
 
+
+        /** CREDENCIALES CPANEL ***/
+        /*CREDENCIALES CPANEL*/
+        private $cpanelCred = array("url"=>"localhost","port"=>2087,"user"=>"adminnub", "pwd"=>"B9707pablo1997");
+        private $dbUser     = array("userName"=>"entidad_dental","pwd"=>"Pablo_1997");
+        private $cpanel;
+
         /** BASE DE DATOS  **/
         var $nombre_clinica = "";
         var $nombre_schema  = ""; #SCHEMA DE LA CLINICA
@@ -24,6 +31,9 @@
         function __construct($db)
         {
             $this->Connecion_corp = $db;
+
+            #PARA CREAR LA DB EN CPANEL
+            $this->cpanel = new cpanelAPI($this->cpanelCred['user'], $this->cpanelCred['pwd'], $this->cpanelCred['url']); //INSTANCIAMOS EL OBJETO UAPI
         }
 
         public  function create_clinica()
@@ -168,8 +178,11 @@
             #CREO EL SCHEMA DE LA CLINICA
             if($schema == true)
             {
+                /*
                 $Schema = "CREATE SCHEMA `$nombre_db_entidad` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;";
-                $result = $this->Connecion_corp->query($Schema);
+                $result = $this->Connecion_corp->query($Schema);*/
+
+                $result = $this->CpanelUAPIOperation_CreateDataBase($nombre_db_entidad);
 
                 if($result){
                     return true;
@@ -311,6 +324,30 @@
             }
 
             return $errores2;
+        }
+
+        /**CREA LA BASE DE DATOS DESDE PHP HACIA CPANEL**/
+        public  function CpanelUAPIOperation_CreateDataBase($dbName)
+        {
+            $dbNameInCPanel = $this->cpanelCred['user']."_".$dbName;
+
+            $createDB = $this->cpanel->uapi->Mysql->create_database(array('name' => $dbNameInCPanel)); //Create the database
+
+            if($createDB){
+
+                $databaseuser = $this->cpanelCred['user']."_".$this->dbUser['userName'];
+
+                // Assign the user to have access to the database.
+                $access = $this->cpanel->uapi->set_privileges_on_database(array('user' => $databaseuser, 'database' => $dbNameInCPanel, 'privileges' => 'ALL'));
+
+                if($access) #base de datos creada
+                {
+                    return true;
+                }
+
+            }
+
+            return false;
         }
 
         /*CONNECION STATIC A LA ENTIDAD CREADA*/

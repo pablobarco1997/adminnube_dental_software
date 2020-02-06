@@ -121,7 +121,7 @@
     $('#crear_clinica').click(function(){
 
         var nombreClinica                = $('#nom_clinica').val();
-        var nombre_schema                = 'adminnub_schema_' + $('#nom_schema').val();
+        var nombre_schema                = $('#nom_schema').val();
         var numeroEntidad                = $('#num_entidad').val();
         var clinicaEmail                 = $('#clinica_email').val();
         var PasswordClinicaEmil          = $('#password_clinica_email').val();
@@ -175,7 +175,7 @@
                     //mensajes de errores
                     if(resp.error.error_text != '')
                     {
-                        notificacion(resp.error.error_text , {color: 'red'});
+                        ohSnap(resp.error.error_text , {color: 'red'});
                     }
 
                     //Lista de Errores con al creacion de tablas
