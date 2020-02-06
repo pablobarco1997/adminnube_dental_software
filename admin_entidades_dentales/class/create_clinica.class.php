@@ -184,7 +184,7 @@
                 $Schema = "CREATE SCHEMA `$nombre_db_entidad` DEFAULT CHARACTER SET utf8 COLLATE utf8_general_ci ;";
                 $result = $this->Connecion_corp->query($Schema);*/
 
-                $result = $this->CpanelUAPIOperation_CreateDataBase($nombre_db_entidad);
+                $result = $this->CpanelUAPIOperation_CreateDataBase('schema_'.$nombre_db_entidad);
 
                 if($result){
                     return true;

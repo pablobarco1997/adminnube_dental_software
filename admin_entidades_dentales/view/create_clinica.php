@@ -195,11 +195,12 @@
                             c++;
                         }
 
-                        var table = "" +
-                            "<tbody>";
 
                         if(puedo == 0)
                         {
+                            var table = "" +
+                                "<tbody>";
+
                             var i = 0;
                             while(i <= list_err.length -1)
                             {
@@ -208,13 +209,14 @@
                                 table += "</tr>";
                                 i++;
                             }
+
+
+                            table += "</tbody>";
+
+                            $('#list_errores').html( table );
+
+                            $('#errores_modal_create_clinica').modal('show');
                         }
-
-                        table += "</tbody>";
-
-                        $('#list_errores').html( table );
-
-                        $('#errores_modal_create_clinica').modal('show');
                     }
 
                     console.log(resp);
