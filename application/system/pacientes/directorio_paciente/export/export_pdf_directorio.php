@@ -156,15 +156,14 @@ ob_start();
 //limpieza del búfer antes de la salida () antes de generar elarchivo pdf
 //ob_end_clean(); // cleaning the buffer before Output()
 
-ob_end_flush();
 error_reporting(E_ALL);
 
 #Muestro la Informacion
 
-//$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
+$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
 //$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
-$mpdf->Output();
-
+//$mpdf->Output();
 exit;
+ob_clean();
 
 ?>
