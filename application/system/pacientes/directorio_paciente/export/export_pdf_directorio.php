@@ -128,6 +128,10 @@ $header = '
 
 $mpdf->mirrorMargins = 1;	// Use different Odd/Even headers and footers and mirror margins
 
+
+//echo $pdf;
+//print_r($pdf); die();
+
 $mpdf->SetHTMLHeader($header,"E",true);
 $mpdf->SetHTMLHeader($header,"O",true);
 $mpdf->SetHTMLFooter($footer,"E",true);
@@ -150,8 +154,6 @@ $mpdf->WriteHTML($body.$pdf);
 ob_start();
 //error_reporting(E_ALL & ~E_NOTICE);
 
-//ini_set('display_errors', 0);
-//ini_set('log_errors', 1);
 
 //limpieza del búfer antes de la salida () antes de generar elarchivo pdf
 //ob_end_clean(); // cleaning the buffer before Output()
@@ -159,11 +161,15 @@ ob_start();
 error_reporting(E_ALL);
 
 #Muestro la Informacion
+ob_clean();
+
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
 
 $mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
 //$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
 //$mpdf->Output();
 exit;
-ob_clean();
+
 
 ?>
