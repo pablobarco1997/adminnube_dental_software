@@ -161,7 +161,8 @@ error_reporting(E_ALL);
 #Muestro la Informacion
 
 //$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
-$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
+//$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
+$mpdf->Output(); 
 
 exit;
 
