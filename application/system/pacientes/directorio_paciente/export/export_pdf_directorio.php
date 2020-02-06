@@ -101,6 +101,7 @@ $footer = '<!--<hr style="margin-bottom: 2px"><table width="100%" style="font-si
 
 
 
+
 $mpdf=new mPDF('c','LETTER','10px','arial',
     12, //left
     12, // right
@@ -166,9 +167,9 @@ ob_clean();
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
-$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
+//$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
 //$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
-//$mpdf->Output();
+$mpdf->Output('doc.pdf', \Mpdf\Output\Destination::FILE);
 exit;
 
 
