@@ -11,13 +11,7 @@ require_once DOL_DOCUMENT .'/application/config/main.php';
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 
 
-//para evitar errores por los mensajes de avertencias que salen por pantalles bloqueando la salida del pdf
 
-ob_start();
-error_reporting(E_ALL & ~E_NOTICE);
-
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
 
 $id = GETPOST('id');
 
@@ -149,6 +143,15 @@ $mpdf->SetDisplayMode('fullpage');
 $mpdf->SetTitle('Directorio' );
 
 $mpdf->WriteHTML($body.$pdf);
+
+
+//para evitar errores por los mensajes de avertencias que salen por pantalles bloqueando la salida del pdf
+
+ob_start();
+error_reporting(E_ALL & ~E_NOTICE);
+
+ini_set('display_errors', 0);
+ini_set('log_errors', 1);
 
 //limpieza del búfer antes de la salida () antes de generar elarchivo pdf
 ob_clean(); // cleaning the buffer before Output()
