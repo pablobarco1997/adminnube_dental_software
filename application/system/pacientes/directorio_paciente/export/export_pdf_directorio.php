@@ -10,6 +10,10 @@ if(!isset($_SESSION['is_open']))
 require_once DOL_DOCUMENT .'/application/config/main.php';
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 
+//limpieza del búfer antes de la salida () antes de generar elarchivo pdf
+ob_clean(); // cleaning the buffer before Output()
+
+
 $id = GETPOST('id');
 
 $datos = [];
@@ -37,6 +41,8 @@ $pdf .= '<style>
             
             .tables {
                 border: 1px solid black;
+                font-size: 1.1rem;
+                padding: 3px;
             }
             
             </style>';
@@ -86,7 +92,7 @@ $footer = '<!--<hr style="margin-bottom: 2px"><table width="100%" style="font-si
           <table>
                 <tr>
                     <td width="50%">
-                        <div align="left">www.dentalSoftware.com</div>
+                        <div align="left">'. $conf->EMPRESA->INFORMACION->email .'</div>
                     </td>
                     <td width="50%" align="right">
                         <!--<div  style="float: right">Pagina:{PAGENO}</div>-->

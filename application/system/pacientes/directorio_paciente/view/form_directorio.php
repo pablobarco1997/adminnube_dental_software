@@ -1,3 +1,9 @@
+<style>
+    .list_option li{
+        padding: 10px;
+    }
+</style>
+
 <div class="row">
     <div class="col-md-12">
 
@@ -10,29 +16,35 @@
             <div class="box-body">
 
                 <div class="row">
-
-                        <div class="col-lg-8 margenTopDiv">
-
-                            <div style="background-color: #E5E8E8; border-radius: 3px; padding: 3px; width: 100%" >
-                                <div class="checkbox" style="margin: 0px">
-                                    &nbsp;&nbsp;
+                    <div class="form-group col-xs-12 col-md-12">
+                        <div class="col-lg-8 col-xs-12 col-md-6 col-sm-6 margenTopDiv pull-right">
+                            <ul class="list-inline pull-right list_option">
+                                <li>
+                                    <div class="checkbox btnhover" style="margin: 0px; padding: 5px">
+                                        <label>
+                                            <input type="checkbox" id="checkPacienteDesact">
+                                            <i class="fa fa-user-times"></i> Ver lista de pacientes desabilitados
+                                        </label>
+                                    </div>
+                                </li>
+                                <li>
                                     <label>
-                                        <input type="checkbox" id="checkPacienteDesact">
-                                        <i class="fa fa-user-times"></i> Ver lista de pacientes desabilitados
+                                        <a id="imprimir_listPacientes" class="btnhover" style="padding: 5px; color: #333333" target="_blank" href="<?= DOL_HTTP .'/application/system/pacientes/directorio_paciente/export/export_pdf_directorio.php' ?>"><i class="fa fa-print"></i>   &nbsp;Imprimir Lista</a>
                                     </label>
-                                    &nbsp;
-                                    <label>
-                                        <a id="imprimir_listPacientes" target="_blank" href="<?= DOL_HTTP .'/application/system/pacientes/directorio_paciente/export/export_pdf_directorio.php' ?>"><i class="fa fa-print"></i>   &nbsp;Imprimir Lista</a>
-                                    </label>
-
+                                </li>
+                                <li>
                                     <label for="">
-                                        <a href="<?= DOL_HTTP .'/application/system/pacientes/nuevo_paciente/index.php?view=nuev_paciente'?>"> <i class="fa fa-users"></i> Nuevo Paciente</a>
+                                        <a class="btnhover" style="padding: 5px; color: #333333" href="<?= DOL_HTTP .'/application/system/pacientes/nuevo_paciente/index.php?view=nuev_paciente'?>"> <i class="fa fa-users"></i> Nuevo Paciente</a>
                                     </label>
-
-                                </div>
-                            </div>
-
+                                </li>
+                            </ul>
                         </div>
+                    </div>
+                </div>
+
+                <div class="row">
+
+
 
 <!--                        <div class="col-lg-6 margenTopDiv">-->
 <!---->
@@ -49,27 +61,26 @@
 
 
                 <div class="row">
-                    <div class="col-md-12  col-sm-12 margenTopDiv">
 
-                        <div style=" border-radius: 3px; padding: 3px; width: 100%">
-
-                            <div class="table-responsive">
-                                <table class="table" id="table_direc" width="100%">
-                                    <thead style="background-color: #E5E8E8">
-                                    <tr>
-                                        <th>Nombre</th>
-                                        <th>Apellido</th>
-                                        <th>rud / dni</th>
-                                        <th>email</th>
-                                        <th>numero celular</th>
-                                        <th>&nbsp;</th>
-                                    </tr>
-                                    </thead>
-                                </table>
+                    <div class="form-group col-md-12 col-xs-12">
+                        <div class="col-md-12  col-sm-12 margenTopDiv">
+                            <div style=" border-radius: 3px; padding: 3px; width: 100%">
+                                <div class="table-responsive">
+                                    <table class="table" id="table_direc" width="100%">
+                                        <thead style="background-color: #E5E8E8">
+                                        <tr>
+                                            <th>Nombre</th>
+                                            <th>Apellido</th>
+                                            <th>rud / dni</th>
+                                            <th>email</th>
+                                            <th>numero celular</th>
+                                            <th>&nbsp;</th>
+                                        </tr>
+                                        </thead>
+                                    </table>
+                                </div>
                             </div>
-
                         </div>
-
                     </div>
 
                 </div>
