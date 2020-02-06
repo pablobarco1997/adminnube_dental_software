@@ -101,7 +101,7 @@ $footer = '<!--<hr style="margin-bottom: 2px"><table width="100%" style="font-si
 
 
 
-$mpdf=new mPDF('c','LETTER','10px','Calibri',
+$mpdf=new mPDF('c','LETTER','10px','arial',
     12, //left
     12, // right
     23, //top
@@ -111,7 +111,7 @@ $mpdf=new mPDF('c','LETTER','10px','Calibri',
 );
 
 $header = ' 
-    <table width="100%" style="vertical-align: bottom; font-family: monospace, monospace; font-size: 9pt; color: black;">
+    <table width="100%" style="vertical-align: bottom; font-family: Arial; font-size: 9pt; color: black;">
         <tr>
           <td width="100%" align="left"><span style="font-size:28pt;">'.$conf->EMPRESA->INFORMACION->nombre.'</span></td>
         </tr>
@@ -154,11 +154,13 @@ ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
 //limpieza del búfer antes de la salida () antes de generar elarchivo pdf
-ob_clean(); // cleaning the buffer before Output()
+ob_end_clean(); // cleaning the buffer before Output()
 
 error_reporting(E_ALL);
 
 #Muestro la Informacion
 $mpdf->Output('DirectorioPacientes.pdf', 'I');
+
+exit;
 
 ?>
