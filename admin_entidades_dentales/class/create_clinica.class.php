@@ -67,7 +67,7 @@
                 #CREAMOS LA BASDE DE DATOS DE LA ENTIDAD DE LA CLINICA
                 $respuesta = $this->create_clinica_db(true, false, $this->nombre_schema);
 
-                if(!$respuesta){
+                if($respuesta==false){
                     $errores['error_text'] = "Ocurrio un error, no se pudo crear la base de datos de esta clinica a Registrar";
                 }
 
@@ -357,7 +357,7 @@
         {
 
             $host     = 'localhost';
-            $database = $schema; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
+            $database = 'adminnub_'.$schema; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
             $username = 'adminnub_entidad_dental'; #USUARIO
             $password = 'Pablo_1997';  #PASSWIRD #PASSWORD SERVIDOR REMOTO ==> Pablo_1997
 
