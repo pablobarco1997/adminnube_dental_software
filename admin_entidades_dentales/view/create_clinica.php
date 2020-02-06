@@ -187,10 +187,11 @@
                         var c = 0;
                         while(c <= list_err.length -1)
                         {
-                            if(list_err[i][0]!="")
+                            if(list_err[c].length > 0)
                             {
                                 puedo++;
                             }
+
                             c++;
                         }
 

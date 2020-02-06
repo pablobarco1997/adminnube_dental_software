@@ -48,7 +48,7 @@
 
             $sql_clinica_create = "insert into tab_entidades_dental (nombre_db_entity, numero_entity, nombre, email, conf_email, conf_password, pais )";
             $sql_clinica_create .= "value(";
-            $sql_clinica_create .= " '". str_replace(' ', '_', $this->nombre_schema) ."'  , ";
+            $sql_clinica_create .= " 'adminnub_schema_". str_replace(' ', '_', $this->nombre_schema) ."'  , "; /*NOMBRE DE LA BASE DE DATOS*/
             $sql_clinica_create .= " '".$this->numero_entidad."' ,";
             $sql_clinica_create .= " '".$this->nombre_clinica."' ,";
             $sql_clinica_create .= " '".$this->email_clinica."'  ,";
