@@ -103,7 +103,7 @@ function ficherosInputsClear()
     $('#doctor').val(null).trigger('change');
     $('#ficheroobservacion').val(null);
     $('#file-5').val(null);
-    $('#iconviewblock').attr('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/viewnoblock.png');
+    $('#iconviewblock').attr('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/file.png');
 }
 
 $('#formFicheros').on('submit', function(e) {

@@ -23,7 +23,7 @@
                 this.value = null;
 
                 var viewnone = document.getElementById('iconviewblock');
-                viewnone.setAttribute('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/viewnoblock.png');
+                viewnone.setAttribute('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/file.png');
             }
 
 
@@ -71,7 +71,7 @@
                     default:
 
                         notificacion('Error, El sistema  no acepta este tipo de archivo: ' + this.files[0].name + ', consulte con soporte técnico'  , 'error');
-                        viewnone.setAttribute('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/viewnoblock.png');
+                        viewnone.setAttribute('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/file.png');
                         break;
                 }
 
@@ -85,7 +85,7 @@
 
             if(this.files.length == 0){
                 var viewnone = document.getElementById('iconviewblock');
-                viewnone.setAttribute('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/viewnoblock.png');
+                viewnone.setAttribute('src', $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/file.png');
             }
 
 

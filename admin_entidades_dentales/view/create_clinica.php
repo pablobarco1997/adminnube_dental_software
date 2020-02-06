@@ -198,7 +198,7 @@
                             c++;
                         }
 
-                        if(puedo == 0)
+                        if(puedo > 0)
                         {
                             var table = "" +
                                 "<tbody>";

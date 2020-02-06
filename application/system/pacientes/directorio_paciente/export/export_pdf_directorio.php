@@ -149,7 +149,8 @@ $mpdf->SetTitle('Directorio' );
 
 $mpdf->WriteHTML($body.$pdf);
 
-
+//echo $body.$pdf;
+//die();
 //para evitar errores por los mensajes de avertencias que salen por pantalles bloqueando la salida del pdf
 
 ob_start();
@@ -167,9 +168,9 @@ ob_clean();
 ini_set('display_errors', 0);
 ini_set('log_errors', 1);
 
-//$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
+$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
 //$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
-$mpdf->Output('doc.pdf', \Mpdf\Output\Destination::FILE);
+//$mpdf->Output('doc.pdf', \Mpdf\Output\Destination::INLINE);
 exit;
 
 

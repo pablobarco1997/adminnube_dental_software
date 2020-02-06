@@ -23,7 +23,7 @@
                                 <div class="form-group col-md-6 col-xs-12">
                                     <div class="form-group col-xs-12 col-md-12">
                                         <div class="form-group col-md-12 col-xs-12">
-                                            <img id="iconviewblock" class="center-block" width="150px" height="150px" src="<?= DOL_HTTP .'/logos_icon/logo_default/viewnoblock.png'?>" alt="">
+                                            <img id="iconviewblock" class="center-block" width="150px" height="150px" src="<?= DOL_HTTP .'/logos_icon/logo_default/file.png'?>" alt="">
                                         </div>
 
                                         <div class="form-group col-md-12 col-xs-12" style="margin-bottom: 0px">
@@ -59,13 +59,13 @@
                                             </select>
                                         </div>
                                         <div class="form-group col-xs-6 col-md-6">
-                                            <input class="form-control disabled_link3" name="fechaFichero" value="<?= date('Y/m/d')?>">
+                                            <input class="form-control" disabled name="fechaFichero" value="<?= date('Y/m/d')?>">
                                         </div>
                                         <div class="form-group col-xs-12 col-md-12">
-                                            <textarea  class="form-control" name="observacion" id="ficheroobservacion"></textarea>
+                                            <textarea  class="form-control" name="observacion" id="ficheroobservacion" placeholder="Ingrese un commentario"></textarea>
                                         </div>
                                         <div class="form-group col-sm-12">
-                                            <button class="btn btn-success btn-block">Guardar</button>
+                                            <button  style="font-weight: bolder; color: green;" class="btn  btnhover btn-block">Guardar</button>
                                         </div>
                                     </div>
                                 </div>
@@ -77,9 +77,9 @@
                 </div>
             </form>
         </div>
-
     </div>
 </div>
+
 
 <div class="form-group col-md-12 col-xs-12">
     <div class="col-xs-12 col-md-12">
