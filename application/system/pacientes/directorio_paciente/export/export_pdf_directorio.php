@@ -10,9 +10,6 @@ if(!isset($_SESSION['is_open']))
 require_once DOL_DOCUMENT .'/application/config/main.php';
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 
-//limpieza del búfer antes de la salida () antes de generar elarchivo pdf
-ob_clean(); // cleaning the buffer before Output()
-
 
 $id = GETPOST('id');
 
@@ -144,6 +141,9 @@ $mpdf->SetDisplayMode('fullpage');
 $mpdf->SetTitle('Directorio' );
 
 $mpdf->WriteHTML($body.$pdf);
+
+//limpieza del búfer antes de la salida () antes de generar elarchivo pdf
+ob_clean(); // cleaning the buffer before Output()
 
 #Muestro la Informacion
 $mpdf->Output('DirectorioPacientes.pdf', 'I');
