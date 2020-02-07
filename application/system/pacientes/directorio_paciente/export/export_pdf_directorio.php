@@ -126,8 +126,8 @@ $mpdf = new \Mpdf\Mpdf();
 
 $mpdf->WriteHTML($pdf);
 
-print_r($pdf); die();
-$mpdf->Output('mypdf.pdf    ', 'I');
+//print_r($pdf); die();
+$mpdf->Output('mypdf.pdf', 'I');
 
 
 ?>
