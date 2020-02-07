@@ -10,7 +10,8 @@ if(!isset($_SESSION['is_open']))
     header("location:".DOL_HTTP."/application/system/login");
 }
 require_once DOL_DOCUMENT .'/application/config/main.php';
-require_once DOL_DOCUMENT .'/public/lib/Mpdf/autoload.php';
+//require_once DOL_DOCUMENT .'/public/lib/Mpdf/autoload.php';
+require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 
 
 $pdf = null;
@@ -123,23 +124,25 @@ $header = '
     ';
 
 ob_end_clean();
+//
+//try{
+//
+//    /*Se crae una instancia del Mpdf*/
+//    $mpdf = new \Mpdf\Mpdf();
+//
+//    $mpdf->WriteHTML($pdf);
+//    $mpdf->debug = true;
+//
+//    $mpdf->Output('m.pdf','I');
+//
+//}catch ( \Mpdf\MpdfException $e ){
+//
+//    echo $e->getMessage();
+//}
 
-try{
-
-    /*Se crae una instancia del Mpdf*/
-    $mpdf = new \Mpdf\Mpdf();
-
-    $mpdf->WriteHTML($pdf);
-    $mpdf->debug = true;
-
-    $mpdf->Output('m.pdf','I');
-
-}catch ( \Mpdf\MpdfException $e ){
-
-    echo $e->getMessage();
-}
-
-
+$mpdf = new mPDF();
+$mpdf->WriteHTML($pdf);
+$mpdf->Output();
 //print_r($mpdf); die();
 //exit;
 
