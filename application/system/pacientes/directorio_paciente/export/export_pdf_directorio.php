@@ -9,18 +9,16 @@ if(!isset($_SESSION['is_open']))
 {
     header("location:".DOL_HTTP."/application/system/login");
 }
-//require_once DOL_DOCUMENT .'/application/config/main.php';
-require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
-require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
-require_once DOL_DOCUMENT .'/application/controllers/controller.php';
 
-$cn = new ObtenerConexiondb();                    //Conexion global Empresa Fija
-$db = $cn::conectarEmpresa($_SESSION['db_name']); //coneccion de la empresa variable global
+require_once  DOL_DOCUMENT  .'/application/config/lib_glob_export.php';
 
+$loginUsuario = $_SESSION['usuario'];
 $pdf = null;
-$id = $_GET['id'];
+$id = GETPOST('id');
 
-
+//echo '<pre>';
+//print_r($loginUsuario);
+//die();
 
 $datos = [];
 $sql = "SELECT * FROM tab_admin_pacientes  WHERE rowid in($id)";
@@ -58,7 +56,7 @@ $pdf .= '<style>
 
 $pdf .= "
     <table  width='100%' class='tables'>
-        <tr  style='width: 100%'>
+        <tr  style='width: 100%; background-color: #688fc2'>
             <td style='text-align: center'> <h2> DIRECTORIO DE PACIENTES</h2> </td>
         </tr>
     </table>    
@@ -101,7 +99,7 @@ $footer = '<!--<hr style="margin-bottom: 2px"><table width="100%" style="font-si
           <table>
                 <tr>
                     <td width="50%">
-                        <div align="left">'. $conf->EMPRESA->INFORMACION->email .'</div>
+                        <div align="left">'. $InformacionEntity->email .'</div>
                     </td>
                     <td width="50%" align="right">
                         <!--<div  style="float: right">Pagina:{PAGENO}</div>-->
@@ -115,14 +113,14 @@ $footer = '<!--<hr style="margin-bottom: 2px"><table width="100%" style="font-si
 $header = ' 
     <table width="100%" style="vertical-align: bottom; font-family: Arial; font-size: 9pt; color: black;">
         <tr>
-          <td width="100%" align="left"><span style="font-size:28pt;">'.$conf->EMPRESA->INFORMACION->nombre.'</span></td>
+          <td width="100%" align="left"><span style="font-size:28pt;">'.$InformacionEntity->nombre.'</span></td>
         </tr>
         <tr>
-            <td width="33%">'.$conf->EMPRESA->INFORMACION->direccion.' <span style="font-size:10pt;"></span></td>
-            <td width="33%" style="text-align: right;">Usuario:<span style="font-weight: bold;"> '.$user->name.'</span></td>
+            <td width="33%">'.$InformacionEntity->direccion.' <span style="font-size:10pt;"></span></td>
+            <td width="33%" style="text-align: right;">Usuario:<span style="font-weight: bold;"> '.$loginUsuario.'</span></td>
         </tr>
         <tr>
-            <td width="33%">'.$conf->EMPRESA->INFORMACION->email.'<span style="font-size:10pt;"></span></td>
+            <td width="33%">'.$InformacionEntity->email.'<span style="font-size:10pt;"></span></td>
             <td width="33%" style="text-align: right;">Fecha: <span style="font-weight: bold;">{DATE j/m/Y}</span></td>
         </tr>
     </table>
