@@ -67,15 +67,15 @@
                             <div style=" border-radius: 3px; padding: 3px; width: 100%">
                                 <div class="table-responsive">
                                     <table class="table" id="table_direc" width="100%">
-                                        <thead style="background-color: #E5E8E8">
-                                        <tr>
-                                            <th>Nombre</th>
-                                            <th>Apellido</th>
-                                            <th>rud / dni</th>
-                                            <th>email</th>
-                                            <th>numero celular</th>
-                                            <th>&nbsp;</th>
-                                        </tr>
+                                        <thead>
+                                            <tr>
+                                                <th>NOMBRE</th>
+                                                <th>APELLIDO</th>
+                                                <th>RUD - CEDULA</th>
+                                                <th>E-MAIL</th>
+                                                <th>TELEFONO CEL.</th>
+                                                <th>&nbsp;</th>
+                                            </tr>
                                         </thead>
                                     </table>
                                 </div>
