@@ -142,7 +142,7 @@ ob_end_clean();
 $mpdf = new mPDF();
 $mpdf->WriteHTML($pdf);
 $mpdf->debug =  true;
-$mpdf->Output();
+$mpdf->Output('ejemplo.php', 'I');
 //print_r($mpdf); die();
 //exit;
 
