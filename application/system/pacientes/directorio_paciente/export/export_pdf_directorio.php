@@ -1,6 +1,6 @@
 <?php
 
-//header('Content-type: application/pdf');
+header('Content-type: application/pdf');
 
 require_once '../../../../config/lib.global.php';
 session_start();
@@ -10,7 +10,6 @@ if(!isset($_SESSION['is_open']))
     header("location:".DOL_HTTP."/application/system/login");
 }
 require_once DOL_DOCUMENT .'/application/config/main.php';
-//require_once DOL_DOCUMENT .'/public/lib/Mpdf/autoload.php';
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 
 
@@ -142,6 +141,7 @@ ob_end_clean();
 
 $mpdf = new mPDF();
 $mpdf->WriteHTML($pdf);
+$mpdf->debug =  true;
 $mpdf->Output();
 //print_r($mpdf); die();
 //exit;
