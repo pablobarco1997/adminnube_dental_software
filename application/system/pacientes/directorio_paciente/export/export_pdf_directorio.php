@@ -12,13 +12,16 @@ if(!isset($_SESSION['is_open']))
 //require_once DOL_DOCUMENT .'/application/config/main.php';
 require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
+require_once DOL_DOCUMENT .'/application/controllers/controller.php';
 
+$cn = new ObtenerConexiondb();                    //Conexion global Empresa Fija
+$db = $cn::conectarEmpresa($_SESSION['db_name']); //coneccion de la empresa variable global
 
 $pdf = null;
 $id = $_GET['id'];
 
 
-/*
+
 $datos = [];
 $sql = "SELECT * FROM tab_admin_pacientes  WHERE rowid in($id)";
 $rs  = $db->query($sql);
@@ -32,9 +35,9 @@ if($rs->rowCount()>0){
             'numeroCelular'   => $obj->telefono_movil,
         );
     }
-}*/
+}
 
-//print_r(phpversion());
+//print_r($datos);
 //die();
 
 
