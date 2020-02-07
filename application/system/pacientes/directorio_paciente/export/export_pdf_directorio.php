@@ -9,13 +9,16 @@ if(!isset($_SESSION['is_open']))
 {
     header("location:".DOL_HTTP."/application/system/login");
 }
-require_once DOL_DOCUMENT .'/application/config/main.php';
+//require_once DOL_DOCUMENT .'/application/config/main.php';
+require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 
 
 $pdf = null;
-$id = GETPOST('id');
+$id = $_GET['id'];
 
+
+/*
 $datos = [];
 $sql = "SELECT * FROM tab_admin_pacientes  WHERE rowid in($id)";
 $rs  = $db->query($sql);
@@ -29,7 +32,7 @@ if($rs->rowCount()>0){
             'numeroCelular'   => $obj->telefono_movil,
         );
     }
-}
+}*/
 
 //print_r(phpversion());
 //die();
@@ -142,7 +145,7 @@ ob_end_clean();
 $mpdf = new mPDF();
 $mpdf->WriteHTML($pdf);
 $mpdf->debug =  true;
-$mpdf->Output('ejemplo.php', 'I', true);
+$mpdf->Output('ejemplo.php', 'I');
 //print_r($mpdf); die();
 //exit;
 
