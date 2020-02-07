@@ -128,7 +128,7 @@ try{
     $mpdf = new \Mpdf\Mpdf();
 
     $mpdf->WriteHTML($pdf);
-    $mpdf->debug = false;
+    $mpdf->debug = true;
 
     $mpdf->Output('m.pdf','I');
 
