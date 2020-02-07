@@ -122,14 +122,23 @@ $header = '
     </table>
     ';
 
+try{
 
-/*Se crae una instancia del Mpdf*/
-$mpdf = new \Mpdf\Mpdf();
+    /*Se crae una instancia del Mpdf*/
+    $mpdf = new \Mpdf\Mpdf();
 
-$mpdf->WriteHTML($pdf);
+    $mpdf->WriteHTML($pdf);
+    $mpdf->debug = false;
 
-print_r($mpdf); die();
-$mpdf->Output('mypdf.pdf', 'I');
+    $mpdf->Output('m.pdf','I');
+
+}catch ( \Mpdf\MpdfException $e ){
+
+    echo $e->getMessage();
+}
+
+
+//print_r($mpdf); die();
 //exit;
 
 ?>
