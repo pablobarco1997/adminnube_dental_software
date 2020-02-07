@@ -1,6 +1,6 @@
 <?php
 
-header('Content-type: application/pdf');
+//header('Content-type: application/pdf');
 
 require_once '../../../../config/lib.global.php';
 session_start();
@@ -32,7 +32,7 @@ if($rs->rowCount()>0){
     }
 }
 
-//print_r($datos);
+//print_r(phpversion());
 //die();
 
 
