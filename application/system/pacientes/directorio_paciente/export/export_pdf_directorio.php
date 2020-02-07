@@ -1,6 +1,6 @@
 <?php
 
-//header('Content-type: application/pdf');
+header('Content-type: application/pdf');
 
 require_once '../../../../config/lib.global.php';
 session_start();
@@ -142,7 +142,7 @@ ob_end_clean();
 $mpdf = new mPDF();
 $mpdf->WriteHTML($pdf);
 $mpdf->debug =  true;
-$mpdf->Output('ejemplo.php', 'I');
+$mpdf->Output('ejemplo.php', 'I', true);
 //print_r($mpdf); die();
 //exit;
 
