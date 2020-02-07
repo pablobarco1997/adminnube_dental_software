@@ -10,17 +10,26 @@ if(!isset($_SESSION['is_open']))
     header("location:".DOL_HTTP."/application/system/login");
 }
 
-//require_once  DOL_DOCUMENT  .'/application/config/lib_glob_export.php';
-
 require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
 require_once  DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
 require_once  DOL_DOCUMENT .'/application/controllers/controller.php';
+
+
+
+
 /**SE CREA LAS VARIABLES DE INICIO**/
 $cn = new ObtenerConexiondb();                    //Conexion global Empresa Fija
 $db = $cn::conectarEmpresa($_SESSION['db_name']); //coneccion de la empresa variable global
 
 
-$loginUsuario = $_SESSION['usuario'];
+$InformacionEntity = (object)array(
+    'nombre'            => $_SESSION['nombreClinica'],
+    'email'             => $_SESSION['emailClinica'],
+    'direccion'         => $_SESSION['direccionClinica'],
+);
+
+
+$loginUsuario = $_SESSION['usuario']; #Login Inicio de Sesion
 $pdf = null;
 $id = GETPOST('id');
 
