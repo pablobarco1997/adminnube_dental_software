@@ -9,13 +9,13 @@ if(!isset($_SESSION['is_open']))
 {
     header("location:".DOL_HTTP."/application/system/login");
 }
-//require_once DOL_DOCUMENT .'/application/config/main.php';
-require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
+//require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
-require_once DOL_DOCUMENT .'/application/controllers/controller.php';
+//require_once DOL_DOCUMENT .'/application/controllers/controller.php';
 
-$cn = new ObtenerConexiondb();                    //Conexion global Empresa Fija
-$db = $cn::conectarEmpresa($_SESSION['db_name']); //coneccion de la empresa variable global
+require_once DOL_DOCUMENT .'/application/config/main.php';
+//$cn = new ObtenerConexiondb();                    //Conexion global Empresa Fija
+//$db = $cn::conectarEmpresa($_SESSION['db_name']); //coneccion de la empresa variable global
 
 $pdf = null;
 $id = $_GET['id'];
@@ -129,26 +129,34 @@ $header = '
     ';
 
 ob_end_clean();
-//
-//try{
-//
-//    /*Se crae una instancia del Mpdf*/
-//    $mpdf = new \Mpdf\Mpdf();
-//
-//    $mpdf->WriteHTML($pdf);
-//    $mpdf->debug = true;
-//
-//    $mpdf->Output('m.pdf','I');
-//
-//}catch ( \Mpdf\MpdfException $e ){
-//
-//    echo $e->getMessage();
-//}
 
-$mpdf = new mPDF();
-$mpdf->WriteHTML($pdf);
-$mpdf->debug =  true;
-$mpdf->Output('ejemplo.php', 'I');
+
+$mpdf=new mPDF('c','LETTER','10px','Calibri',
+    12, //left
+    12, // right
+    23, //top
+    18, //bottom
+    3, //header top
+    3 //footer botoom
+);
+
+$mpdf->SetHTMLHeader($header,"E",true);
+$mpdf->SetHTMLHeader($header,"O",true);
+$mpdf->SetHTMLFooter($footer,"E",true);
+$mpdf->SetHTMLFooter($footer,"O",true);
+
+// Make it DOUBLE SIDED document with 4mm bleed
+$mpdf->mirrorMargins = 1;
+$mpdf->bleedMargin = 4;
+// Set left to right text
+$mpdf->SetDirectionality('ltr');
+$mpdf->showImageErrors = 'true';
+$mpdf->SetDisplayMode('fullpage');
+$mpdf->SetTitle('directorio de pacientes' );
+
+$mpdf->WriteHTML($body.$pdf);
+
+$mpdf->Output('ejemplo.pdf', 'I');
 //print_r($mpdf); die();
 //exit;
 
