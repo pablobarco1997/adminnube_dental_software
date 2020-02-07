@@ -8,11 +8,10 @@ if(!isset($_SESSION['is_open']))
     header("location:".DOL_HTTP."/application/system/login");
 }
 require_once DOL_DOCUMENT .'/application/config/main.php';
-require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
+require_once DOL_DOCUMENT .'/public/lib/Mpdf/autoload.php';
 
 
-
-
+$pdf = null;
 $id = GETPOST('id');
 
 $datos = [];
@@ -29,6 +28,9 @@ if($rs->rowCount()>0){
         );
     }
 }
+
+//print_r($datos);
+//die();
 
 
 $pdf .= '<style>
@@ -102,15 +104,6 @@ $footer = '<!--<hr style="margin-bottom: 2px"><table width="100%" style="font-si
 
 
 
-$mpdf=new mPDF('c','LETTER','10px','arial',
-    12, //left
-    12, // right
-    23, //top
-    18, //bottom
-    3, //header top
-    3 //footer botoom
-);
-
 $header = ' 
     <table width="100%" style="vertical-align: bottom; font-family: Arial; font-size: 9pt; color: black;">
         <tr>
@@ -127,51 +120,14 @@ $header = '
     </table>
     ';
 
-$mpdf->mirrorMargins = 1;	// Use different Odd/Even headers and footers and mirror margins
 
+/*Se crae una instancia del Mpdf*/
+$mpdf = new \Mpdf\Mpdf();
 
-//echo $pdf;
-//print_r($pdf); die();
+$mpdf->WriteHTML($pdf);
 
-$mpdf->SetHTMLHeader($header,"E",true);
-$mpdf->SetHTMLHeader($header,"O",true);
-$mpdf->SetHTMLFooter($footer,"E",true);
-$mpdf->SetHTMLFooter($footer,"O",true);
-
-// Make it DOUBLE SIDED document with 4mm bleed
-$mpdf->mirrorMargins = 1;
-$mpdf->bleedMargin = 4;
-// Set left to right text
-$mpdf->SetDirectionality('ltr');
-$mpdf->showImageErrors = 'true';
-$mpdf->SetDisplayMode('fullpage');
-$mpdf->SetTitle('Directorio' );
-
-$mpdf->WriteHTML($body.$pdf);
-
-//echo $body.$pdf;
-//die();
-//para evitar errores por los mensajes de avertencias que salen por pantalles bloqueando la salida del pdf
-
-ob_start();
-//error_reporting(E_ALL & ~E_NOTICE);
-
-
-//limpieza del búfer antes de la salida () antes de generar elarchivo pdf
-//ob_end_clean(); // cleaning the buffer before Output()
-
-error_reporting(E_ALL);
-
-#Muestro la Informacion
-ob_clean();
-
-ini_set('display_errors', 0);
-ini_set('log_errors', 1);
-
-$mpdf->Output('DirectorioPacientes.pdf', 'I'); #IMPRIMIR EL PDF POR browser google
-//$mpdf->Output('DirectorioPacientes.pdf', 'D'); #DESCARGA EL PDF DIRECTAMENTE
-//$mpdf->Output('doc.pdf', \Mpdf\Output\Destination::INLINE);
-exit;
+//print_r($mpdf); die();
+$mpdf->Output('mypdf.pdf    ', 'I');
 
 
 ?>
