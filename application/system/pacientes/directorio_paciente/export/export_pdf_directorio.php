@@ -9,13 +9,13 @@ if(!isset($_SESSION['is_open']))
 {
     header("location:".DOL_HTTP."/application/system/login");
 }
-//require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
+//require_once DOL_DOCUMENT .'/application/config/main.php';
+require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
 require_once DOL_DOCUMENT .'/public/lib/mpdf60/mpdf.php';
-//require_once DOL_DOCUMENT .'/application/controllers/controller.php';
+require_once DOL_DOCUMENT .'/application/controllers/controller.php';
 
-require_once DOL_DOCUMENT .'/application/config/main.php';
-//$cn = new ObtenerConexiondb();                    //Conexion global Empresa Fija
-//$db = $cn::conectarEmpresa($_SESSION['db_name']); //coneccion de la empresa variable global
+$cn = new ObtenerConexiondb();                    //Conexion global Empresa Fija
+$db = $cn::conectarEmpresa($_SESSION['db_name']); //coneccion de la empresa variable global
 
 $pdf = null;
 $id = $_GET['id'];
@@ -155,6 +155,7 @@ $mpdf->SetDisplayMode('fullpage');
 $mpdf->SetTitle('directorio de pacientes' );
 
 $mpdf->WriteHTML($body.$pdf);
+
 
 $mpdf->Output('ejemplo.pdf', 'I');
 //print_r($mpdf); die();
