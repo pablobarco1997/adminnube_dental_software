@@ -122,6 +122,8 @@ $header = '
     </table>
     ';
 
+ob_end_clean();
+
 try{
 
     /*Se crae una instancia del Mpdf*/
