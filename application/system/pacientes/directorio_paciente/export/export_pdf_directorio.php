@@ -1,5 +1,7 @@
 <?php
 
+header('Content-type: application/pdf');
+
 require_once '../../../../config/lib.global.php';
 session_start();
 
@@ -128,6 +130,6 @@ $mpdf->WriteHTML($pdf);
 
 //print_r($pdf); die();
 $mpdf->Output('mypdf.pdf', 'D');
-
+exit;
 
 ?>
