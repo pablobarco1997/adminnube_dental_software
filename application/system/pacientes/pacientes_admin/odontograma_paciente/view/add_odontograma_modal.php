@@ -38,7 +38,7 @@
 
                             ?>
                         </select>
-                        <small style="color: red"></small>
+                        <small style="color: red" id="msg_errores_odontogram"></small>
                     </div>
                     <div class="form-group col-lg-12 col-md-12">
                         <label for="">Descripción (opcional)</label>

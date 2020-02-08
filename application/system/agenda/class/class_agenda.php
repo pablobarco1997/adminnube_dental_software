@@ -126,7 +126,7 @@ class admin_agenda{
 
         $error = '';
 
-        $sql = "INSERT INTO `tab_plan_tratamiento_cab` (`numero`, `fk_doc`, `fk_sucursal`, `fk_convenio`, `fk_paciente`, `abonos`, `estados_tratamiento`, `evoluciones_porct`, `ultima_cita`, `fk_cita`, `detencion`, situacion)";
+        $sql = "INSERT INTO `tab_plan_tratamiento_cab` (`numero`, `fk_doc`, `fk_sucursal`, `fk_convenio`, `fk_paciente`, `abonos`, `estados_tratamiento`, `evoluciones_porct`, `ultima_cita`, `fk_cita`, `detencion`, situacion, fecha_create)";
         $sql .= "VALUES(";
 
         $sql .= "'$this->tratam_numero' ,";
@@ -140,7 +140,8 @@ class admin_agenda{
         $sql .= " $this->tratam_ultimacita ,";
         $sql .= "'$this->tratam_fk_cita' ,";
         $sql .= "'$this->tratam_detencion' ,";
-        $sql .= "'$this->tratam_situaccion' ";
+        $sql .= "'$this->tratam_situaccion' ,  ";
+        $sql .= " now() ";
 
         $sql .= ");";
 

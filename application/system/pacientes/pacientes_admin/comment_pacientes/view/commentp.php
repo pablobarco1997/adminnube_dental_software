@@ -3,6 +3,7 @@
 
 <!--    <a href="ultimoMensaje">Ultimo</a>-->
     <div class="form-group col-md-12 col-xs-12">
+        <h3 id="loading_text"></h3>
         <div class="direct-chat-messages" id="mensajesInsert" style="height: 450px">
 
             <div class="chatUpdate" id="chatUpdate">

@@ -17,3 +17,7 @@ CREATE TABLE `tab_plan_tratamiento_cab` (
   PRIMARY KEY (`rowid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
 ;
+
+ALTER TABLE `tab_plan_tratamiento_cab` 
+ADD COLUMN `fecha_create` DATETIME NULL DEFAULT NULL COMMENT '' AFTER `edit_name`
+;

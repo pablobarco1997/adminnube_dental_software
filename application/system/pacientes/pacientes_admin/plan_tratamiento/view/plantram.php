@@ -71,16 +71,28 @@
 
 <!--        OPCIONES CREACION DE PLANDES DE TRATAMIENTO-->
         <div class="form-group col-md-12 col-xs-12">
-            <ul class="list-inline">
+            <label for="">LISTA DE COMPORTAMIENTOS</label>
+            <ul class="list-inline" style="border-bottom: 0.6px solid #333333; padding: 3px">
                 <li>
-                    <a href="#" class="btnhover btn btn-sm " id="createPlanTratamientoCab"> <b>  <i class="fa fa-file-text"></i> Crear Plan de Tratamiento Independiente </b> </a>
+                    <a href="#" style="color: #333333" class="btnhover btn btn-sm " id="createPlanTratamientoCab"> <b>  <i class="fa fa-file-text"></i> Crear Plan de Tratamiento Independiente </b> </a>
                 </li>
 
                 <li>
-                    <a href="#modal_plantrem_citas" data-toggle="modal" class="btnhover btn btn-sm " onclick="attrChangAsociarCitas(null)"> <b>  <i class="fa fa-clone"></i>  Crear Plan de tratamiento desde cita de paciente  </b> </a>
+                    <a href="#modal_plantrem_citas" style="color: #333333" data-toggle="modal" class="btnhover btn btn-sm " onclick="attrChangAsociarCitas(null)"> <b>  <i class="fa fa-clone"></i>  Crear Plan de tratamiento desde cita de paciente  </b> </a>
+                </li>
+
+                <li>
+                    <div class="checkbox btn btnhover no-margin btn-sm">
+                        <label for="mostrarAnuladosPlantram">
+                            <b><input type="checkbox" id="mostrarAnuladosPlantram">
+                                <i  class="fa fa-trash-o"></i>
+                                Mostrar Planes de tratamiento Anulados</b>
+                        </label>
+                    </div>
                 </li>
 
             </ul>
+            <br>
         </div>
 <!--       END OPCIONES CREACION DE PLANDES DE TRATAMIENTO-->
 
@@ -100,7 +112,7 @@
 
 
 
-        <!--    MODAL CREAR PLAN DE TRATAMIENTO INDEPENDIENTE  -------------------------------------------------------->
+        <!--    MODAL CREAR PLAN DE TRATAMIENTO ASOCIADO A UNA CITA  -------------------------------------------------------->
         <div id="modal_plantrem_citas" class="modal fade" role="dialog">
             <div class="modal-dialog">
 
@@ -179,6 +191,31 @@
                     <div class="modal-footer">
                         <a href="#" class="btn btnhover" style="font-weight: bolder; color: green" id="CrearPlanTratamientoPlantram">Guardar</a>
                         <a href="#" class="btn btnhover" data-dismiss="modal" style="font-weight: bolder">Close</a>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+
+
+
+        <!--MENSAJE DE CONFIRMACION DE ELIMINACION DE PLAN DE TRATAMIENTO-->
+        <div id="confirm_eliminar_plantram" class="modal fade" role="dialog">
+            <div class="modal-dialog">
+
+                <!-- Modal content-->
+                <div class="modal-content">
+                    <div class="modal-header modal-diseng">
+                        <button type="button" class="close" data-dismiss="modal">&times;</button>
+                        <h4 class="modal-title">Confirmar</h4>
+                    </div>
+                    <div class="modal-body">
+                        <label for="">Eliminar Plan de tratamiento</label>
+                        <p id="msg_eliminar_plantram"></p>
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" style="font-weight: bolder; color: green" class="btn btnhover" id="delete_plantram_confirm" >Confirm</button>
+                        <button type="button" style="font-weight: bolder;" class="btn btnhover" data-dismiss="modal">Close</button>
                     </div>
                 </div>
 

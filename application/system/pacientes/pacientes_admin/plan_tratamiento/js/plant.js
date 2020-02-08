@@ -13,7 +13,14 @@ function  listplaneTratamiento(){
         ajax:{
             url: $DOCUMENTO_URL_HTTP + '/application/system/pacientes/pacientes_admin/controller/controller_adm_paciente.php',
             type:'POST',
-            data:{'ajaxSend':'ajaxSend', 'accion':'list_tratamiento', 'idpaciente': $id_paciente } ,
+            data:{
+
+                'ajaxSend':'ajaxSend',
+                'accion':'list_tratamiento',
+                'idpaciente': $id_paciente,
+                'mostrar_anulados': ($('#mostrarAnuladosPlantram').prop('checked') == true) ? 'si': 'no'
+
+            } ,
             dataType:'json',
         },
 
@@ -32,19 +39,25 @@ function  listplaneTratamiento(){
                     var profecionalCargo      = null;
                     var ultimaCitaFecha       = null;
                     var ultimaCitaHora        = null;
+                    var estadoPlanTram        = null;
 
                     idplantratamiento     = full[6];
                     profecionalCargo      = full[1];
                     numeroPlantratamiento = full[0];
                     ultimaCitaFecha       = full[3];
                     ultimaCitaHora        = full[4];
+                    estadoPlanTram        = full[8];
 
                     //Se bloqueara si ya tiene asociada una cita
                     var disablelinkCitasAsocid = "";
-
+                    var disableEstadoPlantrem  = "";
 
                     if(full[7] != 0){
                         disablelinkCitasAsocid = 'disabled_link3'
+                    }
+
+                    if(estadoPlanTram == 'E'){
+                        disableEstadoPlantrem = 'disabled_link3';
                     }
 
                     //DROPDOWN MENU
@@ -54,7 +67,7 @@ function  listplaneTratamiento(){
                                 "   <li><a href=\"#\" onclick='optionTratamiento("+idplantratamiento+", \"editname\")'>Cambiar Nombre de Plan Tratamiento</a></li>\n" +
                                 "   <li><a href=\"#\">Financiamiento</a></li>\n" +
                                 "   <li><a href=\"#\">Recaudar este Tratamiento</a></li>\n" +
-                                "   <li><a href=\"#\">Eliminar</a></li>\n" +
+                                "   <li><a href=\"#\" class='"+disableEstadoPlantrem+"' onclick='eliminarPlan_tratamiento($(this), "+ idplantratamiento +")' >Anular</a></li>\n" +
                                 "   <li><a href=\"#\">Finalizar</a></li>\n" +
                                 "   <li><a href=\"#\">Duplicar este plan de tratamiento</a></li>\n" +
                                 "\n" +
@@ -63,12 +76,15 @@ function  listplaneTratamiento(){
                     //------------------------html ------------------------------------
                 var html = "";
 
-                html += "<div id='boxtratamiento' class='box-ptratamiento' style=' padding: 7px' >";
+                html += "<div id='boxtratamiento' class='box-ptratamiento row_list_plantram' style=' padding: 7px' >";
                 html += "<div class='row'> " +
 
 
                         " <div class='col-md-11 col-sm-9 col-xs-8'>" +
-                        "      " + numeroPlantratamiento + "  " +
+                        "       <ul class='list-inline'>" +
+                        "           <li>" +numeroPlantratamiento+ "</li>" +
+                        "           <li></li>" +
+                        "       </ul>   " +
                         " </div>" +
 
 
@@ -275,7 +291,7 @@ function print_html_detalle_viewPrincipal(tratramientodet)
             "   <div class='form-group col-md-12 col-xs-12'>" +
 
                 "     <a  href='#modal_prestacion_realizada' style='font-size: 2rem; cursor:pointer;color: #9f191f' data-toggle='modal' class='terminarEstaPrestacionOpcion1' title='Realizar esta prestación'> " +
-                "     <img src='"+$DOCUMENTO_URL_HTTP+"/logos_icon/logo_default/unchecked-checkbox.png' width='20px' height='20px'>        " +  //Checkear prestacion
+                 "     <img src='"+$DOCUMENTO_URL_HTTP+"/logos_icon/logo_default/unchecked-checkbox.png' width='20px' height='20px'>        " +  //Checkear prestacion
                 "     </a>" +
 
                 "     &nbsp;&nbsp;" +
@@ -314,7 +330,7 @@ function print_html_detalle_viewPrincipal(tratramientodet)
 
         html += "<td>  " +
             "   <div class='form-group col-md-12 col-xs-12'>" +
-            "     <p class='' style='margin: 0px; font-size: 1.5rem'> $ <b class='total'>" + total1 + " </b> </p> " +
+            "     <p class='' style='margin: 0px; font-size: 1.5rem'> $ <b class='total'>" + redondear(total1, 2) + " </b> </p> " +
             "   </div>  " +
             " </td>";
 
@@ -512,7 +528,7 @@ function invalicErrorPrestacionDiente(prestacion, diente, subaccion) {
                 if($(this).data('idprestacion') == prestacion && $(this).data('iddiente') == diente )
                 {
                     PuedoPasar++;
-                    $('#errores_msg_addplantram').text( 'Este detalle con ya esta ingresado');
+                    $('#errores_msg_addplantram').text( 'Esta prestación ya esta asignada');
                 }
             }
 
@@ -521,7 +537,7 @@ function invalicErrorPrestacionDiente(prestacion, diente, subaccion) {
                 if( $(this).data('idprestacion') == prestacion && $(this).data('iddiente') == 0)
                 {
                     PuedoPasar++;
-                    $('#errores_msg_addplantram').text( 'Este detalle con ya esta ingresado');
+                    $('#errores_msg_addplantram').text( 'Esta prestación ya esta asignada');
                 }
             }
 
@@ -761,7 +777,16 @@ if($accion == "principal")
     //Crear Plan de tratamiento desde una Cita
     $('#CrearPlanTratamientoPlantram').click(function() {
 
-        CrearPlanTratamientoIndependienteDependiente(null);
+        if($('#citasPaciente').find(':selected').val() > 0)
+        {
+            CrearPlanTratamientoIndependienteDependiente(null);
+        }else{
+
+            $('#error_asociarCitas').text('Debe seleccionar una cita');
+            setTimeout(function() {
+                $('#error_asociarCitas').text(null);
+            }, 3000);
+        }
     });
     
     //CAMBIAR ATRIBUTO ASOCIAR CITAS A PLANES DE TRATAMIENTO

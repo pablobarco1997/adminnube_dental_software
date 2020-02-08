@@ -103,6 +103,8 @@ $('#comment').on("click", function() {
     $("#texto_comment").val(null);
 });
 // ajax_load_comment_time(null, 'consultar');
-setInterval(function () {
-    ajax_load_comment_time(null, 'consultar');
-},1000);
+// setInterval(function () {
+//
+// },1000);
+
+ajax_load_comment_time(null, 'consultar');

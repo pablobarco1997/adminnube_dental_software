@@ -1,3 +1,38 @@
+<?php
+
+$array_datos_personales = (object)[
+   'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=dop&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente) ,
+   'active'  =>  ($VISTAS == "dop") ? "ActivaLista" : "",
+   'permiso' => ''
+];
+
+$array_imagenes_archivos = (object)[
+    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=arch&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'' ,
+    'active'  =>  ($VISTAS == "arch") ? "ActivaLista" : "",
+    'permiso' => ''
+];
+
+$array_plan_tratamiento = (object)[
+    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=plantram&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'' ,
+    'active'  =>  ($VISTAS == "plantram") ? "ActivaLista" : "",
+    'permiso' => ''
+];
+
+$array_odontograma = (object)[
+    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=odot&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=listp' ,
+    'active'  =>  ($VISTAS == "odot") ? "ActivaLista" : "",
+    'permiso' => ''
+];
+
+$array_citas_asociadas = (object)[
+    'url'     =>   DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=citasoci&key='.KEY_GLOB .'&id='.tokenSecurityId($idPaciente),
+    'active'  =>  ($VISTAS == "citasoci") ? "ActivaLista" : "",
+    'permiso' => ''
+];
+
+
+
+?>
 
 
 <style>
@@ -66,8 +101,8 @@
 
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "dop") ? "ActivaLista" : "" ?>">
-                                    <a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=dop&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente) ?>">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_datos_personales->active ?>">
+                                    <a class="lista" href="<?= $array_datos_personales->url ?>">&nbsp;&nbsp;
                                         <i class="fa fa-user"></i>&nbsp;&nbsp; DATOS PERSONALES </a>
                                 </li>
 
@@ -76,13 +111,13 @@
                                         <i class="fa fa-link"></i>&nbsp;&nbsp; CARGA FAMILIARES </a>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "arch") ? "ActivaLista" : "" ?>">
-                                    <a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=arch&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).''; ?>">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_imagenes_archivos->active ?>">
+                                    <a class="lista" href="<?= $array_imagenes_archivos->url ?>">&nbsp;&nbsp;
                                         <i class="fa fa-folder"></i>&nbsp;&nbsp; IMAGENES - ARCHIVOS</a>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "form_citas") ? "ActivaLista" : "" ?>">
-                                    <a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/admin_paciente/?view=form_citas&id='.$idPaciente; ?>">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_citas_asociadas->active ?>">
+                                    <a class="lista" href="<?= $array_citas_asociadas->url ?>">&nbsp;&nbsp;
                                         <i class="fa fa-calendar"></i>&nbsp;&nbsp; CITAS </a>
                                 </li>
 
@@ -102,8 +137,8 @@
                                     <p class="text-center" style="font-weight: bold">CLINICO</p>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "form_plan_tratamiento") ? "ActivaLista" : "" ?>"> <!--Plande tratamiento-->
-                                    <a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=plantram&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).''; ?>">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_plan_tratamiento->active ?>"> <!--Plande tratamiento-->
+                                    <a class="lista" href="<?= $array_plan_tratamiento->url; ?>">&nbsp;&nbsp;
                                         <i class="fa fa-list-ul"></i>&nbsp;&nbsp; PLANES DE TRATAMIENTOS </a>
                                 </li>
 
@@ -116,7 +151,7 @@
                                         <i class="fa fa-file"></i>&nbsp;&nbsp; DOCUMENTOS CLINICOS </a>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "form_odontograma") ? "ActivaLista" : "" ?>"><a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=odot&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=listp'; ?>">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_odontograma->active ?>"><a class="lista" href="<?= $array_odontograma->url; ?>">&nbsp;&nbsp;
                                         <img  src=" <?= DOL_HTTP .'/logos_icon/logo_default/diente.png';?>" width="12px" height="14px" alt=""> &nbsp;&nbsp;
                                         ODONTOGRAMA </a>
                                 </li>

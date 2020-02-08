@@ -1,5 +1,7 @@
 <?php
 
+$VISTAS      = $_GET['view'];
+
 #VISTAS FORMULARIOS
 switch($VISTAS)
 {
@@ -32,11 +34,19 @@ switch($VISTAS)
         break;
 
     case "odot": #ODONTOGRAMA ACTUAL
-        $VIEW_GLOB_ADMIN_PACIENTES   = "principal_odontograma";   #view formulario
+        $VIEW_GLOB_ADMIN_PACIENTES   = "principal_odontograma";        #view formulario
         $DIRECTORIO_ADMIN            = "odontograma_paciente";         #directorio
         $_JS_DOCMENT                 = "odont";                        #doc javascript
         $NAME_MODULO                 = "ODONTOGRAMA";
         break;
+
+    case "citasoci": #CITAS ASOCIADAS
+        $VIEW_GLOB_ADMIN_PACIENTES   = "citasoci";                #view citas asociadas
+        $DIRECTORIO_ADMIN            = "citas_asociadas";         #directorio
+        $_JS_DOCMENT                 = "citasoci";                #doc javascript
+        $NAME_MODULO                 = "CITAS ASOCIADAS";
+        break;
+
 
 }
 

@@ -7,7 +7,7 @@ if(!isset($_SESSION['is_open']))
     header("location:".DOL_HTTP."/application/system/login");
 }
 
-require_once '../../../../application/config/main.php'; //el main contiene la sesion iniciada
+require_once '../../../../application/config/main.php';
 
 
 #declaro las variables globales
@@ -21,10 +21,9 @@ $idPaciente = 0;  #ID PACIENTES ------------------------------------------------
 if(isset($_GET['id']))
 {
 
-    PERMISO_ACCESO_ADMIN_PACIENTES(GETPOST('key'));
+    PERMISO_ACCESO_ADMIN_PACIENTES(GETPOST('key'));  #permisos
 
     $idPaciente  = decomposeSecurityTokenId($_GET['id']); #id del paciente
-    $VISTAS      = $_GET['view'];
 
     #VISTAS FORMULARIOS ----------
     include_once 'view/vistas_mod.php';
@@ -59,7 +58,7 @@ if(isset($_GET['id']))
 
             <div class="box box-solid">
                 <div class="box-header with-border">
-                    <h3 id="tituloInfo"><?= $NAME_MODULO ?></h3>
+                    <h3 id="tituloInfo"><?= $NAME_MODULO ?>  -  <?= getnombrePaciente($idPaciente)->nombre .' ' .getnombrePaciente($idPaciente)->apellido ?></h3>
                 </div>
                 <div class="box-body">
                         <div class="form-group col-md-12 col-xs-12">
@@ -107,7 +106,6 @@ if(isset($_GET['id']))
 <!--modales glob admin pacientes-->
 <?php include_once  DOL_DOCUMENT .'/application/system/pacientes/pacientes_admin/view/menu_admin.php'; ?>
 
-<script src="<?= DOL_HTTP.'/application/system/pacientes/pacientes_admin/'.$DIRECTORIO_ADMIN.'/js/'.$_JS_DOCMENT.'.js' ?>"></script>
 
 <?php
 #FUNCIONES ESPECIALES JAVASCRIP
@@ -117,6 +115,25 @@ switch ($VISTAS)
     case 'arch': #Modulo Ficheros
         echo "<script src='".DOL_HTTP."/application/system/pacientes/pacientes_admin/archivos_ficheros/js/input_file.js'></script>";
         break;
+
+    case 'plantram': #mod Plan tratamiento
+
+        echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/plan_tratamiento/js/plant2.js"></script>';
+        break;
+
+    case 'odot'; #Odontograma
+
+        if(isset($_GET['v']) && $_GET['v'] == 'fordont') #FORMULARIO DE ODONTOGRAMA
+        {
+            echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/odontograma_paciente/js/fetch_odontograma_paint.js"></script>';
+            echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/odontograma_paciente/js/odont2.js"></script>';
+        }
+
+        break;
 }
 ?>
+
+
+<script src="<?= DOL_HTTP.'/application/system/pacientes/pacientes_admin/'.$DIRECTORIO_ADMIN.'/js/'.$_JS_DOCMENT.'.js' ?>"></script>
+
 

@@ -43,10 +43,89 @@ function  odontolist()
     });
 }
 
+//CONSULTAR SECUENCIAL ODONTOGRAMA
+function  concultarSecuencialOdontograma() {
+
+    var sucuencial = 0;
+
+    $.ajax({
+        url: $DOCUMENTO_URL_HTTP +'/application/system/pacientes/admin_paciente/controller/controller_adm_paciente.php',
+        type:'POST',
+        data: {'accion':'consultar_numero_odontograma','ajaxSend':'ajaxSend'},
+        dataType:'json',
+        async:false,
+        success:function(resp){
+
+            $('#suencialOdontograma').text( resp );
+            sucuencial = resp;
+        }
+    });
+
+    return sucuencial;
+}
+
+//corre todos los campos de entrada modificados con librias o framewrok
+function inputs_runn() {
+
+    $('#tratamientoSeled').select2({
+        placeholder: 'seleccione una opcion',
+        allowClear: true,
+        language:'es'
+    });
+}
+
+
+
+
 
 // EXEC ODONTOGRAMA
 
 if( $accionOdontograma == 'principal')
 {
     odontolist();
+    inputs_runn();
+
+
+
+    /*CREAR EL ODONTOGRAMA*/
+    $('#crear_odontograma').on('click', function() {
+
+        // alert( $id_paciente );
+
+        var parametros = {
+            'accion':'nuevoUpdateOdontograma',
+            'ajaxSend':'ajaxSend',
+            'numero': concultarSecuencialOdontograma(),  //ultimo secuencial del odontograma
+            'fk_tratamiento' : $('#tratamientoSeled').find(':selected').val(),
+            'descrip'        : $('#odontograDescrip').val(),
+            'fk_paciente'    : $id_paciente
+        };
+
+        $.ajax({
+            url: $DOCUMENTO_URL_HTTP +'/application/system/pacientes/pacientes_admin/controller/controller_adm_paciente.php',
+            type:'POST',
+            data: parametros ,
+            dataType:'json',
+            async:false,
+            success:function(resp){
+
+                if(resp.error == ''){
+                    notificacion('Información Actualizada', 'success');
+                    setTimeout(function() {
+                        location.reload();
+                    }, 1500);
+                }else{
+
+                    $('#msg_errores_odontogram').html(resp.error);
+                    setTimeout(function() {
+                        $('#msg_errores_odontogram').html(null);
+                    },3000);
+                }
+            }
+        });
+
+    });
+
+
 }
+

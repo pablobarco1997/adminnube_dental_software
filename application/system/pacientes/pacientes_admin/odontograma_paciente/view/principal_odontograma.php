@@ -30,16 +30,23 @@
 
 <div class="form-group col-md-12 col-xs-12">
 
-<!--    LISTA DE ODONTOGRAMA-->
+<!--    LISTA DE ODONTOGRAMA PRINCIPAL -->
     <?php if($v == "listp"){  ?>
 
 <!--        OPCIONES ODONTOGRAMA-->
         <div class="form-group col-md-12 col-xs-12">
-            <ul class="list-inline">
-                <li><a href="#" class="btnhover btn btn-sm " id="createOdontograma"> <b>  <img  src=" <?= DOL_HTTP .'/logos_icon/logo_default/diente.png';?>" width="12px" height="14px" alt="">
+            <label for="">LISTA DE COMPORTAMIENTOS</label>
+
+            <ul class="list-inline" style="border-bottom: 0.6px solid #333333; padding: 3px">
+
+                <li>
+                    <a href="#add_odontograma" data-toggle="modal" class="btnhover btn btn-sm " style="color: #333333" id="createOdontograma"> <b> &nbsp;&nbsp; <img  src=" <?= DOL_HTTP .'/logos_icon/logo_default/diente.png';?>" width="12px" height="14px" alt="">
                             Crear Odontograma  </b> </a>
                 </li>
+
             </ul>
+
+            <br>
         </div>
 
 
@@ -60,6 +67,8 @@
             </div>
         </div>
 
+        <?php include_once 'add_odontograma_modal.php'; ?>
+
     <?php } ?>
 
 
@@ -70,6 +79,10 @@
         <div class="form-group col-md-12 col-xs-12">
 
             <?php include_once DOL_DOCUMENT .'/application/system/pacientes/pacientes_admin/odontograma_paciente/view/picture_piezas_odontograma.php'; ?>
+
+            <br>
+
+            <?php include_once DOL_DOCUMENT .'/application/system/pacientes/pacientes_admin/odontograma_paciente/view/odontogram_tram_form.php'; ?>
 
         </div>
 

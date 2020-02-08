@@ -19,34 +19,6 @@
 
     /*end style caras*/
 
-    .dropdown-content-diente{
-        display: none;
-        position: absolute;
-        background-color: #f1f1f1;
-        min-width: 140px;
-        overflow: auto;
-        box-shadow: 0px 8px 16px 0px rgba(0,0,0,0.2);
-        z-index: 0;
-        height: 190px;
-        overflow-y: scroll;
-    }
-
-    .dropdown-content-diente a{
-        color: black;
-        font-size: 1rem !important;
-        padding: 4px 8px;
-        text-decoration: none;
-        display: block;
-    }
-
-    .dropdown-content-diente a:hover{
-
-        border-left: 1.5px solid black;
-        background-color: rgba(204, 209, 209,0.5);
-    }
-    .mostratMenuEstadosDentales{
-        display: block;
-    }
 
     .dienteActivo{
         background-color: rgba(204, 209, 209,0.5);
@@ -57,27 +29,33 @@
         height: 90px;
     }
 
+    .dientePermanente{
+        padding: 10px !important;
+    }
+
 
 </style>
 
 <div class="table-responsive" >
-    <div style="width: 1250px">
+    <div style="width: 1393px">
 
         <?php
 
         $dropdownMenuEstadosDientes = "
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Lesión de Caries' data-id='1'>  <img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/caries.png' width='20px' height='15px' alt=''> &nbsp;Lesión de Caries</a>                               
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Infección Pulpar' data-id='2'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/infeccion_pulpar.png' width='20px' height='15px' alt=''> &nbsp;Infección Pulpar</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Fractura' data-id='3'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/fractura.png' width='20px' height='15px' alt=''> &nbsp;Fractura</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Indicación de extracción' data-id='4'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/indicacion_extraccion.png' width='20px' height='15px' alt=''> &nbsp;Indicación de extracción</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Ausente' data-id='5'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/ausente.png' width='20px' height='15px' alt=''> &nbsp; Ausente</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Restauración' data-id='6'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/restauracion.png' width='20px' height='15px' alt=''> &nbsp;Restauración</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Endodoncia' data-id='7'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/endodoncia.png' width='20px' height='15px' alt=''> &nbsp;Endodoncia</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Corona' data-id='8'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/corona.png' width='20px' height='15px' alt=''> &nbsp;Corona</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Implante' data-id='9'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/implante.png' width='20px' height='15px' alt=''> &nbsp;Implante</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Perno muñon' data-id='10'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/perno_punon.png' width='20px' height='15px' alt=''> &nbsp;Perno muñon</a>
-<a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Otros' data-id='0'>Otros</a>
-";
+         
+         <ul class='dropdown-menu'>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Lesión de Caries' data-id='1'>  <img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/caries.png' width='20px' height='15px' alt=''> &nbsp;Lesión de Caries</a>                       </li>          
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Infección Pulpar' data-id='2'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/infeccion_pulpar.png' width='20px' height='15px' alt=''> &nbsp;Infección Pulpar</a>  </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Fractura' data-id='3'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/fractura.png' width='20px' height='15px' alt=''> &nbsp;Fractura</a> </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Indicación de extracción' data-id='4'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/indicacion_extraccion.png' width='20px' height='15px' alt=''> &nbsp;Indicación de extracción</a> </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Ausente' data-id='5'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/ausente.png' width='20px' height='15px' alt=''> &nbsp; Ausente</a> </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Restauración' data-id='6'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/restauracion.png' width='20px' height='15px' alt=''> &nbsp;Restauración</a> </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Endodoncia' data-id='7'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/endodoncia.png' width='20px' height='15px' alt=''> &nbsp;Endodoncia</a>  </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Corona' data-id='8'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/corona.png' width='20px' height='15px' alt=''> &nbsp;Corona</a> </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Implante' data-id='9'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/implante.png' width='20px' height='15px' alt=''> &nbsp;Implante</a> </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Perno muñon' data-id='10'><img src='".DOL_HTTP."/logos_icon/logo_default/odontograma/estados_dientes/perno_punon.png' width='20px' height='15px' alt=''> &nbsp;Perno muñon</a> </li>
+              <li>  <a href='#' class='linkdiente' onclick='fetch_diente_odontograma($(this))' title='Otros' data-id='0'>Otros</a>    
+        </ul>";
 
         ?>
 
@@ -94,13 +72,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom" >
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente" >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza18/pieza18-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -148,13 +129,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente" onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente" >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza17/pieza17-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -202,13 +186,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente "  >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza16/pieza16-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -255,13 +242,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza15/pieza15-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -308,13 +298,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza14/pieza14-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -361,13 +354,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza13/pieza13-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -415,13 +411,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza12/pieza12-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -469,13 +468,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza11/pieza11-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -526,13 +528,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza11/pieza11-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -580,13 +585,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza22/pieza22-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -634,13 +642,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza23/pieza23-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -687,13 +698,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza24/pieza24-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -741,13 +755,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza25/pieza25-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -794,13 +811,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza26/pieza26-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -848,13 +868,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza27/pieza27-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -902,13 +925,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza28/pieza28-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -951,6 +977,7 @@
 
         <!--        ========================================HEMIARCADA  SUPERIOR IZQUIERDA =========================================-->
 
+        <hr>
 
         <!--        ========================================HEMIARCADA  INFERIOR DERECHA =========================================-->
 
@@ -965,13 +992,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza48/pieza48-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1018,13 +1048,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza47/pieza47-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1071,13 +1104,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza46/pieza46-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1124,13 +1160,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza45/pieza45-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1177,13 +1216,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza44/pieza44-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1229,13 +1271,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza43/pieza43-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1282,13 +1327,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza42/pieza42-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1335,13 +1383,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza41/pieza41-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1390,13 +1441,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza31/pieza31-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1443,13 +1497,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente  dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza32/pieza32-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1496,13 +1553,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza33/pieza33-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1549,13 +1609,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente  dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza34/pieza34-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1602,13 +1665,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza35/pieza35-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1656,13 +1722,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza36/pieza36-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1709,13 +1778,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza37/pieza37-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1762,13 +1834,16 @@
                     <!--                        MENU DROP DOWN ESTADOS-->
                     <tr>
                         <td colspan="3">
-                            <div class="dropdown-diente">
-                                <div class="dropbtn-diente " onclick="mostratDientesEstados($(this))">
+                            <div class="dropdown-diente dropdown margin-bottom">
+
+                                <button class=' btn btn-xs btnhover dropdown-toggle' type='button' data-toggle='dropdown'> <i class='fa fa-ellipsis-v'></i> </button>
+
+                                <div class="dropbtn-diente " >
                                     <img src="<?= DOL_HTTP . '/logos_icon/logo_default/odontograma/numeros_dientes/dropwdon-menu-pieza38/pieza38-ai.png'?>" alt="">
                                 </div>
-                                <div id="myDropdown-detalle" class="dropdown-content-diente">
-                                    <?= $dropdownMenuEstadosDientes; ?>
-                                </div>
+
+                                <?= $dropdownMenuEstadosDientes; ?>
+
                             </div>
 
                         </td>
@@ -1808,6 +1883,11 @@
 
         </ul>
 
+
+        <br>
+        <br>
+        <br>
+        <br>
 
         <!--    ------------------------------------    -->
 

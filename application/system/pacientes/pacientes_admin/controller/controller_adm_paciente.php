@@ -683,6 +683,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $error = '';
             $puedoPasar = 0;
 
+            $url_location = ""; #para redirigir al odontograma creado
+
             $fk_tratamiento = GETPOST('fk_tratamiento');
             $descript       = GETPOST('descrip');
             $numero         = 0;
@@ -698,12 +700,14 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             }
 
-            $sql1   = "SELECT max(rowid) as rowid FROM tab_odontograma_paciente_cab";
-            $rs1    = $db->query($sql1);
-            $numero = (double)( $rs1->fetchObject()->rowid + 1 ); #ultimo id mas el + 1
+            #consulto el ultmo id
+            $sql1       = "SELECT max(rowid) as rowid FROM tab_odontograma_paciente_cab";
+            $numero     = $db->query($sql1)->fetchObject()->rowid;
+            $ultimo_id_odontgram = (double)( $numero + 1 ); #ultimo id mas el + 1
 
-//            print_r($numero); die();
-            if( $puedoPasar == 0){
+//            print_r($error); die();
+
+            if( $puedoPasar == 0 && $error == ''){
 
                 $paciente->fk_plantratamiento = $fk_tratamiento;
                 $paciente->numero             = $numero;
@@ -736,16 +740,17 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         dc.descripcion,
                         dc.fk_tratamiento, 
                         dc.estado_odont , 
-                        (select if(tc.edit_name != null , tc.edit_name , concat('Plan de Tratamiento #', tc.numero)) 
+                        (select ifnull(edit_name, concat('Plan de tratamiento # ', numero)) as editnum
                             from tab_plan_tratamiento_cab tc where tc.rowid = dc.fk_tratamiento) as labeltram
                     FROM tab_odontograma_paciente_cab dc where dc.rowid > 0 ";
 
             if(!empty($idpaciente)){
                 $sql .= " and dc.fk_paciente = ".$idpaciente;
             }
+
             $resul = $db->query($sql);
 
-            if($resul->rowCount()>0){
+            if($resul->rowCount() > 0){
 
                 while ( $ob = $resul->fetchObject() )
                 {
@@ -761,12 +766,15 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
                     }
 
-                    $url_updateOdont = DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=odot&key='.KEY_GLOB.'&id='.tokenSecurityId($idpaciente).'&v=fordont';
+                    #FK_PLAN DE TRATAMIENTO QUE ESTA ASOCIADO A ESTE ODONTOGRAMA
+                    $URL_idplantramiento = '&idplantram='.$ob->fk_tratamiento;
 
-                    $opciones = "<div class='form-group col-md-6 col-xs-6 col-sm-6'>
+                    $url_updateOdont = DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=odot&key='.KEY_GLOB.'&id='.tokenSecurityId($idpaciente).'&v=fordont'.$URL_idplantramiento;
+
+                    $opciones = "<div class='form-group col-md-12 col-lg-6 col-xs-12 col-sm-12'>
                                      <a href='$url_updateOdont' class='btnhover btn btn-sm ' style='font-weight: bolder'> <i class='fa fa-edit'></i> ACTUALIZAR </a>     
                                  </div>
-                                 <div class='form-group col-md-6 col-xs-6 col-sm-6'>
+                                 <div class='form-group col-md-12 col-lg-6 col-xs-12 col-sm-12'>
                                      <a href='#' class='btnhover btn btn-sm ' style='font-weight: bolder; color: red' > <i class='fa fa-trash'></i> ELIMINAR </a> 
                                  </div>";
 
@@ -938,6 +946,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
         case 'list_tratamiento':
 
             $idpaciente = GETPOST('idpaciente');
+            $estadotram = GETPOST('mostrar_anulados');
 
             $dataprincipal = array();
 
@@ -948,7 +957,9 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         ifnull((select concat(od.nombre_doc, ' ', od.apellido_doc) from tab_odontologos od where od.rowid =  tc.fk_doc ), 'No asignado') as nombre_doc,
                         
                         tc.estados_tratamiento , tc.ultima_cita , tc.situacion , tc.edit_name as edit_name , 
-                        tc.fk_paciente as idpaciente, tc.fk_cita as idCitas
+                        tc.fk_paciente as idpaciente, tc.fk_cita as idCitas , 
+                        
+                        tc.fecha_create 
                         
                         FROM tab_plan_tratamiento_cab tc , tab_admin_pacientes ap
                         where 
@@ -956,6 +967,16 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                    ";
             $sql .= " and tc.fk_paciente = ".$idpaciente." ";
 
+            if(!empty($estadotram))
+            {
+                if($estadotram == 'si'){
+                    $sql .= " and tc.estados_tratamiento = 'E'";
+                }
+
+                if($estadotram == 'no'){
+                    $sql .= " and tc.estados_tratamiento = 'A'";
+                }
+            }
 //            print_r($sql); die();
             $rul = $db->query($sql);
 
@@ -990,6 +1011,9 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $row[] = $ob->situacion;
                     $row[] = $ob->rowid; #id plan de tratamiento
                     $row[] = $ob->idCitas; #id plan de cita asociada
+
+                    $row[] = $ob->estados_tratamiento; #estado plan de tratamiento
+                    $row[] = $ob->fecha_create; #fecha de creacion del plan de tratamiento
 
                     $dataprincipal[] = $row;
 
@@ -1044,7 +1068,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
         case 'fecht_odontograma':
 
             $error = '';
-            $dataprincipal = array();
+            $dataPrincipal = array();
             $idpaciente    = GETPOST('idpaciente');
             $idtratamiento = GETPOST('idtratamiento');
 
@@ -1299,6 +1323,100 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             echo json_encode($output);
 
             break;
+
+        case 'confirm_eliminar_plantratamiento':
+
+            $subaccion  = GETPOST('subaccion');
+            $idplantcab = GETPOST('idplan');
+            $idpaciente = GETPOST('idpaciente');
+
+            $acierto = 0;
+
+            $msgConfirm = "";
+            $error = 0;
+            $errores = '';
+
+            if($subaccion == 'eliminar_plantcab_preguntar')
+            {
+                $sql1 = "select rowid, fk_cita, estados_tratamiento,  concat('Plan de Tratamiento: #', '', numero) numero , edit_name from tab_plan_tratamiento_cab where rowid = $idplantcab and fk_paciente = $idpaciente limit 1;";
+                $rs1 = $db->query($sql1);
+
+                if($rs1->rowCount()>0)
+                {
+                    $objectplantram = $rs1->fetchObject();
+
+                    if( $objectplantram->estados_tratamiento == 'E' ) #ANULADO O ELIMINADO
+                    {
+                        $error++;
+                        $errores = 'Este plan de tratamiento ya se encuentra ANULADO';
+                    }
+
+                    if( $objectplantram->estados_tratamiento == 'A' )
+                    {
+                        $nametram = ($objectplantram->edit_name == null) ? $objectplantram->numero : $objectplantram->edit_name;
+
+                        if( $objectplantram->fk_cita  > 0 ) #asociado a una cita
+                        {
+                            $msgConfirm = "<b>Confimar:</b> Este <b>" . $nametram . "</b> esta asociado a una cita <br>
+                                                <b>continuar con la eliminación</b><br>
+                                                <small><b>Si plan de tratamiento esta asociado a un Odontograma Este tambien se eliminara</b></small>";
+                        }
+
+                        if( $objectplantram->fk_cita  == 0 ) #asociado a una cita
+                        {
+                            $msgConfirm = "<b>Confimar:</b> Desa eliminar este <b>" . $nametram . "</b> <br>
+                                                <b>continuar con la eliminación</b><br>
+                                                <small><b>Si plan de tratamiento esta asociado a un Odontograma Este tambien se eliminara</b></small>";
+                        }
+                    }
+
+                }else{
+
+                    $error++;
+                    $errores = 'Ese plan de tratamiento no existe';
+                }
+            }
+
+            if($subaccion == 'confirm_eliminar')
+            {
+                #UPDATE ESTADO ANULADO
+                $sqlupdatPlant = "UPDATE `tab_plan_tratamiento_cab` SET `estados_tratamiento`='E' WHERE `rowid`='$idplantcab';";
+                $delUpd = $db->query($sqlupdatPlant);
+                if(!$delUpd){
+                    $error++;
+                    $errores = "Ocurrio un error con la eliminación Consulte con soporte";
+                }else{
+                    $acierto++;
+                }
+
+                #ELIMINACION DE PLAN DE TRATAMIENTO
+                /*
+                $sqldelcab = "DELETE FROM `tab_plan_tratamiento_cab` WHERE `rowid`='$idplantcab' and fk_paciente = $idpaciente;";
+                $delrcab = $db->query($sqldelcab);
+
+                if($delrcab){
+
+                    $sqldeldet = "DELETE FROM `tab_plan_tratamiento_det` WHERE `rowid` > 0 and fk_plantratam_cab = $idplantcab ;";
+                    $db->query($sqldeldet);
+
+                }else{
+                    $error++;
+                    $errores = "Ocurrio un error con la eliminación Consulte con soporte";
+                }*/
+
+            }
+
+
+
+
+            $output = [
+                'error' => $error , 'errores' => $errores , 'msgConfirm' => $msgConfirm, 'acierto'=> $acierto
+            ];
+
+            echo json_encode($output);
+            break;
+
+
     }
 }
 
@@ -1523,25 +1641,26 @@ function listcitas_admin($idPaciente, $fechaInicio, $fechafin){
     $data = array();
 
     $sql = "select 
-            d.fecha_cita  as fecha_cita,
-            d.hora_inicio , 
-            d.hora_fin ,
-            d.rowid  as id_cita_det,
-            
-            (select concat(p.nombre ,' ',p.apellido) from tab_admin_pacientes p where p.rowid = c.fk_paciente) as paciente,
-            (select rowid from tab_admin_pacientes p where p.rowid = c.fk_paciente) as idpaciente,
-            (select telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil,
-            
-            (select concat(o.nombre_doc,' ', o.apellido_doc) from tab_odontologos o where o.rowid = d.fk_doc) as doct ,
-            (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as estado,
-            (select s.color from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as color,
-            d.fk_estado_paciente_cita , 
-            c.comentario ,
-            (select es.nombre_especialidad FROM tab_especialidades_doc es where es.rowid = d.fk_especialidad) as especialidad,
-            
-            					(select p.telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil
+
+                    date_format(d.fecha_cita, '%Y-%m-%d')  as fecha_cita,
+                    c.rowid as id_cita_cab ,
+                    d.hora_inicio , 
+                    d.hora_fin ,
+                    d.rowid  as id_cita_det,
+                    (select concat(p.nombre ,' ',p.apellido) from tab_admin_pacientes p where p.rowid = c.fk_paciente) as paciente,
+                    (select rowid from tab_admin_pacientes p where p.rowid = c.fk_paciente) as idpaciente,
+                    (select telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil,
+                    (select concat(o.nombre_doc,' ', o.apellido_doc) from tab_odontologos o where o.rowid = d.fk_doc) as doct ,
+                    (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as estado,
+                    (select s.color from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as color,
+                    d.fk_estado_paciente_cita , 
+                    c.comentario ,
+                    IFNULL((select es.nombre_especialidad FROM tab_especialidades_doc es where es.rowid = d.fk_especialidad), 'No asignada') as especialidad,
+                    (select IFNULL(tc.edit_name, concat('Plan de tratamiento #',tc.numero)) from tab_plan_tratamiento_cab tc where tc.fk_cita = c.rowid limit 1) as plantratamiento ,
+                    (select p.telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil
                 
          from 
+         
              tab_pacientes_citas_cab c , tab_pacientes_citas_det d
              where c.rowid = d.fk_pacient_cita_cab ";
 
@@ -1550,6 +1669,8 @@ function listcitas_admin($idPaciente, $fechaInicio, $fechafin){
     }
 
 //    print_r($sql);
+//    die();
+
     $res = $db->query($sql);
 
     if($res->rowCount()>0){
@@ -1557,8 +1678,6 @@ function listcitas_admin($idPaciente, $fechaInicio, $fechafin){
         while ($obj = $res->fetchObject()){
 
             $row = array();
-            $numeroTratamiento = "TRTAMIENTO-0001";
-
             $label = "";
             $diasTranscurridos = date('Y-m-d');
 
@@ -1569,11 +1688,13 @@ function listcitas_admin($idPaciente, $fechaInicio, $fechafin){
 
             }
 
-            $row[] = $numeroTratamiento;
-            $row[] = $obj->doct;
-            $row[] = "<p style='margin: 0px'> ".date('Y/m/d', strtotime($obj->fecha_cita))."</p>$label";
+
+            $row[] = $obj->fecha_cita;
             $row[] = $obj->especialidad;
-            $row[] = $obj->estado;
+            $row[] = "Cita - " . str_pad($obj->id_cita_cab, 6, "0", STR_PAD_LEFT);
+            $row[] = $obj->comentario;
+            $row[] = $obj->plantratamiento;
+            $row[] = "<label class='label' style='background-color: $obj->color !important; font-size: 1.5rem; color: #333333'> $obj->estado </label>";
 
             $data[] = $row;
         }
