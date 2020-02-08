@@ -29,8 +29,6 @@
     <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.css'?> ">
 <!--    input search css-->
     <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/css/inputSearch.css'?> ">
-<!--    alertify-->
-    <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/lib/alertify/css/alertify.rtl.css'?> ">
 
 </head>
 <style>

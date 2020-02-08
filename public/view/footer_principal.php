@@ -16,8 +16,6 @@
 </body>
 </html>
 
-<!--Loadding lib global -->
-<script src="<?php echo DOL_HTTP .'/public/js/loadding.lib.glob.js' ?>"></script>
 <!-- REQUIRED JS SCRIPTS -->
 <!-- jQuery 3 -->
 <script src="<?php echo DOL_HTTP.'/public/bower_components/jquery/dist/jquery.js'?>"></script>
