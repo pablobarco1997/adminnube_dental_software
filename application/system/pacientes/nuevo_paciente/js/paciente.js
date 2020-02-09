@@ -177,6 +177,8 @@ $(document).ready(function() {
         },
         singleDatePicker: true,
         showDropdowns: true,
+        autoclose: true,
+        pickerPosition: "bottom-left"
     });
 
 
