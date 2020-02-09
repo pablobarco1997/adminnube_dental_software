@@ -93,8 +93,6 @@ if(isset($_GET['view']))
         </section>
     </div>
 
-    <br>
-
 </div>
 <?php include_once DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
 <?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
