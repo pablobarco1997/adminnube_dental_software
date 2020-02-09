@@ -11,16 +11,16 @@
     <div class="col-sm-12 col-lg-12">
         <div class="table-responsive">
             <table class="table" style="width: 100%" id="table_ficheros_paciente">
-                <thead style="background-color: #FDFEFE">
-                <tr>
-                    <th WIDTH="14%">HORA</th>
-                    <th WIDTH="14%">DOCTOR</th>
-                    <th WIDTH="14%">PACIENTE</th>
-                    <th WIDTH="14%">RUC/CÉDULA</th>
-                    <th WIDTH="14%">TELÉFONO</th>
-                    <th WIDTH="14%">ESPECIALIDAD</th>
-                    <th WIDTH="14%">OBSERVACIÓN</th>
-                </tr>
+                <thead>
+                    <tr>
+                        <th WIDTH="14%">HORA</th>
+                        <th WIDTH="14%">DOCTOR</th>
+                        <th WIDTH="14%">PACIENTE</th>
+                        <th WIDTH="14%">RUC/CÉDULA</th>
+                        <th WIDTH="14%">TELÉFONO</th>
+                        <th WIDTH="14%">ESPECIALIDAD</th>
+                        <th WIDTH="14%">OBSERVACIÓN</th>
+                    </tr>
                 </thead>
             </table>
         </div>

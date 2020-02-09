@@ -46,40 +46,14 @@ if(isset($_GET['view']))
         background-color: #E5E8E8;
         border-radius: 10px;
     }
-    .addCitas{
-        cursor: pointer;
-        display: inline-block;
-        padding: 7px;
-        /*margin: 0px;*/
-        /*background-color: #E5E8E8;*/
-        /*border-radius: 10px;*/
-        color: black;
-        float: right;
-        color: black;
 
-    }
 
-    .Filtros{
-        /*padding: 5px;*/
-        margin: 0px;
-        background-color: #E5E8E8;
-        border-radius: 3px;
-    }
-
-    .view_none_list {
-        display: none;
-    }
 
     /* Ensure that the demo table scrolls */
     th, td { white-space: nowrap; }
     div.dataTables_wrapper {
         width: 100%;
         margin: 0 auto;
-    }
-
-    .callbox{
-        border-left: 2px solid #212f3d;
-
     }
 
 

@@ -22,6 +22,7 @@
 <script src="<?php echo DOL_HTTP.'/public/bower_components/jquery/dist/jquery.js'?>"></script>
 <!-- Bootstrap 3.4 -->
 <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/dist/js/bootstrap.js'?>"></script>
+<script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/js/popover.js'?>"></script>
 <!-- AdminLTE App -->
 <script src="<?php echo DOL_HTTP .'/public/js/adminlte.min.js'?>"></script>
 <!--datatable-->

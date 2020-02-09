@@ -1,154 +1,165 @@
+<style>
+    .callbox{
+        border-left: 2px solid #212f3d;
+    }
+</style>
 
-<?
-//    include_once  DOL_DOCUMENT .'/application/system/agenda/controller/agenda_controller.php';
-?>
+
 
 <div class="row">
     <div class="col-md-12">
 
         <div class="box box-solid">
             <div class="box-header with-border">
-                <h3>Agenda</h3>
+                <h3>AGENDA</h3>
             </div>
 
             <div class="box-body">
 
-                <div class="row margenTopDiv" >
-                    <div class="col-md-4 col-lg-4 col-xs-12">
-                        <div class="info-box">
-                            <div class="info-box-icon bg-aqua" style="background-color: #212f3d!important;">
-                                <i class="fa fa-calendar" style="margin-top: 20px"></i>
-                            </div>
-                            <div class="info-box-content">
-                                <span class="info-box-text">NÚMERO DE CITAS PARA HOY </span>
-                                <span class="info-box-number" style="font-size: 2em" id="numCitas">0</span>
-                                <span><?= date("Y/m/d")?></span>
+
+                <div class="row" >
+                    <div class="form-group col-lg-12 col-md-12">
+                        <div class="col-md-4 col-lg-4 col-xs-12">
+                            <div class="info-box">
+                                <div class="info-box-icon bg-aqua" style="background-color: #212f3d!important;">
+                                    <i class="fa fa-calendar" style="margin-top: 20px"></i>
+                                </div>
+                                <div class="info-box-content">
+                                    <span class="info-box-text">NÚMERO DE CITAS PARA HOY </span>
+                                    <span class="info-box-number" style="font-size: 2em" id="numCitas">0</span>
+                                    <span><?= date("Y/m/d")?></span>
+                                </div>
                             </div>
                         </div>
                     </div>
                 </div>
 
-                <div class="row margenTopDiv" >
+                <div class="row" >
 
-                    <div class="col-md-6 col-sm-6  <?= $permisos->consultar  ?>">
-                        <table>
-                            <tr>
-                                <th>
+                    <div class="form-group col-md-12 col-lg-12">
+                        <div class="col-md-6 col-sm-6  <?= $permisos->consultar  ?>">
+                            <ul class="list-inline">
+                                <li>
                                     <div class="callbox">
                                         <div class="form-group">
                                             <div class="checkbox <?= $permisos->consultar  ?>">
-                                                <a href="<?= DOL_HTTP .'/application/system/agenda/index.php?view=principal&list=diaria' ?>" class="btn <?= $permisos->consultar  ?>">
+                                                <a style="color: #333333" href="<?= DOL_HTTP .'/application/system/agenda/index.php?view=principal&list=diaria' ?>" class="btn btnhover <?= $permisos->consultar  ?>">
                                                     DIARIA
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                </th>
-                                <th>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;</th>
-                                <th>
+                                </li>
+                                <li>
                                     <div class="callbox">
                                         <div class="form-group">
-                                            <div class="checkbox <?= $permisos->consultar  ?>">
-                                                <a href="<?php echo DOL_HTTP.'/application/system/agenda/index.php?view=principal&list=diariaglob'?>" class="btn <?= $permisos->consultar  ?>">
+                                            <div class="checkbox  <?= $permisos->consultar  ?>">
+                                                <a style="color: #333333" href="<?php echo DOL_HTTP.'/application/system/agenda/index.php?view=principal&list=diariaglob'?>" class="btn btnhover <?= $permisos->consultar  ?>">
                                                     DIARIA GLOBAL
                                                 </a>
                                             </div>
                                         </div>
                                     </div>
-                                </th>
-                            </tr>
-                        </table>
+                                </li>
+                                <li>
+                                    <div class="callbox">
+                                        <div class="form-group">
+                                            <div class="checkbox <?= $permisos->consultar  ?>">
+                                                <a href="#agendaModCitas" data-toggle="modal" style="color: #333333" class="btn btnhover addCitas  <?= $permisos->agregar  ?>">
+                                                    AGENDAR UNA CITA &nbsp;&nbsp;<i class="fa fa-calendar"></i>
+                                                </a>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </li>
+                            </ul>
+                        </div>
                     </div>
-
-                    <div class="col-md-6 col-sm-6">
-                        <ul class="list-inline" style="float: right">
-                            <li>
-                                <a href="#agendaModCitas" data-toggle="modal" class="addCitas btn btnhover<?= $permisos->agregar ?>" ><i class="fa fa-plus" aria-hidden="true"></i>&nbsp; AGREGAR CITAS</a>
-                            </li>
-                        </ul>
-
-                    </div>
-
                 </div>
 
                 <div class="row">
+                    <div class="form-group col-lg-12 col-md-12">
 
-                        <div class="col-md-12 margenTopDiv ">
-                            <div class="form-group"><label for="">Filtrar:</label></div>
-                            <div class="form-group  col-md-4 col-xs-12">
-                                <label for="">Doctor</label>
-                                <select name="" id="filtro_doctor" class="filtrar_doctor select2_max_ancho <?= $permisos->consultar  ?>" >
-                                    <option value=""></option>
-                                    <?php
-                                        $sql = "SELECT * FROM tab_odontologos;";
-                                        $rs = $db->query($sql);
-                                        if($rs->rowCount() > 0)
-                                        {
-                                            while ($obj = $rs->fetchObject())
-                                            {
-                                                echo "<option value='$obj->rowid'>$obj->nombre_doc  $obj->apellido_doc</option>";
-                                            }
-                                        }
-                                    ?>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4 col-xs-12">
-                                <label for="">Estados</label>
-                                <select name="" id="filtroEstados" class="select2_max_ancho filtrar_estados <?= $permisos->consultar  ?>" multiple>
-                                    <option value=""></option>
-                                        <?php
-                                            $sql = "SELECT * FROM tab_pacientes_estado_citas;";
-                                            $rs = $db->query($sql);
-                                            if($rs->rowCount() > 0)
-                                            {
-                                                while ($obj = $rs->fetchObject())
-                                                {
-                                                    echo "<option value='$obj->rowid' >$obj->text</option>";
-                                                }
-                                            }
-                                        ?>
-                                </select>
-                            </div>
-                            <div class="form-group col-md-4 col-xs-12">
-                                <label for="">Fecha</label>
-                                <div class="input-group">
-                                    <input type="date" class="form-control filtroFecha <?= $permisos->consultar  ?>" value="<?= date("Y/m/d") ?>">
-                                    <div class="input-group-addon" >
-                                        <span class=""><i class="fa fa-calendar" aria-hidden="true"></i></span>
-                                    </div>
-                                </div>
-                            </div>
-                            <div class="form-group col-sm-12 margenTopDiv">
-                                <button class="aplicar btn btn-xs <?= $permisos->consultar  ?>" style="float: right; padding: 3px" ><i class="fa fa-search-plus" aria-hidden="true"></i> &nbsp; Filtrar busqueda</button>
-                                <button class="limpiar btn btn-xs <?= $permisos->consultar  ?>" style="float: right; padding: 3px; margin-right: 15px" > &nbsp;Limpiar &nbsp;</button>
+                        <div class="form-group col-md-4 col-xs-12">
+                            <label for="">Fecha</label>
+                            <div class="input-group form-group rango" style="margin: 0">
+                                <input type="text" class="form-control filtroFecha <?= $permisos->consultar  ?> " id="startDate" value="">
+                                <span class="input-group-addon" style="border-radius: 0"><i class="fa fa-calendar"></i></span>
                             </div>
                         </div>
 
+
+                        <div class="form-group  col-md-4 col-xs-12">
+                            <label for="">Doctor</label>
+                            <select name="" id="filtro_doctor" class="filtrar_doctor select2_max_ancho <?= $permisos->consultar  ?>" >
+                                <option value=""></option>
+                                <?php
+                                $sql = "SELECT * FROM tab_odontologos;";
+                                $rs = $db->query($sql);
+                                if($rs->rowCount() > 0)
+                                {
+                                    while ($obj = $rs->fetchObject())
+                                    {
+                                        echo "<option value='$obj->rowid'>$obj->nombre_doc  $obj->apellido_doc</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+
+                        <div class="form-group col-md-4 col-xs-12">
+                            <label for="">Estados</label>
+                            <select name="" id="filtroEstados" class="select2_max_ancho filtrar_estados <?= $permisos->consultar  ?>" multiple>
+                                <option value=""></option>
+                                <?php
+                                $sql = "SELECT * FROM tab_pacientes_estado_citas;";
+                                $rs = $db->query($sql);
+                                if($rs->rowCount() > 0)
+                                {
+                                    while ($obj = $rs->fetchObject())
+                                    {
+                                        echo "<option value='$obj->rowid' >$obj->text</option>";
+                                    }
+                                }
+                                ?>
+                            </select>
+                        </div>
+
+                        <div class="form-group col-md-4 pull-right">
+                            <ul class="list-inline pull-right">
+                                <li>  <button class="aplicar btn btnhover <?= $permisos->consultar  ?>" style="float: right; padding: 3px" > &nbsp; <i class="fa fa-search" ></i> &nbsp;buscar &nbsp;</button> </li>
+                                <li>  <button class="limpiar btn btnhover <?= $permisos->consultar  ?>" style="float: right; padding: 3px" > &nbsp; &nbsp; Limpiar &nbsp; &nbsp;</button> </li>
+                            </ul>
+                        </div>
+
+                    </div>
                 </div>
-                <br>
 
-<!--                Lista diaria-->
-                <div class="list-diaria">
+                <div class="form-group col-md-12 col-xs-12">
+                    <!--                Lista diaria-->
+                    <div class="list-diaria">
 
-                    <?php
+                        <?php
 
                         if(isset($_GET['list']) && $_GET['list'] == 'diaria')
                         {
                             include_once DOL_DOCUMENT .'/application/system/agenda/view/list_diaria.php';
                         }
 
-                    ?>
-                </div>
-<!--                Lista global-->
-                <div class="list-diariaGlobal">
-                    <?php
+                        ?>
+                    </div>
+                    <!--                Lista global-->
+                    <div class="list-diariaGlobal">
+                        <?php
 
                         if(isset($_GET['list']) && $_GET['list'] == 'diariaglob')
                         {
                             include_once DOL_DOCUMENT .'/application/system/agenda/view/list_globaldiaria.php';
                         }
 
-                    ?>
+                        ?>
+                    </div>
                 </div>
 
             </div>

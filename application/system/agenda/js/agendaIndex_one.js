@@ -7,7 +7,10 @@ function loadtableAgenda($doctor, $estado, $fecha)
         searching: false,
         ordering:false,
         destroy:true,
-        // scrollX: true,
+
+        scrollX: true,
+        scrollY: 700,
+
         ajax:{
             url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
             type:'POST',
@@ -407,65 +410,6 @@ function notificaionEmail($idPaciente, $idcita, idestado, idcita )
 
 }
 
-function menuDropdownCita(html, tipo)
-{
-    if(tipo==0)
-    {
-        var dropdown     = html.parents(".dropdownMenuIndex2");
-        var block        = dropdown.find(".dropdownMenuIndex-content");
-        console.log(html);
-
-        if($('.dropdownActivar').length > 0)
-        {
-            var dropdowns = document.getElementsByClassName("dropdownMenuIndex-content");
-
-            var i;
-            // console.log(dropdowns.length -1);
-
-            for (i = 0; i < dropdowns.length ; i++)
-            {
-                var openDropdown = dropdowns[i];
-                if (openDropdown.classList.contains('dropdownActivar'))
-                {
-                    openDropdown.classList.remove('dropdownActivar');
-                }
-            }
-
-
-        }
-
-        if($('.dropdownActivar').length == 0)
-        {
-
-            block.addClass('dropdownActivar');
-        }
-    }
-
-    
-}
-
-// drowpmenu
-window.onclick = function(event) {
-
-    if (!event.target.matches('.dropbtn'))
-    {
-            var dropdowns = document.getElementsByClassName("dropdownMenuIndex-content");
-
-            var i;
-            // console.log(dropdowns.length -1);
-
-                for (i = 0; i < dropdowns.length ; i++)
-                {
-                    var openDropdown = dropdowns[i];
-                    if (openDropdown.classList.contains('dropdownActivar'))
-                    {
-                        openDropdown.classList.remove('dropdownActivar');
-                    }
-                }
-
-    }
-
-};
 
 //CREATE PLAN DE TRATAMIENTO DESDE CITAS
 function create_plandetratamiento($idpaciente, $idcitadet, $iddoct, $html)
@@ -796,10 +740,57 @@ $(".limpiar").click(function() {
 
 
     $("#filtro_doctor").val(null).trigger('change');
-    document.getElementById('filtroEstados').innerHTML = ""; 
-    $(".filtroFecha").val(null);
+    document.getElementById('filtroEstados').innerHTML = "";
 
     loadtableAgenda();
     list_global_diaria_citas();
+});
+
+
+$('.filtroFecha').daterangepicker({
+
+    locale: {
+        format: 'YYYY/MM/DD' ,
+        daysOfWeek: [
+            "Dom",
+            "Lun",
+            "Mar",
+            "Mie",
+            "Jue",
+            "Vie",
+            "Sáb"
+        ],
+        monthNames: [
+            "Enero",
+            "Febrero",
+            "Marzo",
+            "Abril",
+            "Mayo",
+            "Junio",
+            "Julio",
+            "Agosto",
+            "Septiembre",
+            "Octubre",
+            "Noviembre",
+            "Diciembre"
+        ],
+    },
+
+    startDate: moment().startOf('month'),
+    endDate: moment(),
+    ranges: {
+        'Hoy': [moment(), moment()],
+        'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+        'Últimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+        'Últimos 30 Dias': [moment().subtract(29, 'days'), moment()],
+        'Mes Actual': [moment().startOf('month'), moment().endOf('month')],
+        'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+        'Año Actual': [moment().startOf('year'), moment().endOf('year')],
+        'Año Pasado': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+    }
+});
+
+$('.rango span').click(function() {
+    $(this).parent().find('input').click();
 });
 

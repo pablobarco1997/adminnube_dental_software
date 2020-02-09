@@ -526,46 +526,58 @@ function list_citas($doctor, $estado = array(), $fecha)
             //PACIENTES
             $html2 = "";
             $html2 .= "<div class='form-group col-md-12'>";
+            $html2 .= " <i class='fa fa-user'></i> $acced->paciente";
+                $html2 .= "<div class='dropdown pull-right'>
+                                <button class='btn btnhover  dropdown-toggle' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>
+                                <ul class='dropdown-menu'>";
 
-                $html2 .= "<div   style='background-color: #e9edf2;margin-bottom: 10px; padding-left: 5px; cursor: pointer' class='text-left dropdownMenutextoAbsoluta'>
-                                   
-                                    <p style=' cursor:pointer; margin: 0px; ;display: inline-block; font-size: 1.5rem'> 
-                                      <i class='fa fa-user'></i> $acced->paciente
-                                     </p>";
-                        $html2 .= "<div class='dropdownMenuIndex-content' style='top: 21px; left: 20rem; width: 150px;'>";
+                                $tienePlanTratamiento = "";
+                                $tieneComentarioadicional = "";
 
-                        $tienePlanTratamiento = "";
-                        $tieneComentarioadicional = "";
+                                $sql2 = "SELECT * FROM tab_plan_tratamiento_cab where fk_cita =  $acced->id_cita_det";
+                                $rs2 = $db->query($sql2);
+                                if($rs2->rowCount()>0){
+                                    $tienePlanTratamiento = "disabled_link3";
+                                }
 
-                        $sql2 = "SELECT * FROM tab_plan_tratamiento_cab where fk_cita =  $acced->id_cita_det";
-                        $rs2 = $db->query($sql2);
-                        if($rs2->rowCount()>0){
-                            $tienePlanTratamiento = "disabled_link3";
-                        }
+                                if($acced->comentario_adicional != ""){
+                                    $tieneComentarioadicional = "disabled_link3";
+                                }
 
-                        if($acced->comentario_adicional != ""){
-                            $tieneComentarioadicional = "disabled_link3";
-                        }
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' class='$tienePlanTratamiento' onclick='create_plandetratamiento($acced->idpaciente, $acced->id_cita_det, $acced->iddoctor , $(this));'  >Plan de Tratamiento</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Recaudación</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='".DOL_HTTP."/application/system/pacientes/admin_paciente/?view=form_datos_personales&id=$acced->idpaciente' >Datos personales</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a> </li>";
 
-                            $html2 .= "<a style='cursor: pointer; font-size: 1.1rem;' class='$tienePlanTratamiento' onclick='create_plandetratamiento($acced->idpaciente, $acced->id_cita_det, $acced->iddoctor , $(this));'  >Plan de Tratamiento</a>";
-                            $html2 .= "<a style='cursor: pointer; font-size: 1.1rem;' >Recaudación</a>";
-                            $html2 .= "<a style='cursor: pointer; font-size: 1.1rem;' href='".DOL_HTTP."/application/system/pacientes/admin_paciente/?view=form_datos_personales&id=$acced->idpaciente' >Datos personales</a>";
-                            $html2 .= "<a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a>";
+                                $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det)' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
 
-                            $html2 .= "<a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det)' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a>";
-
-                        $html2 .= "</div>";
+                    $html2 .= "</ul>";
                 $html2 .= "</div>";
-
-            $html2 .= "<p class='text-left'><i class='fa fa-mobile-phone'></i>&nbsp; $acced->telefono_movil</p>";
             $html2 .= "</div>";
 
             $html4  = "";
-            $html4 .= "<div class='form-group col-md-12'>";
-//                $html4 .= "<i class='fa fa-x4 fa-comment commentPopover'  data-toggle=\"tooltip\" data-placement=\"right\" title='$acced->comentario' style='cursor:pointer;'> </i>";
+            $html4 .= "<div class='form-group col-md-12 col-xs-12'>";
+
+            if(!empty($acced->comentario))
+            {
                 $html4 .= "<ul class='list-inline'>";
-                    $html4 .= ' <li><i class="fa fa-x3 fa-comment" style="cursor: pointer" title="'.$acced->comentario.'"></i></li>';
+                    $html4 .= ' <li> 
+                                        <div style="width: 400px !important; ">
+                                        <p style="width: 400px" class="trunc" title="' .$acced->comentario. '">  
+                                            <i class="fa fa-x3 fa-comment" style="cursor: pointer" ></i> '. $acced->comentario .'
+                                        </p>
+                                        </div>
+                                </li>';
                 $html4 .= "</ul>";
+            }
+
+            if(!empty($acced->telefono_movil))
+            {
+                $html4 .= "<ul class='list-inline'>";
+                    $html4 .= ' <li><i class="fa fa-x3 fa-phone" style="cursor: pointer" ></i> '. $acced->telefono_movil .' </li>';
+                $html4 .= "</ul>";
+            }
+
             $html4 .= "</div>";
 
             $row[] = $html2 ."".$html4;
@@ -581,13 +593,13 @@ function list_citas($doctor, $estado = array(), $fecha)
             $html5 .= "</div>";
             $row[] = $html5;
 
+            #DROPDOWN -------------------------------------------------------------------------------------------------
             $html3 = "";
-            $html3 .= "<div class='form-group col-md-12'>$acced->estado &nbsp;&nbsp;";
-                $html3 .= "<div class='dropdownMenuIndex2' style='float: right!important;'>";
-                $html3 .= "    <p class='dropbtn text-center' style='height: 100%'  onclick='menuDropdownCita($(this), 0)'>
-                                    ▼
-                               </p>&nbsp;&nbsp;";
-                        $html3 .= " <div class='dropdownMenuIndex-content'>";
+            $html3 .= "<div class='form-group col-md-12 col-xs-12'>$acced->estado";
+                $html3 .= "<div class='dropdown pull-right'>";
+//            onclick='menuDropdownCita($(this), 0)'
+                $html3 .= "    <button class='btn btnhover  dropdown-toggle' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>";
+                        $html3 .= " <ul class='dropdown-menu pull-right'>";
 
                         $sqlMenuDrowpdown = "SELECT * FROM tab_pacientes_estado_citas";
                         $rsdrown = $db->query($sqlMenuDrowpdown);
@@ -611,26 +623,27 @@ function list_citas($doctor, $estado = array(), $fecha)
                                     $dataEmailPaciente = "data-email='$acced->email'";
                                 }
 
-                                $todosdata .= " ".
+                                    $todosdata .= " ".
                                     $dataTelefono." ".
                                     $dataEmailPaciente." ";
 
                                 if($acced->fk_estado_paciente_cita == $rowxs->rowid )//muestra la cita con el estado seleccionado
                                 {
-                                    $html3 .= " <a class='activeEstadoCita' $todosdata   style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a>";
+                                    $html3 .= "<li> <a class='activeEstadoCita' $todosdata   style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a> </li>";
                                 }
                                 else{
 
-                                    $html3 .= " <a  data-text='$rowxs->text' $todosdata  onclick='EstadosCitas($rowxs->rowid, $acced->id_cita_det, $(this), $acced->idpaciente)' style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a>";
+                                    $html3 .= "<li> <a  data-text='$rowxs->text' $todosdata  onclick='EstadosCitas($rowxs->rowid, $acced->id_cita_det, $(this), $acced->idpaciente)' style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a> </li>";
                                 }
                             }
                         }
 
+                         $html3 .= " </ul>"; #dropdown end
 
-                         $html3 .= " </div>";
                 $html3 .= "</div>";
             $html3 .= "</div>";
 
+            #END DROPDOWN-----------------------------------------------------------------------------------------------
             $row[] = $html3;
 
 
