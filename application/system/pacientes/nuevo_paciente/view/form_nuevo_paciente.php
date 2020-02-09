@@ -2,7 +2,7 @@
     <div class="col-md-12">
             <div class="box box-solid">
                     <div class="box-header with-border">
-                        <h3>Registrar Nuevo Paciente</h3>
+                        <h3>REGISTRAR NUEVO PACIENTE</h3>
                     </div>
 
                     <div class="box-body">
@@ -20,9 +20,11 @@
 
 <!--                        FORM DE REGISTRO PACIENTE-->
                         <div class="col-md-12  col-sm-12 margenTopDiv">
-                            <div style="background-color: #E5E8E8; border-radius: 3px; padding: 3px; width: 100%">
+
+                            <div style="padding: 3px; width: 100%">
 
                                 <div class="center-block" style="width: 70%">
+
                                         <form action="" style="padding: 20px">
 
                                                     <div class="form-group">
@@ -85,8 +87,14 @@
 
                                                     <div class="form-group">
                                                         <label for="">Fecha de Nacimiento</label>
-                                                        <input type="date" class="form-control" id="fech_nacimit">
-                                                        <small id="noti_date_nacimiento" style="color: red"></small>
+
+                                                        <div class="input-group date" data-provide="datepicker" >
+                                                            <input type="text" class="form-control" id="fech_nacimit"  readonly>
+                                                            <div class="input-group-addon">
+                                                                <span class="fa fa-calendar"></span>
+                                                            </div>
+                                                            <small id="noti_date_nacimiento" style="color: red"></small>
+                                                        </div>
                                                     </div>
 
                                                     <div class="form-group">
@@ -142,13 +150,16 @@
                                                     </div>
 
                                                     <div class="form-group">
-                                                        <input type="button" class="btn btn-success" value="Guardar" id="guardar" style="float: right">
+                                                        <input type="button" class="btn btnhover btn-block" style="font-weight: bolder; color: green" id="guardar" value="Guardar">
                                                     </div>
                                         </form>
+
                                     <br>
+
                                 </div>
 
                             </div>
+
                         </div>
 
 <!--                                        END FORM PACIENTE -->

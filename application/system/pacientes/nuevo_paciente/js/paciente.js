@@ -147,4 +147,37 @@ function invalic_paciente()
 
 $(document).ready(function() {
 
+
+    $('#fech_nacimit').daterangepicker({
+        locale: {
+            format: 'YYYY/MM/DD' ,
+            daysOfWeek: [
+                "Dom",
+                "Lun",
+                "Mar",
+                "Mie",
+                "Jue",
+                "Vie",
+                "Sáb"
+            ],
+            monthNames: [
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
+            ],
+        },
+        singleDatePicker: true,
+        showDropdowns: true,
+    });
+
+
 });
