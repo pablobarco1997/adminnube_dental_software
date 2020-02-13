@@ -421,11 +421,6 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 'logo'         => $conf->EMPRESA->INFORMACION->logo              ,
                 'celular'      => $conf->EMPRESA->INFORMACION->celular           ,
 
-                'paciente' => [
-                    'id_cita'            => $rowCitasObject->rowid,    #id de la cita detalle
-                    'id_pacient'         => $rowCitasObject->fk_pacient_cita_cab ,
-                    'fecha_cita'         => $rowCitasObject->fecha_cita
-                ]
             ];
 
 
