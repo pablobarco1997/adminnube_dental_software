@@ -2,7 +2,7 @@
 
 <?php
 
-    include_once DOL_DOCUMENT .'/public/information/controller/informacion_controller.php';
+//    include_once DOL_DOCUMENT .'/public/information/controller/informacion_controller.php';
 
     $fecha = GET_DATE_SPANISH( date('Y-m-d') );
 
@@ -36,7 +36,7 @@
 <div class="container">
     <div class="form-group col-md-12 col-xs-12">
         <div class=" col-centered col-xs-12 col-md-8 col-sm-8  " >
-            <div class="noti_content"  style="margin-top: 15%; width: 100%">
+            <div class="noti_content"  style="margin-top: 7%; width: 100%">
                 <div class="page-header" style="padding-left: 7px; background-color: #2980B9; margin-bottom: 0px; border: none!important; ">
                     <ul class="list-inline" style="margin-bottom: 0px !important;">
 

@@ -211,7 +211,7 @@ function notificaionEmail($idPaciente, $idcita, idestado, idcita )
 
             error                   = resp.error_email;
             error_registrar_email_  = resp.registrar;
-            
+
 
             if(error == '' && error_registrar_email_ == ""){
                 $('#asunto_email').val();
