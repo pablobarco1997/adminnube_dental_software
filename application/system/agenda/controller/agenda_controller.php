@@ -452,11 +452,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $error = notificarCitaEmail($datos, $buttonConfirmacion);
 
-            $output = [
-                'error'         => $error,
-            ];
-
-            echo json_encode($output);
+            echo json_encode($error);
 
             break;
 
@@ -932,7 +928,7 @@ function notificarCitaEmail($datos, $token_confirmacion)
         $error = 'No esta asignado el acceso de e-mail';
     }
 
-
+    $error_insert_notific_email = "";
     if($error == '' || $error == true){
 
         $sql = "INSERT INTO `tab_notificacion_email` (`asunto`, `from`, `to`, `subject`, `message`, `estado`, `fk_paciente`, `fk_cita`, `fecha`) ";
@@ -952,12 +948,19 @@ function notificarCitaEmail($datos, $token_confirmacion)
 //        die();
         $rs = $db->query($sql);
         if(!$rs){
-            $error = 'Ocurrio un error, el sistema no logro registrar el correo enviado';
+            $error_insert_notific_email = 'Ocurrio un error, el sistema no logro registrar el correo enviado';
         }
 
     }
 
-    return ($error == true) ? '' : $error;
+    $Ouput = [
+
+        'registrar'   => $error_insert_notific_email ,
+        'error_email' => ($error == true) ? "" : $error
+
+    ];
+
+    return $Ouput;
 
 }
 

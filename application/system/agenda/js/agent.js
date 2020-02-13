@@ -189,6 +189,7 @@ function notificaionEmail($idPaciente, $idcita, idestado, idcita )
     $('#emailEspere').fadeIn();
 
     var error = '';
+    var error_registrar_email_ = '';
     $.ajax({
         url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
         type:'POST',
@@ -208,9 +209,11 @@ function notificaionEmail($idPaciente, $idcita, idestado, idcita )
         async: false,
         success: function(resp){
 
-            error = resp.error;
+            error                   = resp.error_email;
+            error_registrar_email_  = resp.registrar;
+            
 
-            if(error == '' || error){
+            if(error == '' && error_registrar_email_ == ""){
                 $('#asunto_email').val();
                 $('#de_email').val();
                 $('#para_email').val();
@@ -223,7 +226,16 @@ function notificaionEmail($idPaciente, $idcita, idestado, idcita )
 
             }else{
 
-                notificacion(error, 'error');
+                if(error !="" )
+                {
+                    notificacion(error, 'error');
+                }
+
+                if(error_registrar_email_ != "")
+                {
+                    notificacion(error_registrar_email_, 'error');
+                }
+
                 $('#emailEspere').fadeOut();
             }
 
