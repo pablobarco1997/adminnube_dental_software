@@ -13,6 +13,9 @@
         $objPacienteInfo = json_decode(decomposeSecurityTokenId($_GET['token']));
     }
 
+    $name_db_entity = $objPacienteInfo[1];
+    $id_citadet     = $objPacienteInfo[0];
+
 //    echo '<pre>';
 //    print_r($objPacienteInfo); die();
 
@@ -40,11 +43,11 @@
                 <div class="page-header" style="padding-left: 7px; background-color: #2980B9; margin-bottom: 0px; border: none!important; ">
                     <ul class="list-inline" style="margin-bottom: 0px !important;">
 
-                        <li style="width: 20%"><img class="img-rounded"  src="<?= DOL_HTTP .'/logos_icon/icon_logos_'.$objPacienteInfo->entity.'/'.$objPacienteInfo->logo ;?>"
+                        <li style="width: 20%"><img class="img-rounded"  src="<?= DOL_HTTP .'/logos_icon/icon_logos_'.$objPacienteInfo[2] .'/'.$objPacienteInfo[4] ;?>"
                                   alt="icon_clinica" style="width: 60px; height: 60px; background-color: #ffffff">
                         </li>
 
-                        <li style="width: 60%">  <h3 class="text-center" style="font-weight: bolder; color: #ffffff; margin-top: 25px"><?= $objPacienteInfo->name_clinica ?></h3></li>
+                        <li style="width: 60%">  <h3 class="text-center" style="font-weight: bolder; color: #ffffff; margin-top: 25px"><?= $objPacienteInfo[3] ?></h3></li>
                     </ul>
                 </div>
                 <div class="form-group col-md-12 col-xs-12 insetbox-body" style="background-color: #7FB3D5">
@@ -60,11 +63,7 @@
                     </div>
 
                     <div class="form-group col-xs-12 col-md-12 col-sm-12" style="text-align: justify; overflow-y: auto">
-
-                        <p class="text-center"><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_correo.png'?>" style="width: 20px ; height: 20px ;" alt=""> &nbsp; E-mail: &nbsp;</b> <?= $objPacienteInfo->email ?></p>
-                        <p class="text-center"><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_llamar.png'?>" style="width: 20px ; height: 20px ;" alt="">  &nbsp; Cel: &nbsp;</b> <?= $objPacienteInfo->celular ?> </p>
-
-
+                        <hr>
                     </div>
 
                     <div class="row">

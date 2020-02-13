@@ -412,16 +412,14 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $rowCitasObject = $rsuCita;
 
             #GENERAR TOKEN E INFORMACION DE LA CLINICA
-            $create_token_confirm_citas = [
-                'name_db'      => $conf->EMPRESA->INFORMACION->nombre_db_entity  ,
-                'entity'       => $conf->EMPRESA->INFORMACION->numero_entity     ,
-                'name_clinica' => $conf->EMPRESA->INFORMACION->nombre            ,
-                'email'        => $conf->EMPRESA->INFORMACION->email             ,
-                'direccion'    => $conf->EMPRESA->INFORMACION->direccion         ,
-                'logo'         => $conf->EMPRESA->INFORMACION->logo              ,
-                'celular'      => $conf->EMPRESA->INFORMACION->celular           ,
 
-            ];
+            /*
+            'name_db'      => $conf->EMPRESA->INFORMACION->nombre_db_entity  , 0
+            'entity'       => $conf->EMPRESA->INFORMACION->numero_entity     , 1
+            'name_clinica' => $conf->EMPRESA->INFORMACION->nombre            , 2
+            'logo'         => $conf->EMPRESA->INFORMACION->logo              , 3*/
+
+            $create_token_confirm_citas = [$idcita,$conf->EMPRESA->INFORMACION->nombre_db_entity,$conf->EMPRESA->INFORMACION->numero_entity,$conf->EMPRESA->INFORMACION->nombre,$conf->EMPRESA->INFORMACION->logo];
 
 
 
@@ -439,7 +437,13 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                'message' =>   $message,
 
                 'feche_cita' => $rowCitasObject->fecha_cita ,
-                'horaInicio' => $rowCitasObject->hora_inicio
+                'horaInicio' => $rowCitasObject->hora_inicio ,
+
+                /*INFORMACION DE LA CLINICA*/
+
+                'email'        => $conf->EMPRESA->INFORMACION->email             ,
+                'direccion'    => $conf->EMPRESA->INFORMACION->direccion         ,
+                'celular'      => $conf->EMPRESA->INFORMACION->celular           ,
             );
 
 //            echo '<pre>';
@@ -883,7 +887,7 @@ function notificarCitaEmail($datos, $token_confirmacion)
 
             $messabody = "";
             if($message!=""){
-                $messabody = "<br><b>Mensaje:</b>&nbsp; $message <br>";
+                $messabody = "<br><b>Mensaje:</b>&nbsp; ". utf8_decode($message) ." <br>";
             }
 
             // Content
@@ -899,6 +903,9 @@ function notificarCitaEmail($datos, $token_confirmacion)
                                     <br>
                                     ". $token_confirmacion ."
                                     <br>
+                                    <b>".utf8_decode('Dirección:')."</b>&nbsp; ". $datos->direccion ."
+                                    <br>
+                                    <b>".utf8_decode('Teléfono:')."</b>&nbsp;  ". $datos->celular ."
                                     <br>
                                     <br>
                                     
@@ -955,6 +962,8 @@ function notificarCitaEmail($datos, $token_confirmacion)
 
     ];
 
+//    print_r($Ouput);
+//    die();
     return $Ouput;
 
 }
