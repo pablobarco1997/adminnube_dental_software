@@ -26,7 +26,7 @@
         -ms-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         -o-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
-        padding: 15px;
+        padding-top: 15px;
     }
 
 </style>
@@ -59,25 +59,27 @@
                         <p class="text-center"> RECORDATORIO DE CITA - <b> ¿ CONFIRMAR CITA ?</b> </p>
                     </div>
 
-                    <div class="form-group col-xs-12 col-md-12">
-                        <ul style="list-style: none">
-                            <li><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_correo.png'?>" style="width: 20px ; height: 20px ;" alt=""> &nbsp; E-mail: &nbsp;</b> <?= $objPacienteInfo->email ?>   </li>
-                            <li>&nbsp;</li>
-                            <li><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_llamar.png'?>" style="width: 20px ; height: 20px ;" alt="">  &nbsp; Cel: &nbsp;</b> <?= $objPacienteInfo->celular ?> </li>
-                        </ul>
+                    <div class="form-group col-xs-12 col-md-12 col-sm-12" style="text-align: justify; overflow-y: auto">
+
+                        <p class="text-center"><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_correo.png'?>" style="width: 20px ; height: 20px ;" alt=""> &nbsp; E-mail: &nbsp;</b> <?= $objPacienteInfo->email ?></p>
+                        <p class="text-center"><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_llamar.png'?>" style="width: 20px ; height: 20px ;" alt="">  &nbsp; Cel: &nbsp;</b> <?= $objPacienteInfo->celular ?> </p>
+
+
                     </div>
 
-                    <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
-                        <a  class=" action-button animate-buton blue" style="font-weight: bolder; text-align: center" >CONFIRMAR CITA ( <i class="fa fa-check-circle"></i> )</a>
-                    </div>
+                    <div class="row">
+                        <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
+                            <a  class=" action-button animate-buton blue" id="asistir" style="font-weight: bolder; float: left" >ASISTIR </a>
+                        </div>
 
-                    <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
-                        <a  class=" action-button animate-buton red" style="font-weight: bolder; float: right" >NO ASISTIR ? ( x )</a>
+                        <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
+                            <a  class=" action-button animate-buton red" id="no_asistir" style="font-weight: bolder; float: right" >NO ASISTIR</a>
+                        </div>
                     </div>
-
                 </div>
-
             </div>
+
+
         </div>
     </div>
 </div>
