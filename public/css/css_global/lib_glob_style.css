@@ -1,0 +1,76 @@
+.form-control{
+    border: 0.9px solid #AEB6BF;
+    box-shadow: inset 0 0.1px 1px  rgba(0,0,0,.39), 0 -1px 1px #FFF, 0 1px 0 #FFF;
+}
+
+.form-control:focus{
+    border: 0.9px solid #212F3D;
+}
+
+.disabled_link3 {
+    color: currentColor;
+    cursor: not-allowed;
+    opacity: 0.5;
+    text-decoration: none;
+    pointer-events: none;
+}
+
+li.Active_link a{
+    background-color: #1e282c !important;
+    color: #f8f8f8 !important;
+    border-left: 3px solid #3c8dbc !important;
+}
+
+/*** SCROLL GLOBAL CAMBIANDO EL DISEÑO ***/
+*::-webkit-scrollbar{
+    width: 10px;
+    background-color: #ffffff;
+}
+
+*::-webkit-scrollbar-thumb{
+    background-color: #cccccc;
+    border-radius: 5px;
+}
+
+
+.swal2-content{
+    font-size: 1.4rem!important;
+}
+
+.select2-search-choice div{
+    padding: 3px;
+}
+.select2-choices .select2-search-choice{
+    background-color: #D6EAF8 !important;
+}
+.select2-search-choice-close{
+    margin-top: 2.3px;
+}
+
+.btnhover{
+    cursor: pointer;
+}
+.btnhover:hover{
+    background-color: #e9edf2;
+}
+
+/*trunc la letra con  puntos ...*/
+.trunc{
+    width:250px;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
+}
+
+/*Modal diseño personalizado*/
+.modal-diseng{
+    background-color: #212f3d !important;
+    color: #ffffff;
+}
+
+
+/*contenedor centro col bootstrap*/
+.col-centered{
+    float: none;
+    margin: 0 auto;
+}

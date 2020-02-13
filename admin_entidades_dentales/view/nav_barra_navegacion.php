@@ -12,6 +12,10 @@ if(isset($_GET['view']) && $_GET['view'] == 'create_clinica')
 {
     $view   = $_GET['view'];
 }
+if(isset($_GET['view']) && $_GET['view'] == 'create_querydb')
+{
+    $view   = $_GET['view'];
+}
 
 
 
@@ -26,9 +30,20 @@ $arrayCreateClinica = (object)[
     'active' => ($view == 'create_clinica') ?  'active' : '',
 ];
 
+$arrayIngresoConsultas = (object)[
+    'url'    => DOL_HTTP.'/admin_entidades_dentales/index.php?view=create_querydb' ,
+    'active' => ($view == 'create_querydb') ?  'active' : '',
+];
+
 
 ?>
 
+<style>
+
+    .borderlits{
+        border-left: 1px solid #a5a5a5;
+    }
+</style>
 
 <nav class="navbar navbar-default" style="">
     <div class="container-fluid">
@@ -47,9 +62,10 @@ $arrayCreateClinica = (object)[
 
         ?>
 
-        <li class="<?= $arrayhome->active ?>"><a href="<?= $arrayhome->url ?>">INICIO</a></li>
-        <li class="<?= $arrayCreateClinica->active ?>"><a href="<?= $arrayCreateClinica->url ?>">CREAR CLINICA</a></li>
-        <li><a href="#" onclick="cerrarSesion()">CERRAR SESION</a></li>
+        <li class="borderlits <?= $arrayhome->active ?>"><a href="<?= $arrayhome->url ?>">INICIO</a></li>
+        <li class="borderlits <?= $arrayCreateClinica->active ?>"><a href="<?= $arrayCreateClinica->url ?>">CREAR CLINICA</a></li>
+        <li class="borderlits <?= $arrayIngresoConsultas->active ?>"><a href="<?= $arrayIngresoConsultas->url ?>">AGREGAR CONSULTAS A TODAS LA BASES &nbsp;<i class="fa fa-database"></i></a></li>
+        <li class="borderlits"><a href="#" onclick="cerrarSesion()">CERRAR SESION</a></li>
 
         <?php  }else{ ?>
 

@@ -1,12 +1,4 @@
-<!--<!-- Main Footer -->
-<!--<footer class="main-footer" style="margin: 0px; background-color: #212F3D !important; color: #FDFEFE; width: 100%">-->
-<!--    <!-- To the right -->
-<!--    <div class="pull-right hidden-xs">-->
-<!--        Anything you want-->
-<!--    </div>-->
-<!--    <!-- Default to the left -->
-<!--    <strong>Copyright &copy; --><?php //echo date('Y')   ?><!-- <a href="#">Company</a>.</strong> Todos los derechos reservados.-->
-<!--</footer>-->
+
 
 <div class="control-sidebar-bg"></div>
 
@@ -32,7 +24,7 @@
 <script src="<?php echo DOL_HTTP .'/public/bower_components/select2/select2.js'?>"></script>
 <script src="<?php echo DOL_HTTP .'/public/bower_components/select2/select2_locale_es.js'?>"></script>
 <!-- sweetalert2 -->
-<script src="<?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.js'?>" ></script>
+<script src="<?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.all.js'?>" ></script>
 <!--    mask-->
 <script src="<?php echo DOL_HTTP .'/public/lib/jquery.mask.min.js'?> "></script>
 <script src="<?php echo DOL_HTTP .'/public/lib/jquery.maskMoney.js'?> "></script>

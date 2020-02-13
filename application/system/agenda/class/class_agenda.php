@@ -51,7 +51,7 @@ class admin_agenda{
     public function GenerarCitas()
     {
 
-        $error = 0;
+        $error = "";
 
         $sql = "INSERT INTO tab_pacientes_citas_cab (`fecha_create`, `fk_paciente`, `comentario`, `fk_login_user`) ";
         $sql .= "value(";
@@ -105,15 +105,12 @@ class admin_agenda{
                     $sql1 .= "'$Hora_Fin' ";
                     $sql1 .= ")";
 
-//                    print_r($sql1); die();
-
                     $this->db->query($sql1);
-
-                    $error++;
 
             }
 
-            $error++;
+        }else{
+            $error = 'Ocurrio un error al  generar la cita , consulte con soporte tecnico';
         }
 
         return $error;

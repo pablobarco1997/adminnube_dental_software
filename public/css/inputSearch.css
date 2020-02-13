@@ -1,9 +1,3 @@
-.btnhover{
-    cursor: pointer;
-}
-.btnhover:hover{
-    background-color: #e9edf2;
-}
 
 .autocomplete {
     position: relative;
@@ -66,19 +60,7 @@ input[type=submit] {
     border: 1px solid red !important;
 }
 
-/*trunc la letra con  puntos ...*/
-.trunc{
-    width:250px;
-    white-space: nowrap;
-    overflow: hidden;
-    text-overflow: ellipsis;
-}
 
-/*Modal diseño personalizado*/
-.modal-diseng{
-    background-color: #212f3d !important;
-    color: #ffffff;
-}
 
 /*LOADDING GLOB*/
 .loadding-text{

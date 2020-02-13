@@ -25,12 +25,12 @@
                </div>
 
                <?php
-               /*
+
                global $conf, $user;
                echo '<pre>';
                     print_r($conf);
                     echo '<pre>';
-                    print_r($user);*/
+                    print_r($user);
 
                ?>
            </div>

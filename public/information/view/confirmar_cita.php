@@ -4,46 +4,90 @@
 
     include_once DOL_DOCUMENT .'/public/information/controller/informacion_controller.php';
 
+    $fecha = GET_DATE_SPANISH( date('Y-m-d') );
 
-    $fecha = getdateSpanish( date('Y-m-d') );
+    $objPacienteInfo = [];
 
-//    echo date('D', strtotime('2019-11-10'));
-//    die();
+    if(isset($_GET['token']))
+    {
+        $objPacienteInfo = json_decode(decomposeSecurityTokenId($_GET['token']));
+    }
+
+//    echo '<pre>';
+//    print_r($objPacienteInfo); die();
+
 ?>
 
 <style>
 
-    .informacion-cita{
-        -webkit-box-shadow: 3px 3px 5px 0px rgba(115,110,115,1);
-        -moz-box-shadow: 3px 3px 5px 0px rgba(115,110,115,1);
-        box-shadow: 3px 3px 5px 0px rgba(115,110,115,1);
-        width: 100%;
-        padding: 20px;
+    .insetbox-body{
+        -webkit-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        -moz-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        -ms-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        -o-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
+        padding: 15px;
     }
 
 </style>
 
+<?php if(isset($_GET['token'])) { ?>
 
-<div class="center-block" style="width: 450px; margin-top: 3%">
-    <div class="form-group">
-        <div class="informacion-cita">
-            <h3 class="text-center">Datos de la cita </h3>
-            <p class="alert bg-info">la confirmacion de la cita solo es valida para esta fecha</p>
-            <p class="alert bg-warning"><?= $fecha; ?></p>
-            <hr>
+<div class="container">
+    <div class="form-group col-md-12 col-xs-12">
+        <div class=" col-centered col-xs-12 col-md-8 col-sm-8  " >
+            <div class="noti_content"  style="margin-top: 15%; width: 100%">
+                <div class="page-header" style="padding-left: 7px; background-color: #2980B9; margin-bottom: 0px; border: none!important; ">
+                    <ul class="list-inline" style="margin-bottom: 0px !important;">
 
-            <p class="text-center">
-                <img width="80%" height="80%" class="text-center" src="https://img2.freepng.es/20190511/iug/kisspng-portable-network-graphics-calendar-date-total-acce-musicalfactory-64853-webseite-des-projekts-titan-5cd709349efb66.5865115115575964686512.jpg" alt="">
-            </p>
+                        <li style="width: 20%"><img class="img-rounded"  src="<?= DOL_HTTP .'/logos_icon/icon_logos_'.$objPacienteInfo->entity.'/'.$objPacienteInfo->logo ;?>"
+                                  alt="icon_clinica" style="width: 60px; height: 60px; background-color: #ffffff">
+                        </li>
 
+                        <li style="width: 60%">  <h3 class="text-center" style="font-weight: bolder; color: #ffffff; margin-top: 25px"><?= $objPacienteInfo->name_clinica ?></h3></li>
+                    </ul>
+                </div>
+                <div class="form-group col-md-12 col-xs-12 insetbox-body" style="background-color: #7FB3D5">
 
-           <div class="row">
-               <div class="col-md-12">
-                   <button class="btn-success btn" style="float: left"> <i class="fa fa-check"></i> Confirma cita (si, asiste)</button>
-                   <button class="btn-danger btn" style="float: right">No asiste (no, pudo asistir)</button>
-               </div>
-           </div>
+                    <div class="form-group col-md-12 col-xs-12">
+                        <div class="col-centered col-md-3 col-sm-4 col-xs-6">
+                            <img src="<?= DOL_HTTP .'/logos_icon/logo_default/campana.png' ?>" class=" " style="width: 100%; height: 100%;" alt="">
+                        </div>
+                    </div>
 
+                    <div class="form-group col-xs-12 col-md-12">
+                        <p class="text-center"> RECORDATORIO DE CITA - <b> ¿ CONFIRMAR CITA ?</b> </p>
+                    </div>
+
+                    <div class="form-group col-xs-12 col-md-12">
+                        <ul style="list-style: none">
+                            <li><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_correo.png'?>" style="width: 20px ; height: 20px ;" alt=""> &nbsp; E-mail: &nbsp;</b> <?= $objPacienteInfo->email ?>   </li>
+                            <li>&nbsp;</li>
+                            <li><b> <img src="<?= DOL_HTTP .'/logos_icon/logo_default/icon_def_llamar.png'?>" style="width: 20px ; height: 20px ;" alt="">  &nbsp; Cel: &nbsp;</b> <?= $objPacienteInfo->celular ?> </li>
+                        </ul>
+                    </div>
+
+                    <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
+                        <a  class=" action-button animate-buton blue" style="font-weight: bolder; text-align: center" >CONFIRMAR CITA ( <i class="fa fa-check-circle"></i> )</a>
+                    </div>
+
+                    <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
+                        <a  class=" action-button animate-buton red" style="font-weight: bolder; float: right" >NO ASISTIR ? ( x )</a>
+                    </div>
+
+                </div>
+
+            </div>
         </div>
     </div>
 </div>
+
+<?php } ?>
+
+
+<script>
+
+
+
+
+</script>

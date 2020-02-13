@@ -171,6 +171,10 @@ function notificacion(mensage, accion)
     {
         label = "Información";
     }
+    if(accion == "warning")
+    {
+        label = "Advertencia";
+    }
 
     Swal.fire(label, mensage, accion);
 

@@ -187,4 +187,33 @@ function decomposeSecurityTokenId($token){
     return hex2bin($token);
 }
 
+
+function ConfirmacionEmailHTML($token)
+{
+    $Url_ConfirmCita = DOL_HTTP .'/public/information/?v=confirm_cita&token='.$token;
+
+    $buttonToken = '';
+    $buttonToken .= '
+            
+    <div style=\'width: 100%\'>
+            <a href='. $Url_ConfirmCita .' style="
+                position: relative;
+                padding: 10px 40px;
+                margin: 0px 10px 10px 0px;
+                border-radius: 3px;
+                /*font-family: \'Lato\', sans-serif;*/
+                font-size: 1.4rem;
+                color: #FFF;
+                text-decoration: none; 
+                
+                background-color: #3498db;
+                border-bottom: 5px solid #2980B9;
+                text-shadow: 0px -2px #2980B9;
+                cursor: pointer;
+            ">CONFIRMAR CITA &nbsp;&nbsp; <i class="fa fa-bell-o"></i> </a>
+    </div>';
+
+    return $buttonToken;
+}
+
 ?>

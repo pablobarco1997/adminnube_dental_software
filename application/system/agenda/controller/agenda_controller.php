@@ -7,6 +7,8 @@ require_once DOL_DOCUMENT. '/application/config/main.php'; //el main contiene la
 require_once DOL_DOCUMENT .'/application/system/agenda/class/class_agenda.php';
 
 
+global  $db , $conf;
+
 $agenda = new admin_agenda($db);
 
 if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
@@ -18,7 +20,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
         case 'create_cita_paciente':
 
 
-            $error = 0;
+            $error = "";
+
             $row = GETPOST('datos');
 
             $agenda->fk_paciente    = $row['fk_paciente'];
@@ -26,14 +29,14 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $agenda->fk_login_users = 0;
             $agenda->detalle        = $row['detalle'];
 
-//            print_r($agenda->detalle);
-//            die();
-            if($agenda->GenerarCitas() > 0)
-            {
-                $error = 1;
-            }
+//            print_r($agenda); die();
+            $error = $agenda->GenerarCitas();
 
-            echo json_encode($error);
+            $output = [
+              'error' => $error
+            ];
+
+            echo json_encode($output);
 
             break;
 
@@ -44,18 +47,22 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $doctor  = GETPOST("doctor");
             $fecha   = GETPOST("fecha");
 
-            $fecha2="";
+            $fechaInicio ="";
+            $fechaFin    ="";
             if(!empty($fecha))
             {
-                $fecha2 = date("Y-m-d", strtotime( str_ireplace("/", "-", $fecha)));
+                $fecha   = explode('-',GETPOST("fecha"));
+                $fechaInicio = date("Y-m-d", strtotime( str_replace("/", "-", trim($fecha[0]))));
+                $fechaFin    = date("Y-m-d", strtotime( str_replace("/", "-", trim($fecha[1]))));
             }
 
-            $nu="";
+//            print_r($fechaFin.'   '. $fechaInicio); die();
+            $numerosEstados="";
             if(is_array($estados)){
-                $nu = implode(',', $estados);
+                $numerosEstados = implode(',', $estados);
             }
 
-            $rows = list_citas($doctor,$nu, $fecha2);
+            $rows = list_citas($doctor,$numerosEstados, $fechaInicio, $fechaFin );
 
             $output = [
                 'data' => $rows,
@@ -193,8 +200,16 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             #CUANDO LA CITA SEA
             $idcita                = ( GETPOST('idcitadet') == "") ? 0: GETPOST('idcitadet'); #EL ID DE LA CITA PUEDE SER 0 O MAYOR A 0
             $iddoctor              = GETPOST('iddoct');
-            $idplantramAsociarCita = GETPOST('idplantramAsociar');  #PARA ASOCIAR SITA DE UN PLAN DE TRATAMIENTO YA REALIZADO
+            $idplantramAsociarCita = GETPOST('idplantramAsociar');  #PARA ASOCIAR CITA DE UN PLAN DE TRATAMIENTO YA REALIZADO
+
             $subaccion = GETPOST('subaccion');
+
+//            print_r('doctor - ');
+//            print_r($iddoctor);
+//            echo '<br>';
+//            print_r('cita - ');
+//            print_r($idcita);
+//            die();
 
             #SE VALIDA LA CITA EN CASO DE REPETIR LA ASOCIACION AL PLAN DE TRATAMIENTO
             if($idcita != 0)
@@ -252,7 +267,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $numero = str_pad($rs->numero, 6, "0", STR_PAD_LEFT);
 
                     $agenda->tratam_numero  = $numero;
-                    $agenda->tratam_fk_doc  = ( $iddoctor = 0 ) ? 0 : $iddoctor;
+                    $agenda->tratam_fk_doc  = ( $iddoctor == 0 ) ? 0 : $iddoctor;
                     $agenda->tratam_fk_cita = ( $idcita == 0 ) ? 0 : $idcita; #CITA ID
                     $agenda->tratam_fk_paciente = $idpaciente;
                     $agenda->tratam_fk_convenio = $obj1->fk_convenio;
@@ -381,25 +396,43 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $error = '';
 
-            $idpaciente = GETPOST("idpaciente");
-            $idcita = GETPOST('idcita');
-            $asunto = GETPOST("asunto");
-            $from = GETPOST("from");
+            $idpaciente     = GETPOST("idpaciente");
+            $idcita         = GETPOST('idcita');  #id de la cita detalle
+            $asunto         = GETPOST("asunto");
+            $from           = GETPOST("from");
             $to             = GETPOST("to");
             $subject        = GETPOST("subject");
-            $message = GETPOST("message");
+            $message        = GETPOST("message");
 
-            $htmlform = '
-            <div style="width: 500px; background-color: #fcf8e3">
-                <div style="width: 100%; padding: 15px">
-                    <h2 style="margin: 0px">Confirma cita</h2>
-                    <p>'.utf8_decode('La confirmación de la cita solo es valida hasta la fecha ').' <b>2019/11/29</b> </p>
-            
-                    <div style="100%">
-                        <a href="'.DOL_HTTP.'/public/information/?v=confirmar_cita" id="confimarCitaOnlinePaciente" style="margin: auto;text-align: center; display: block; width: 300px; padding: 15px; background-color: #5cb85c; border: 1px solid #00a157; color: #d5fbe5; font-size: 3rem " >Aceptar</a>
-                    </div>
-                </div>
-            </div>';
+
+            $sqlCitadet     = "SELECT * FROM tab_pacientes_citas_det WHERE rowid = $idcita limit 1";
+            $rsuCita = $db->query($sqlCitadet)->fetchObject();
+
+            #Obtengo el objeto conpleto de la cita
+            $rowCitasObject = $rsuCita;
+
+            #GENERAR TOKEN E INFORMACION DE LA CLINICA
+            $create_token_confirm_citas = [
+                'name_db'      => $conf->EMPRESA->INFORMACION->nombre_db_entity  ,
+                'entity'       => $conf->EMPRESA->INFORMACION->numero_entity     ,
+                'name_clinica' => $conf->EMPRESA->INFORMACION->nombre            ,
+                'email'        => $conf->EMPRESA->INFORMACION->email             ,
+                'direccion'    => $conf->EMPRESA->INFORMACION->direccion         ,
+                'logo'         => $conf->EMPRESA->INFORMACION->logo              ,
+                'celular'      => $conf->EMPRESA->INFORMACION->celular           ,
+
+                'paciente' => [
+                    'id_cita'            => $rowCitasObject->rowid,    #id de la cita detalle
+                    'id_pacient'         => $rowCitasObject->fk_pacient_cita_cab ,
+                    'fecha_cita'         => $rowCitasObject->fecha_cita
+                ]
+            ];
+
+
+
+            $token = tokenSecurityId(json_encode($create_token_confirm_citas));
+            $buttonConfirmacion = ConfirmacionEmailHTML( $token );
+
 
             $datos = (object)array(
                'idpaciente' =>   !empty($idpaciente) ? $idpaciente : 0,
@@ -409,10 +442,15 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                'to' =>   $to,
                'subject' =>   $subject,
                'message' =>   $message,
+
+                'feche_cita' => $rowCitasObject->fecha_cita ,
+                'horaInicio' => $rowCitasObject->hora_inicio
             );
 
+//            echo '<pre>';
 //            print_r($datos); die();
-            $error = notificarCitaEmail($datos, $htmlform);
+
+            $error = notificarCitaEmail($datos, $buttonConfirmacion);
 
             $output = [
                 'error'         => $error,
@@ -446,10 +484,10 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
 }
 
-function list_citas($doctor, $estado = array(), $fecha)
+function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
 {
 
-    global $db, $DOL_HTTP, $permisos;
+    global $db, $permisos;
 
     $data = array();
 
@@ -492,9 +530,9 @@ function list_citas($doctor, $estado = array(), $fecha)
         $sql .= " and d.fk_estado_paciente_cita in($estado)";
     }
 
-    if(!empty($fecha))
+    if(!empty($fechaInicio) && !empty($fechaFin))
     {
-        $sql .= " and d.fecha_cita = '$fecha' ";
+        $sql .= " and cast(d.fecha_cita as date) between cast('$fechaInicio' as date) and cast('$fechaFin' as date) ";
     }
 
     $sql .= " order by d.fecha_cita desc";
@@ -525,9 +563,12 @@ function list_citas($doctor, $estado = array(), $fecha)
 
             //PACIENTES
             $html2 = "";
-            $html2 .= "<div class='form-group col-md-12'>";
-            $html2 .= " <i class='fa fa-user'></i> $acced->paciente";
-                $html2 .= "<div class='dropdown pull-right'>
+            $html2 .= "<div class='form-group col-md-12 col-xs-12' >";
+
+                $html2 .= "<div class='col-xs-10 col-md-10 '> <i class='fa fa-user'></i> $acced->paciente </div>";
+                $html2 .= "
+                        <div class='col-xs-2 col-md-2'>
+                            <div class='dropdown pull-right'>
                                 <button class='btn btnhover  dropdown-toggle' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>
                                 <ul class='dropdown-menu'>";
 
@@ -552,20 +593,21 @@ function list_citas($doctor, $estado = array(), $fecha)
                                 $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det)' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
 
                     $html2 .= "</ul>";
-                $html2 .= "</div>";
+                $html2 .= "</div> 
+                    </div>";
             $html2 .= "</div>";
 
             $html4  = "";
-            $html4 .= "<div class='form-group col-md-12 col-xs-12'>";
-
+            $html4 .= "<div class='form-group col-md-12 col-xs-12'>
+                <div class='col-xs-12 col-md-12'>";
             if(!empty($acced->comentario))
             {
                 $html4 .= "<ul class='list-inline'>";
                     $html4 .= ' <li> 
                                         <div style="width: 400px !important; ">
-                                        <p style="width: 400px" class="trunc" title="' .$acced->comentario. '">  
-                                            <i class="fa fa-x3 fa-comment" style="cursor: pointer" ></i> '. $acced->comentario .'
-                                        </p>
+                                            <p style="width: 400px" class="text-sm text-justify" title="' .$acced->comentario. '">  
+                                                <i class="fa fa-x3 fa-comment" style="cursor: pointer" ></i> '. $acced->comentario .'
+                                            </p>
                                         </div>
                                 </li>';
                 $html4 .= "</ul>";
@@ -578,25 +620,31 @@ function list_citas($doctor, $estado = array(), $fecha)
                 $html4 .= "</ul>";
             }
 
-            $html4 .= "</div>";
+            $html4 .= "</div>
+                </div>";
 
             $row[] = $html2 ."".$html4;
 
             //DOCTOR
-            $html5 = "<div class='form-group col-md-12'>";
-                $html5 .= "<p class='trunc text-left'>Doc(a). $acced->doct</p>";
+            $html5 = "<div class='form-group col-md-12 col-xs-12'>";
+                $html5 .= "<p class='text-left'>Doc(a). $acced->doct</p>";
                 $html5 .= "<p class='trunc'> <i class='fa fa-user-md'></i> &nbsp;&nbsp; $acced->especialidad </p>";
 
                 if($acced->comentario_adicional){
-                    $html5 .= "<p class='trunc text-sm' title='$acced->comentario_adicional'> <i class='fa fa-comment'></i> &nbsp;&nbsp; $acced->comentario_adicional </p>";
+                    $html5 .= "<p class=' text-sm' title='$acced->comentario_adicional'> <i class='fa fa-comment'></i> &nbsp;&nbsp; $acced->comentario_adicional </p>";
                 }
             $html5 .= "</div>";
             $row[] = $html5;
 
             #DROPDOWN -------------------------------------------------------------------------------------------------
             $html3 = "";
-            $html3 .= "<div class='form-group col-md-12 col-xs-12'>$acced->estado";
-                $html3 .= "<div class='dropdown pull-right'>";
+            $html3 .= "<div class='form-group col-md-12 col-xs-12'>
+                        <div class='col-xs-12 col-ms-10 col-md-10'> 
+                            <label for='' class='text-justify' title='$acced->estado' >$acced->estado</label> 
+                        </div>";
+
+            $html3 .= "<div class='col-xs-12 col-ms-2 col-md-2'>
+                            <div class='dropdown pull-right'>";
 //            onclick='menuDropdownCita($(this), 0)'
                 $html3 .= "    <button class='btn btnhover  dropdown-toggle' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>";
                         $html3 .= " <ul class='dropdown-menu pull-right'>";
@@ -611,6 +659,7 @@ function list_citas($doctor, $estado = array(), $fecha)
                                 $todosdata = "";
                                 $dataTelefono = "";
                                 $dataEmailPaciente = "";
+                                $addclases = "";
 
                                 if($rowxs->rowid == 8) //whatsapp
                                 {
@@ -621,6 +670,10 @@ function list_citas($doctor, $estado = array(), $fecha)
                                 if($rowxs->rowid == 1) //notificar por email
                                 {
                                     $dataEmailPaciente = "data-email='$acced->email'";
+                                }
+                                if($rowxs->rowid == 10) //no debe verse el estado confirmado e-mail x paciente - este estado solo lo confirma el paciente
+                                {
+                                    $addclases .= " hide "; //oculto este estado
                                 }
 
                                     $todosdata .= " ".
@@ -633,7 +686,8 @@ function list_citas($doctor, $estado = array(), $fecha)
                                 }
                                 else{
 
-                                    $html3 .= "<li> <a  data-text='$rowxs->text' $todosdata  onclick='EstadosCitas($rowxs->rowid, $acced->id_cita_det, $(this), $acced->idpaciente)' style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a> </li>";
+                                    $html3 .= "<li> <a class=' $addclases '  data-text='$rowxs->text' $todosdata  onclick='EstadosCitas($rowxs->rowid, $acced->id_cita_det, $(this), $acced->idpaciente)' style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a> </li>";
+
                                 }
                             }
                         }
@@ -641,13 +695,20 @@ function list_citas($doctor, $estado = array(), $fecha)
                          $html3 .= " </ul>"; #dropdown end
 
                 $html3 .= "</div>";
-            $html3 .= "</div>";
+            $html3 .= "</div> 
+            </div>";
 
             #END DROPDOWN-----------------------------------------------------------------------------------------------
             $row[] = $html3;
 
 
-            $row[] = "Diagnostico";
+            #DIAGNOSTICO O OTROS ESTADOS
+
+            $html6 = "<div class='col-md-12 col-xs-12'>
+                        <label class='label text-bold' style='color: #333333; font-size: 1.4rem; background-color: #E5E7E9'> Diagnostico </label>
+                    </div>";
+
+            $row[] = $html6;
 
             $data[] = $row;
         }
@@ -770,23 +831,30 @@ function fecth_diariaHorasGlobal($fecha, $hora, $doctor, $export, $estados)
     return $detalle;
 }
 
-function notificarCitaEmail($datos, $formulario_confirmacion)
+function notificarCitaEmail($datos, $token_confirmacion)
 {
 
     global $db, $conf, $user;
 
+//    print_r($token_confirmacion); die();
     require_once DOL_DOCUMENT .'/public/lib/PHPMailer2/src/Exception.php';
     require_once DOL_DOCUMENT .'/public/lib/PHPMailer2/src/PHPMailer.php';
     require_once DOL_DOCUMENT .'/public/lib/PHPMailer2/src/SMTP.php';
 
     $error = '';
 
-    $asunto = $datos->asunto;
-    $from = $datos->from;
-    $to = $datos->to;
-    $message = $datos->message;
-    $subject = $datos->subject;
+    $asunto     = $datos->asunto;
+    $from       = $datos->from;
+    $to         = $datos->to;
+    $message    = $datos->message;
+    $subject    = $datos->subject;
 
+    $labelPaciente = getnombrePaciente($datos->idpaciente)->nombre.' '.getnombrePaciente($datos->idpaciente)->apellido;
+
+//    echo '<pre>';
+//    print_r($conf->EMPRESA->INFORMACION->conf_email);
+//    print_r($conf->EMPRESA->INFORMACION->conf_password);
+//    die();
 
     $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 
@@ -802,15 +870,15 @@ function notificarCitaEmail($datos, $formulario_confirmacion)
 
             // Enable SMTP authentication
             #acceso de envio
-            $mail->Username   = $conf->EMPRESA->INFORMACION->conf_email;             // SMTP username
-            $mail->Password   = $conf->EMPRESA->INFORMACION->conf_password ;                               // SMTP password
+            $mail->Username   = trim($conf->EMPRESA->INFORMACION->conf_email);             // SMTP username
+            $mail->Password   = trim($conf->EMPRESA->INFORMACION->conf_password);                               // SMTP password
             $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
             $mail->Port       = 587;
 
 
             //Recipients
             $mail->setFrom($conf->EMPRESA->INFORMACION->conf_email, $conf->EMPRESA->INFORMACION->nombre);
-            $mail->addAddress($to , '');     // Add a recipient
+            $mail->addAddress($to);     // Add a recipient
 
             /*$mail->addAddress('ellen@example.com');               // Name is optional
             $mail->addReplyTo('info@example.com', 'Information');
@@ -822,12 +890,32 @@ function notificarCitaEmail($datos, $formulario_confirmacion)
             $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
             $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name */
 
+            $messabody = "";
+            if($message!=""){
+                $messabody = "<br><b>Mensaje:</b>&nbsp; $message <br>";
+            }
+
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = utf8_decode($subject);
-            $mail->Body    = $formulario_confirmacion; #envio un formulariode confirmacion
-            $mail->AltBody = '';
+            $mail->Body    = "<div> <b>Estimado/a:</b>&nbsp;$labelPaciente  <br><br> 
+                                Le recordamos que tiene una cita agendada para la fecha - <b>". GET_DATE_SPANISH(date('Y-m-d', strtotime($datos->feche_cita))) ." - hora ". $datos->horaInicio . "</b>   
+                                
+                                      ". $messabody ."
+                                
+                                    <br>
+                                    <br>
+                                    <br>
+                                    ". $token_confirmacion ."
+                                    <br>
+                                    <br>
+                                    <br>
+                                    
+                                </div>"; #envio un formulariode confirmacion
+            $mail->AltBody = "";
 
+//            echo '<pre>';
+//            print_r($mail); die();
             $error = $mail->send();
 
             //emael no enviado
@@ -836,15 +924,16 @@ function notificarCitaEmail($datos, $formulario_confirmacion)
             }
 
         }catch (Exception $e){
-            $error = 'Ocurrio un error con la Operación Notificar por e-mail verifique el e-mail o Consulte con soporte Tecnico';
+            $error = 'Ocurrio un error con la Operación " Notificar por e-mail " verifique el e-mail o Consulte con soporte Tecnico - ' . $mail->ErrorInfo .' - Error : Acceso de aplicaciones poco seguras - https://myaccount.google.com/u/1/lesssecureapps?rapt=AEjHL4MUc6sVgag8QGQq-fdisl2F5kETOCyzfQXY51-RqKtpVrpX3CsW1tPL-IWkXzK6LerTnHSPxirTQ3OrLtppXWFrXKwegg';
         }
 
     }else{
-        $error = 'No esta asignado el acceso de e-mail de la clinica';
+
+        $error = 'No esta asignado el acceso de e-mail';
     }
 
 
-    if($error == "" || $error == true){
+    if($error == '' || $error == true){
 
         $sql = "INSERT INTO `tab_notificacion_email` (`asunto`, `from`, `to`, `subject`, `message`, `estado`, `fk_paciente`, `fk_cita`, `fecha`) ";
         $sql .= "VALUES (";
@@ -860,7 +949,7 @@ function notificarCitaEmail($datos, $formulario_confirmacion)
         $sql .= ");";
 
 //        print_r($sql);
-        //die();
+//        die();
         $rs = $db->query($sql);
         if(!$rs){
             $error = 'Ocurrio un error, el sistema no logro registrar el correo enviado';
@@ -868,11 +957,7 @@ function notificarCitaEmail($datos, $formulario_confirmacion)
 
     }
 
-    if($error == true){
-        $error = '';
-    }
-
-    return $error;
+    return ($error == true) ? '' : $error;
 
 }
 

@@ -14,14 +14,14 @@
                         <div class="form-group">
                             <label for="" class="control-label col-sm-2">Asunto</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="asunto_email" placeholder="asunto">
+                                <input type="text" class="form-control" id="asunto_email" placeholder="asunto" value="Notificación de Cita">
                             </div>
                         </div>
 
                         <div class="form-group">
                             <label for="" class="control-label col-sm-2">From</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="de_email" placeholder="" value="<?= $conf->EMPRESA->INFORMACION->email ?>">
+                                <input type="text" class="form-control" disabled id="de_email" placeholder="" value="<?= $conf->EMPRESA->INFORMACION->email ?>">
                             </div>
                         </div>
 
@@ -34,9 +34,9 @@
                         </div>
 
                         <div class="form-group">
-                            <label for="" class="control-label col-sm-2">Subject</label>
+                            <label for="" class="control-label col-sm-2">Titulo</label>
                             <div class="col-sm-9">
-                                <input type="text" class="form-control" id="titulo_email" placeholder="titulo" value="Notificación de Cita">
+                                <input type="text" class="form-control" id="titulo_email" placeholder="titulo" value="Notificación de Citas - Clinica <?= $conf->EMPRESA->INFORMACION->nombre;  ?> ">
                             </div>
                         </div>
 

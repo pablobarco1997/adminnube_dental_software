@@ -17,8 +17,12 @@ require_once DOL_DOCUMENT .'/application/controllers/controller.php';
 
     <script src="<?php echo DOL_HTTP.'/public/bower_components/jquery/dist/jquery.js'?>"></script>
 
-    <link rel="stylesheet" href="<?php echo  DOL_HTTP.'/public/bower_components/bootstrap/dist/css/bootstrap.min.css' ?>">
-    <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/dist/js/bootstrap.min.js'?>"></script>
+    <link rel="stylesheet" href="<?php echo  DOL_HTTP.'/public/bower_components/bootstrap/dist/css/bootstrap.css' ?>">
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/dist/js/bootstrap.js'?>"></script>
+
+    <link rel="stylesheet" href="<?php echo  DOL_HTTP.'/public/css/css_global/lib_glob_style.css' ?>">
+
+    <link rel="stylesheet" href="<?php echo  DOL_HTTP.'/public/information/css/noti.css' ?>">
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/font-awesome/css/font-awesome.min.css'?>">
@@ -29,6 +33,7 @@ require_once DOL_DOCUMENT .'/application/controllers/controller.php';
     *{
         font-family: 'Hind', sans-serif;
     }
+
 </style>
 <body>
 
@@ -39,7 +44,7 @@ require_once DOL_DOCUMENT .'/application/controllers/controller.php';
 
                 $view = GETPOST('v');
 
-                if($view == 'confirmar_cita')
+                if($view == 'confirm_cita')
                 {
                     include_once DOL_DOCUMENT .'/public/information/view/confirmar_cita.php';
                 }

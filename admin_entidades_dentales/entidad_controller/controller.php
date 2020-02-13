@@ -186,12 +186,44 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             echo json_encode($output);
             break;
 
+        case 'create_query_db':
+
+            $query = GETPOST('query');
+
+            $resp = asd;
+
+            $output = [
+              'error' => $resp
+            ];
+
+            echo json_encode($output);
+            break;
 
     }
 
 }
 
+function query_create_db($query)
+{
+    global $dbEntidad;
 
+    $error = null;
+
+    $sql = "SELECT nombre_db_entity FROM tab_entidades_dental";
+    $rs  = $dbEntidad->query($sql);
+    if($rs && $rs->rowCount() > 0)
+    {
+        while($entity = $rs->fetchObject())
+        {
+            $dbClinica = conn($entity->nombre_db_entity);
+        }
+
+    }else{
+        $error = 'No se encontro ninguna clinica';
+    }
+
+    return $error;
+}
 
 
 
@@ -270,7 +302,34 @@ function list_entidades()
     return $data;
 }
 
+function conn($schema)
+{
+    /* REMOTE
 
+    $host     = 'localhost';
+    $database =  $schema; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
+    $username = 'adminnub_entidad_dental'; #USUARIO
+    $password = 'Pablo_1997';  #PASSWIRD #PASSWORD SERVIDOR REMOTO ==> Pablo_1997
+
+    */
+
+    /* LOCAL */
+    $host     = 'localhost';
+    $database =  $schema; //SE ENCUENTRA TODAS LAS ENTIDADES REGISTRADAS
+    $username = 'root'; #USUARIO
+    $password = '';  #PASSWIRD #PASSWORD SERVIDOR REMOTO ==> Pablo_1997
+
+    $db_conneccion = mysqli_connect( $host, $username, $password, $database );
+
+    if($db_conneccion){
+
+        return $db_conneccion;
+
+    }else{
+
+        return false;
+    }
+}
 
 
 
