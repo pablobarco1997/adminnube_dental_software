@@ -30,6 +30,12 @@ $array_citas_asociadas = (object)[
     'permiso' => ''
 ];
 
+$array_documentAsociado = (object)[
+    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=docummclin&key='.KEY_GLOB .'&id='.tokenSecurityId($idPaciente).'&v=listdocumment',
+    'active'  =>  ($VISTAS == "docummclin") ? "docummclin" : "",
+    'permiso' => ''
+];
+
 
 
 ?>
@@ -146,8 +152,8 @@ $array_citas_asociadas = (object)[
                                         <i class="fa fa-link"></i>&nbsp;&nbsp; EVOLUCIONES </a>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "documentos_clinicos") ? "ActivaLista" : "" ?>">
-                                    <a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/admin_paciente/?view=documentos_clinicos&id='.$idPaciente; ?>">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_documentAsociado->active ?>">
+                                    <a class="lista" href="<?= $array_documentAsociado->url ; ?>">&nbsp;&nbsp;
                                         <i class="fa fa-file"></i>&nbsp;&nbsp; DOCUMENTOS CLINICOS </a>
                                 </li>
 

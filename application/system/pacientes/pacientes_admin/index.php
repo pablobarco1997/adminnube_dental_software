@@ -96,7 +96,7 @@ if(isset($_GET['id']))
     $id_paciente               = "<?=  $idPaciente ?>"; //ID DE PACIENTE
     $DOCUMENTO_URL_HTTP        = "<?=  DOL_HTTP ?>"; //URL  HTTP DOCUMENTO
     $HTTP_DIRECTORIO_ENTITY    = "<?=  $conf->NAME_DIRECTORIO ?>";  //ENTIDAD DE LA EMPRESA PARA JAVASCRIPT
-    $keyGlobal                 = "<?= GETPOST('key') ?>"; //KEY GLOBAL
+    $keyGlobal                 = "<?=  GETPOST('key') ?>"; //KEY GLOBAL
 
 </script>
 
@@ -106,34 +106,6 @@ if(isset($_GET['id']))
 <!--modales glob admin pacientes-->
 <?php include_once  DOL_DOCUMENT .'/application/system/pacientes/pacientes_admin/view/menu_admin.php'; ?>
 
-
-<?php
-#FUNCIONES ESPECIALES JAVASCRIP
-
-switch ($VISTAS)
-{
-    case 'arch': #Modulo Ficheros
-        echo "<script src='".DOL_HTTP."/application/system/pacientes/pacientes_admin/archivos_ficheros/js/input_file.js'></script>";
-        break;
-
-    case 'plantram': #mod Plan tratamiento
-
-        echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/plan_tratamiento/js/plant2.js"></script>';
-        break;
-
-    case 'odot'; #Odontograma
-
-        if(isset($_GET['v']) && $_GET['v'] == 'fordont') #FORMULARIO DE ODONTOGRAMA
-        {
-            echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/odontograma_paciente/js/fetch_odontograma_paint.js"></script>';
-            echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/odontograma_paciente/js/odont2.js"></script>';
-        }
-
-        break;
-}
-?>
-
-
-<script src="<?= DOL_HTTP.'/application/system/pacientes/pacientes_admin/'.$DIRECTORIO_ADMIN.'/js/'.$_JS_DOCMENT.'.js' ?>"></script>
-
+<!--import los script js  modulos independientes -->
+<?php include_once  'view/script_javascrip_mod.php'; ?>
 

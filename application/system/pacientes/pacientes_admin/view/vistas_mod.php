@@ -48,6 +48,14 @@ switch($VISTAS)
         break;
 
 
+    case "docummclin": #DOCUMENTOS CLINICOS
+        $VIEW_GLOB_ADMIN_PACIENTES   = "documprinp";                    #view documentos clinicos asociados
+        $DIRECTORIO_ADMIN            = "document_clinico";              #directorio
+        $_JS_DOCMENT                 = "indx_documclin";                #doc javascript
+        $NAME_MODULO                 = "DOCUMENTOS CLINICOS ASOCIADOS";
+        break;
+
+
 }
 
 ?>

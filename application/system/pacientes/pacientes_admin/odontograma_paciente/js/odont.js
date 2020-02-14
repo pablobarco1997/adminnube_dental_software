@@ -79,7 +79,7 @@ function inputs_runn() {
 
 
 // EXEC ODONTOGRAMA
-
+// alert($accionOdontograma);
 if( $accionOdontograma == 'principal')
 {
     odontolist();
