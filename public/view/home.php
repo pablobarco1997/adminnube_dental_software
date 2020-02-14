@@ -27,10 +27,10 @@
                <?php
 
                global $conf, $user;
-               echo '<pre>';
-                    print_r($conf);
-                    echo '<pre>';
-                    print_r($user);
+//               echo '<pre>';
+//                    print_r($conf);
+//                    echo '<pre>';
+//                    print_r($user);
 
                ?>
            </div>
