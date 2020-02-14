@@ -106,7 +106,7 @@ function EstadosCitas(idestado, idcita, html, idpaciente) //Comprotamientos de l
 {
     var textEstado = html.data('text');
 
-
+    alert(idestado);
 
     switch (idestado)
     {
@@ -127,10 +127,12 @@ function EstadosCitas(idestado, idcita, html, idpaciente) //Comprotamientos de l
             UpdateEstadoCita(idestado, idcita, html, textEstado );
             break;
 
-        case 3: // Confirmar por whatsapp
+        case 3: // Confirmar por Telefono
 
-            $("#number_whasap").text(html.data("telefono"));
-            $("#modalWhapsapp").modal("show");
+            UpdateEstadoCita(idestado, idcita, html, textEstado );
+            break;
+
+        case 4: // En sala de espera
 
             UpdateEstadoCita(idestado, idcita, html, textEstado );
             break;
@@ -151,6 +153,15 @@ function EstadosCitas(idestado, idcita, html, idpaciente) //Comprotamientos de l
             break;
 
         case 9: // Cancelada
+
+            UpdateEstadoCita(idestado, idcita, html, textEstado );
+            break;
+
+        case 8:
+
+            $("#number_whasap").text(html.data("telefono"));
+            $("#modalWhapsapp").modal("show");
+            $("#sendwhap").addClass('disabled_link3');
 
             UpdateEstadoCita(idestado, idcita, html, textEstado );
             break;
@@ -320,12 +331,21 @@ function keyemail_invalic()
 
 
 //Enviar Mensaje por whatsap
-$("#sendwhap").click(function() {
+$("#mensajetext").keyup(function() {
 
-    var telf = $("#number_whasap").text();
-    var url = "https://wa.me/"+telf+"?text="+$("#mensajetext").val();
+    var telf  = $("#number_whasap").text();
+    var texto = $(this).val();
+    var url = "https://wa.me/"+telf+"?text=" + texto;
+
+    if(texto != ""){
+        $("#sendwhap").removeClass('disabled_link3');
+        $("#sendwhap").attr("href", url);
+    }
+
+    if(texto == ""){
+        $("#sendwhap").addClass('disabled_link3');
+    }
     // alert(url);
-    $("#sendwhap").attr("href", url);
 
 });
 

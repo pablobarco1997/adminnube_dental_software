@@ -13,6 +13,7 @@
            <h3 class="pull-right"><?= ($_GET['list'] == 'diaria') ? 'AGENDA DIARIA' : '' ?></h3>
        </div>
     </div>
+
     <div class="form-group col-lg-12 col-md-12">
         <div class="col-md-4 col-lg-4 col-xs-12">
             <div class="info-box">
@@ -20,13 +21,14 @@
                     <i class="fa fa-calendar" style="margin-top: 20px"></i>
                 </div>
                 <div class="info-box-content">
-                    <span class="info-box-text">NÚMERO DE CITAS PARA HOY </span>
+                    <span class="info-box-text">CITAS PARA HOY - ESTADO NO CONFIRMADO </span>
                     <span class="info-box-number" style="font-size: 2em" id="numCitas">0</span>
                     <span><?= date("Y/m/d")?></span>
                 </div>
             </div>
         </div>
     </div>
+
 </div>
 
 <div class="row" >
@@ -175,41 +177,10 @@
 
 </div>
 
-<!--MODALES-->
 
-<div id="modalWhapsapp" class="modal fade" role="dialog">
-    <div class="modal-dialog">
 
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">Confirmar por whatsapp</h4>
-                <span>Telefono Movil: &nbsp;</span> <span id="number_whasap"></span>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="form-group col-md-12">
-                        <div class="center-block" style="width: 100px">
-                            <img src="https://img.icons8.com/plasticine/2x/whatsapp.png" alt="" style="width: 100%">
-                        </div>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <label for="">Mensaje</label>
-                        <textarea name="" id="mensajetext" class="form-control" cols="20" rows="5"></textarea>
-                    </div>
-                    <div class="form-group col-md-12">
-                        <a href="https://wa.me/593987722863?text=hola mundo" target="_blank" id="sendwhap" class="btn btn-block btn-xs" style=" color: black;background-color: #60be92"><i class="fa fa-whatsapp"></i> ENVIAR MENSAJE</a>
-                    </div>
-                </div>
-            </div>
 
-        </div>
-
-    </div>
-</div>
-
-<!--modal email-->
+<!--modales-->
 <?php
     include_once DOL_DOCUMENT .'/application/system/agenda/view/status_modal.php';
 ?>

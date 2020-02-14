@@ -148,11 +148,12 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $numero=0;
 
+            #NUMEROS DE CITAS PARA LA FECHA ACTUAL CON ESTADO NO CONFIRMADO - ID DEL ESTADO == 2
             $sqlCount = "select 
                             count(*) as nu
                         from 
-                        tab_pacientes_citas_cab c , tab_pacientes_citas_det d
-                        where c.rowid = d.fk_pacient_cita_cab and c.rowid > 0 ";
+                        tab_pacientes_citas_cab c , tab_pacientes_citas_det d ,  tab_pacientes_estado_citas s 
+                        where  c.rowid = d.fk_pacient_cita_cab and d.fk_estado_paciente_cita = s.rowid and c.rowid > 0 ";
             $sqlCount .= " and d.fk_estado_paciente_cita = 2 and d.fecha_cita = '".date('Y-m-d')."' ";
             $sqlCount .= " limit 1";
 
@@ -162,6 +163,9 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             {
                 $numero = $rs1->fetchObject()->nu;
             }
+
+//            print_r($sqlCount);
+//            die();
 
             echo json_encode($numero);
             break;
@@ -486,6 +490,9 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
 
     $data = array();
 
+    $fecha_hoy = date("Y-m-d");
+
+
     $sql = "select 
             d.fecha_cita  as fecha_cita,
             d.hora_inicio , 
@@ -508,7 +515,12 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
             d.fk_doc as iddoctor , 
             (select p.email from tab_admin_pacientes p where p.rowid = c.fk_paciente) as email, 
             d.comentario_adicional as comentario_adicional,
-            c.fk_paciente as idpaciente
+            c.fk_paciente as idpaciente  ,
+            
+             -- validaciones
+             
+             -- citas atrazados con estado no confirmado
+              if( cast(d.fecha_cita as date) < '".$fecha_hoy."' && d.fk_estado_paciente_cita = 2 , concat('cita agendada atrazada - NO CONFIRMADO - ', date_format(d.fecha_cita, '%Y/%m/%d') , ' - hora ' , d.hora_inicio ) , '') as cita_atrazada
                         
          from 
              tab_pacientes_citas_cab c , tab_pacientes_citas_det d
@@ -556,7 +568,13 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
 
             $row[] = $html1;
 
-            //PACIENTES
+            //PACIENTES - JUNTO CON DROPDONW
+
+            #ID IMPORTANTE YA QUE ES UN TOKEN CREADO COMO UN ID DE LA CITAS GENERADO EN UN BINARIO HEXADECIMAL
+            $token = tokenSecurityId( $acced->idpaciente); #ME RETORNA UN TOKEN
+            $view  = "dop"; #view vista de datos personales admin pacientes
+            $Url_datospersonales = DOL_HTTP ."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token";
+
             $html2 = "";
             $html2 .= "<div class='form-group col-md-12 col-xs-12' >";
 
@@ -582,7 +600,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
 
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' class='$tienePlanTratamiento' onclick='create_plandetratamiento($acced->idpaciente, $acced->id_cita_det, $acced->iddoctor , $(this));'  >Plan de Tratamiento</a> </li>";
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Recaudación</a> </li>";
-                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='".DOL_HTTP."/application/system/pacientes/admin_paciente/?view=form_datos_personales&id=$acced->idpaciente' >Datos personales</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". $Url_datospersonales ."' >Datos personales</a> </li>";
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a> </li>";
 
                                 $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det)' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
@@ -592,27 +610,33 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
                     </div>";
             $html2 .= "</div>";
 
+            #comentario y numero de telefonos
             $html4  = "";
             $html4 .= "<div class='form-group col-md-12 col-xs-12'>
                 <div class='col-xs-12 col-md-12'>";
+
+            #COMENTARIOS OPCIONAL - PACIENTE
             if(!empty($acced->comentario))
             {
-                $html4 .= "<ul class='list-inline'>";
-                    $html4 .= ' <li> 
-                                        <div style="width: 400px !important; ">
-                                            <p style="width: 400px" class="text-sm text-justify" title="' .$acced->comentario. '">  
-                                                <i class="fa fa-x3 fa-comment" style="cursor: pointer" ></i> '. $acced->comentario .'
-                                            </p>
-                                        </div>
-                                </li>';
-                $html4 .= "</ul>";
+
+                $html4 .= '<p style="width: 400px" class="text-sm text-justify" title="' .$acced->comentario. '">  
+                                <i class="fa fa-x3 fa-comment" style="cursor: pointer" ></i> '. $acced->comentario .'
+                            </p>';
+
             }
 
+            #TELEFONO DEL PACIENTE
             if(!empty($acced->telefono_movil))
             {
-                $html4 .= "<ul class='list-inline'>";
-                    $html4 .= ' <li><i class="fa fa-x3 fa-phone" style="cursor: pointer" ></i> '. $acced->telefono_movil .' </li>';
-                $html4 .= "</ul>";
+
+                $html4 .= '<p> <i class="fa fa-phone-square" style="cursor: pointer" title=" '. $acced->telefono_movil .' "></i> '. $acced->telefono_movil .'  </p>';
+
+            }
+
+            #CITAS ATRAZADAS CON ESTADO NO CONFIRMADO - ID DEL ESTADO = 2
+            if(!empty($acced->cita_atrazada))
+            {
+                $html4 .= '<small style="color: red; display: block" title="'. $acced->cita_atrazada .'"> '. $acced->cita_atrazada .' </small>';
             }
 
             $html4 .= "</div>
@@ -893,7 +917,7 @@ function notificarCitaEmail($datos, $token_confirmacion)
             // Content
             $mail->isHTML(true);                                  // Set email format to HTML
             $mail->Subject = utf8_decode($subject);
-            $mail->Body    = "<div> <b>Estimado/a:</b>&nbsp;$labelPaciente  <br><br> 
+            $mail->Body    = "<div> <b>Estimado/a:</b>&nbsp;$labelPaciente  <br><br><br>
                                 Le recordamos que tiene una cita agendada para la fecha - <b>". GET_DATE_SPANISH(date('Y-m-d', strtotime($datos->feche_cita))) ." - hora ". $datos->horaInicio . "</b>   
                                 
                                       ". $messabody ."
@@ -902,6 +926,8 @@ function notificarCitaEmail($datos, $token_confirmacion)
                                     <br>
                                     <br>
                                     ". $token_confirmacion ."
+                                    <br>
+                                    <br>
                                     <br>
                                     <b>".utf8_decode('Dirección:')."</b>&nbsp; ". $datos->direccion ."
                                     <br>

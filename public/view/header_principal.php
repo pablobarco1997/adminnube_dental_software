@@ -43,7 +43,12 @@
         font-size: 1.4rem !important;
     }
 </style>
-<!--loadding -->
 <body class="skin-blue sidebar-mini sidebar-collapse">
+
+<!--LOADDING HTML CSS -->
+<div id="loaddinContent" class="conten-load" style="display: none;">
+    <div class="loadding"></div>
+</div>
+<!--END LOADDIN HTML CSCS-->
 
 

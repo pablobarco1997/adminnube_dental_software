@@ -38,40 +38,5 @@
 <script>
 
     //LOADDING ---------------------------------------------------------------------------------------------------------
-
-    // DomLoadding($('#loaddin-text'), 'start');
-    //
-    // $(window).ready(function() {
-    //     DomLoadding($('#loaddin-text'), 'stop');
-    // });
-    //
-    //
-    // function DomLoadding(screen, ac) {
-    //     if( ac == 'start' ){
-    //         screen.fadeIn();
-    //
-    //     }
-    //     if( ac == 'stop' ){
-    //         screen.fadeOut();
-    //
-    //     }
-    //
-    // }
-    //
-    // configLoaddingScreen($('#loaddin-text'));
-    //
-    // function configLoaddingScreen(screen){
-    //
-    //     $(document)
-    //         .ajaxStart( function() {
-    //             screen.fadeIn();
-    //             $('body').addClass('disabled_link3').css('overflow-y','hidden');
-    //         })
-    //         .ajaxStop( function() {
-    //             screen.fadeOut();
-    //             $('body').removeClass('disabled_link3').css('overflow-y','scroll');
-    //         })
-    //
-    // }
-
+    loaddingDom = $('#loaddinContent');
 </script>

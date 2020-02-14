@@ -95,3 +95,40 @@
 
         </div>
     </div>
+
+
+<!--MODAL DE whatsapp-->
+
+<div id="modalWhapsapp" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header modal-diseng" >
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">Confirmar por whatsapp</h4>
+                <span> <i class="fa fa-phone-square"></i> <b> Telefono Movil: </b> &nbsp;</span> <span id="number_whasap"></span>
+            </div>
+            <div class="modal-body">
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <div class="center-block" style="width: 100px">
+                            <img src="https://img.icons8.com/plasticine/2x/whatsapp.png" alt="" style="width: 100%">
+                        </div>
+                    </div>
+                    <div class="form-group col-md-12">
+                        <label for="">Mensaje</label>
+                        <textarea name="" id="mensajetext" class="form-control" cols="20" rows="5"></textarea>
+                    </div>
+
+                    <div class="form-group col-md-12">
+                        <a href="https://wa.me/593987722863?text=hola mundo" target="_blank" id="sendwhap"  class="btn btnhover btn-block" style="font-weight: bolder;  color: #ffffff;background-color: #60be92"><i class="fa fa-whatsapp"></i> ENVIAR MENSAJE</a>
+                    </div>
+
+                </div>
+            </div>
+
+        </div>
+
+    </div>
+</div>

@@ -301,3 +301,22 @@ function redondear(numero, decimales = 2, usarComa = false) {
     usarComa = usarComa ? "es" : "en";
     return new Intl.NumberFormat(usarComa, opciones).format(numero);
 }
+
+//loadding load cargando ....
+function loaddingload_XMLHttpRequest(screen){
+
+    $(document)
+        .ajaxStart( function() {
+            /*
+            screen.fadeIn();
+            $('body').addClass('disabled_link3').css('overflow-y','hidden');*/
+            screen.addClass('cargando');
+        })
+        .ajaxStop( function() {
+            /*
+            screen.fadeOut();
+            $('body').removeClass('disabled_link3').css('overflow-y','scroll');*/
+            screen.removeClass('cargando');
+        })
+
+}
