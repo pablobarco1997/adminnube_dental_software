@@ -106,7 +106,7 @@ function EstadosCitas(idestado, idcita, html, idpaciente) //Comprotamientos de l
 {
     var textEstado = html.data('text');
 
-    alert(idestado);
+    // alert(idestado);
 
     switch (idestado)
     {
