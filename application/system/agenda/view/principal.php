@@ -34,7 +34,8 @@
 <div class="row" >
 
     <div class="form-group col-md-12 col-lg-12">
-        <div class="col-md-6 col-sm-6  <?= $permisos->consultar  ?>">
+        <div class="col-md-8 col-sm-8 col-xs-12  <?= $permisos->consultar  ?>">
+
             <ul class="list-inline">
                 <li>
                     <div class="callbox">
@@ -70,7 +71,22 @@
                     </div>
                 </li>
 
+                <li>
+                    <div class="callbox">
+                        <div class="form-group">
+                            <div class="checkbox <?= $permisos->consultar  ?>">
+                                <label for="listcitasCanceladasEliminadas" class="btnhover">
+                                    <a style="color: #333333"  class="btn  <?= $permisos->consultar  ?>">
+                                        <input type="checkbox" id="listcitasCanceladasEliminadas">  MOSTRAR CITAS CANCELADAS O ELIMINADAS
+                                    </a>
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </li>
+
             </ul>
+
         </div>
     </div>
 </div>

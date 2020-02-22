@@ -35,6 +35,7 @@ class admin_agenda{
     var $tramdet_total = '';
     var $tramdet_cantidad = '';
     var $tramdet_detencion = '';
+    var $tramdet_fk_usuario = '';
 
     public function __construct($db)
     {
@@ -163,7 +164,7 @@ class admin_agenda{
 
         $descAdicional = !empty($this->tramdet_descadicional) ? $this->tramdet_descadicional : 0.00;
 
-        $sql  = "INSERT INTO tab_plan_tratamiento_det  (`fk_plantratam_cab`, `fk_prestacion`, `fk_diente`, `json_caras`, `sub_total`, `desc_convenio`, `desc_adicional`, `total`, `cantidad`, detencion) ";
+        $sql  = "INSERT INTO tab_plan_tratamiento_det  (`fk_plantratam_cab`, `fk_prestacion`, `fk_diente`, `json_caras`, `sub_total`, `desc_convenio`, `desc_adicional`, `total`, `cantidad`, detencion, fk_usuario) ";
         $sql .= "VALUES(";
         $sql .= " ".$this->tramdet_fk_tramcab." , ";
         $sql .= " ".$this->tramdet_fk_prestacion." , ";
@@ -174,7 +175,8 @@ class admin_agenda{
         $sql .= " ".$descAdicional." , ";
         $sql .= " ".$this->tramdet_total." , ";
         $sql .= " ".$this->tramdet_cantidad." , ";
-        $sql .= " '".$this->tramdet_detencion."'  "; #detencion permanente - permanente
+        $sql .= " '".$this->tramdet_detencion."' ,  "; #detencion permanente - permanente
+        $sql .= " ".$this->tramdet_fk_usuario."  ";
         $sql .= ");";
 
 //        print_r($sql);

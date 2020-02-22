@@ -15,7 +15,16 @@ function loadtableAgenda($doctor, $estado)
         ajax:{
             url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
             type:'POST',
-            data:{'ajaxSend':'ajaxSend', 'accion':'listCitas', 'doctor': $doctor, 'estados': $estado, 'fecha': $('.filtroFecha').val()},
+            data:
+                {
+                    'ajaxSend'  : 'ajaxSend',
+                    'accion'    : 'listCitas',
+                    'doctor'    : $doctor,
+                    'estados'   : $estado,
+                    'fecha'     : $('.filtroFecha').val(),
+                    'eliminada_canceladas' : ( ( $('#listcitasCanceladasEliminadas').is(':checked')==true) ? "checked" : "") ,
+                },
+
             dataType:'json',
         },
         language:{
@@ -356,18 +365,21 @@ $("#mensajetext").keyup(function() {
 // });
 
 
-//Commentari adicional muestra el modal
-//y guarda el comentario
+//Commentari adicional muestra el modal y guarda el comentario
 function clearModalCommentAdicional(iddetcita, html)
 {
     if(iddetcita != "")
     {
         $('#iddet-comment').attr('data-iddet', iddetcita);
+        $('#invali_commentadciol_mssg').text(null);
+
+        $('#guardarCommentAdicional').attr('onclick', 'UpdateCitasCommentAdicional('+iddetcita+')')
     }
 }
 
-$('#guardarCommentAdicional').click(function(){
 
+function UpdateCitasCommentAdicional(iddetcita)
+{
     var puedo = 0;
 
     if( $('#comment_adicional').val() == "" ){
@@ -383,7 +395,7 @@ $('#guardarCommentAdicional').click(function(){
         $.ajax({
             url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
             type:'POST',
-            data:{'ajaxSend': 'ajaxSend', 'accion': 'UpdateComentarioAdicional', 'iddetcita':$('#iddet-comment').data('iddet') ,'commentAdicional':$('#comment_adicional').val() },
+            data:{'ajaxSend': 'ajaxSend', 'accion': 'UpdateComentarioAdicional', 'iddetcita': iddetcita ,'commentAdicional': $('#comment_adicional').val() },
             dataType:'json',
             async:false,
             success:function(resp) {
@@ -400,10 +412,7 @@ $('#guardarCommentAdicional').click(function(){
         });
 
     }
-
-
-});
-
+}
 
 //APLICAR FILTRO DE BUSQUEDA O LIMPIAR
 $(".aplicar").click(function() {
@@ -413,6 +422,13 @@ $(".aplicar").click(function() {
 
     //Aplicar Cambios citas diarias global
     list_global_diaria_citas();
+
+});
+
+//MOSTRAR CITAS ELIMINADAS O CANCELADAS
+$('#listcitasCanceladasEliminadas').change(function(){
+
+    loadtableAgenda( $('#filtro_doctor').find(':selected').val(), $('#filtroEstados').val() );
 
 });
 
@@ -426,6 +442,18 @@ $(".limpiar").click(function() {
 });
 
 
+//SELECCIONAR TODOS LOS CHECKEDS DIARIA
+$('#checkeAllCitas').change(function() {
+
+
+    if($(this).is(':checked') == true)
+    {
+        $('.checked_detalleCitas').prop('checked', true);
+    }else{
+        $('.checked_detalleCitas').prop('checked', false);
+    }
+
+});
 
 
 

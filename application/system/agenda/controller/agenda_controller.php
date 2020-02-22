@@ -46,6 +46,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $estados = GETPOST("estados");
             $doctor  = GETPOST("doctor");
             $fecha   = GETPOST("fecha");
+            $MostrarCitasCanceladasEliminadas = GETPOST('eliminada_canceladas');
 
             $fechaInicio ="";
             $fechaFin    ="";
@@ -62,7 +63,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 $numerosEstados = implode(',', $estados);
             }
 
-            $rows = list_citas($doctor,$numerosEstados, $fechaInicio, $fechaFin );
+            $rows = list_citas($doctor,$numerosEstados, $fechaInicio, $fechaFin, $MostrarCitasCanceladasEliminadas );
 
             $output = [
                 'data' => $rows,
@@ -348,6 +349,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         $agenda->tramdet_total          = $item['total'];
                         $agenda->tramdet_cantidad   = $item['cantidad'];
                         $agenda->tramdet_detencion  = $detencion; #DETENCION TEMPORAL O PERMANENTE
+                        $agenda->tramdet_fk_usuario = $conf->login_id; #EL USUARIO QUE LA CREO
 
 //                        print_r($agenda);
 //                        die();
@@ -483,7 +485,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
 }
 
-function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
+function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $MostrarCitasCanceladasEliminadas)
 {
 
     global $db, $permisos;
@@ -533,7 +535,6 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
 
     if(!empty($estado))
     {
-//        $nu = implode(",", $estado);
         $sql .= " and d.fk_estado_paciente_cita in($estado)";
     }
 
@@ -542,20 +543,36 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
         $sql .= " and cast(d.fecha_cita as date) between cast('$fechaInicio' as date) and cast('$fechaFin' as date) ";
     }
 
-    $sql .= " order by d.fecha_cita desc";
+    if(!empty($MostrarCitasCanceladasEliminadas)) // Muestro la citas eliminadas y canceladas
+    {
+        $sql .= " and d.estado = 'E' or  d.fk_estado_paciente_cita = 9 ";
+    }
+
+    $sql .= " order by d.fecha_cita desc ";
 
     $sql .= " ".$permisos->consultar;
-//    print_r($permisos->consultar); die();
+
+//    print_r($sql); die();
 
     $rs = $db->query($sql);
 
     if( $rs && $rs->rowCount() > 0 )
     {
+        $iu = 0; #acumulador
+
         while ($acced = $rs->fetchObject())
         {
-            $row = array();
 
-            $numeroCita = "C-";
+            $row = array();
+            #checked box
+            $row[] = "<span class='custom-checkbox-myStyle'>
+								<input type='checkbox' id='checked-detalleCitas-$iu' class='checked_detalleCitas'>
+								<label for='checked-detalleCitas-$iu' ></label>
+                      </span>";
+
+
+
+            $numeroCita = "<img  src='". DOL_HTTP. "/logos_icon/logo_default/cita-medica.png' class='img-sm img-rounded' >  -";
             $row[] = $numeroCita . str_pad($acced->id_cita_det, 6, "0", STR_PAD_LEFT);
 
             $html1 = "";
@@ -603,7 +620,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". $Url_datospersonales ."' >Datos personales</a> </li>";
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a> </li>";
 
-                                $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det)' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
+                                $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det, $(this))' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
 
                     $html2 .= "</ul>";
                 $html2 .= "</div> 
@@ -636,7 +653,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
             #CITAS ATRAZADAS CON ESTADO NO CONFIRMADO - ID DEL ESTADO = 2
             if(!empty($acced->cita_atrazada))
             {
-                $html4 .= '<small style="color: red; display: block" title="'. $acced->cita_atrazada .'"> '. $acced->cita_atrazada .' </small>';
+                $html4 .= '<small style="color: red; display: block"  class="label text-center" title="'. $acced->cita_atrazada .'"> '. $acced->cita_atrazada .' </small>';
             }
 
             $html4 .= "</div>
@@ -724,12 +741,14 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin)
             #DIAGNOSTICO O OTROS ESTADOS
 
             $html6 = "<div class='col-md-12 col-xs-12'>
-                        <label class='label text-bold' style='color: #333333; font-size: 1.4rem; background-color: #E5E7E9'> Diagnostico </label>
+                        <p class='text-bold'  style='text-align: center !important; color: #333333; font-size: 1.4rem; background-color: #E5E7E9; padding: 3px; border-radius: 3px'> Diagnostico </p>
                     </div>";
 
             $row[] = $html6;
 
             $data[] = $row;
+
+            $iu++; #recorrido
         }
 
     }
