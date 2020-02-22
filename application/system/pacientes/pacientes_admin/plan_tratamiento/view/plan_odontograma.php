@@ -23,7 +23,7 @@
 
 
 
-<div style="width: 1210px !important;">
+<div style="width: 1242px !important;">
     <ul class="list-inline" >
 
         <!--        ==================================  HEMIARCADA SUPERIOR DERECHA ==============================================-->

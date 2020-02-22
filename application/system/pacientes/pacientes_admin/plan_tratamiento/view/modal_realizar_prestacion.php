@@ -64,7 +64,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
+                <a href="#" class="btn btnhover" style="font-weight: bolder; color: green" id="RealizarPrestacion" onclick="">Aceptar</a>
+                <a href="#" class="btn btnhover" style="font-weight: bolder; "  data-dismiss="modal" id="">Close</a>
             </div>
         </div>
 

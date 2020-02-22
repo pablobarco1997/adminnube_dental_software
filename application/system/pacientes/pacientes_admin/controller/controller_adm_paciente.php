@@ -752,18 +752,23 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                                     cf.rowid = tc.fk_convenio),
                             0) valorConvenio ,
                             
-                    tc.edit_name as edit_name
+                    tc.edit_name as edit_name , 
+                    
+                    -- ABONADO
+                    (SELECT round(sum(pd.amount),2) saldo FROM tab_pagos_independ_pacientes_det pd where pd.fk_plantram_cab = tc.rowid and pd.fk_paciente = $idpaciente) abonado_cab 
+                    
                 FROM
                     tab_plan_tratamiento_cab tc,
                     tab_admin_pacientes ap,
                     tab_odontologos od
                 WHERE
                     tc.fk_paciente = ap.rowid
-                        AND tc.rowid = ".$idtratamiento." limit 1";
+                        AND tc.rowid = ".$idtratamiento."
+                        AND tc.fk_paciente = ". $idpaciente ." limit 1";
 
 //            print_r($sqltrancab);
             $rscab = $db->query($sqltrancab);
-            if($rscab->rowCount() > 0 ){
+            if($rscab && $rscab->rowCount() > 0 ){
 
                 while ($obcab = $rscab->fetchObject()){
                     $objetoCab[] = $obcab;
@@ -781,11 +786,16 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         cp.descripcion AS prestacion,
                         pd.fk_prestacion AS fk_prestacion,
                         format(pd.sub_total, 2) AS subtotal,
+                        pd.cantidad , 
                         pd.desc_convenio AS descconvenio,
                         pd.desc_adicional AS descadicional,
                         pd.json_caras,
                         pd.total,
-                        pd.estadodet
+                        pd.estadodet , 
+                        pd.fk_usuario , 
+                        ifnull((SELECT usuario FROM tab_login_users s where s.fk_doc = pd.fk_usuario limit 1),'') as usuario_creator , 
+                        ifnull((SELECT usuario FROM tab_login_users s where s.fk_doc = pd.realizada_fk_dentista limit 1),'') as usuario_realizado , 
+                        pd.estado_pay as estado_pago
                     FROM
                         tab_plan_tratamiento_det pd,
                         tab_conf_prestaciones cp
@@ -908,11 +918,13 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     }
 
                     $nombre_tratamiento = null;
+
                     if($ob->edit_name != ""){
                         $nombre_tratamiento = $ob->edit_name;
                     }else{
                         $nombre_tratamiento = "Plan de Tratamiento: # $ob->numero ";
                     }
+
 
                     $url_planform = DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=plantram&key='.KEY_GLOB.'&id='.tokenSecurityId($ob->idpaciente).'&v=planform&idplan='.tokenSecurityId($ob->rowid);
 
@@ -979,6 +991,186 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             echo  json_encode($output);
             break;
 
+
+        case 'realizarPrestacion':
+
+            $error = '';
+
+            $idCabPlant      = GETPOST('idcabplantram');
+            $idDetPlant      = GETPOST('iddetplantram');
+            $idpaciente      = GETPOST('idpaciente');
+            $iddiente        = GETPOST('iddiente');
+            $iddoct          = GETPOST('fk_doct');
+            $observacion     = GETPOST('observacion');
+            $estadoDiente    = GETPOST('fk_estadodiente');
+
+            $tieneOdontograma = false;
+            $datosRealizarPrestacion = [];
+
+
+            $sql = "SELECT * FROM tab_plan_tratamiento_det where rowid = $idDetPlant and fk_plantratam_cab = $idCabPlant limit 1";
+            $resul = $db->query($sql);
+            if($resul && $resul->rowCount() > 0)
+            {
+                $objtratm = $resul->fetchObject();
+
+                $labellist = []; #aux caras
+                $listcaras = []; #cadena de caras
+
+                if($objtratm->json_caras != "")
+                {
+                    $labellist = json_decode( $objtratm->json_caras );
+
+                    if($labellist->vestibular == "true")
+                    { $listcaras[] = "vestibular"; }
+                    if($labellist->distal == "true")
+                    { $listcaras[] = "distal";  }
+                    if($labellist->palatino == "true")
+                    { $listcaras[] = "palatino"; }
+                    if($labellist->oclusal == "true")
+                    { $listcaras[] = "oclusal"; }
+                    if($labellist->mesial == "true")
+                    { $listcaras[] = "mesial"; }
+                    if($labellist->lingual == "true")
+                    { $listcaras[] = "lingual"; }
+
+                }
+
+                $datosRealizarPrestacion = (object)[
+                    'fk_paciente'        =>  $idpaciente ,
+                    'fk_plantram_cab'    =>  $idCabPlant ,
+                    'fk_plantram_det'    =>  $idDetPlant ,
+                    'observacion'        =>  $observacion ,
+                    'json_caras'         =>  $objtratm->json_caras ,
+                    'estadodiente'       =>  $estadoDiente,
+                    'fk_doctor'          =>  $iddoct,
+                    'idlogin'            =>  $conf->login_id,
+                    'iddiente'           =>  $iddiente,
+
+                    'AxulisttaCaras'     =>  implode(',', $listcaras),
+                ];
+
+
+            }else{
+                $error = 'Ocurrio un error no se encontraron datos para ejecutar el proceso Realizar prestación';
+            }
+
+//            echo '<pre>';
+//            print_r($datosRealizarPrestacion);
+//            print_r( json_decode( $datosRealizarPrestacion->json_caras ) );
+//            die();
+
+            if( $iddiente != 0 && $error == '') //Se actualiza el odontograma en caso de tener asociado
+            {
+                $sqlodont = "SELECT * FROM tab_odontograma_update od where od.fk_tratamiento = $idCabPlant and  od.fk_diente = $iddiente";
+                $rsodont  = $db->query($sqlodont);
+                if($rsodont && $rsodont->rowCount() > 0)
+                {
+                    if($estadoDiente!=0){ //solo se actualiza si el estado es diferente de 0
+
+                        $updateOdont1 = "UPDATE `tab_odontograma_update` SET `fk_estado_pieza`=$estadoDiente , json_caras = '". $datosRealizarPrestacion->json_caras ."' WHERE `rowid`>0 and fk_tratamiento = $idCabPlant and fk_diente = $iddiente;";
+                        $rsultUpdate = $db->query($updateOdont1);
+
+                        $updateOdont2  = " UPDATE `tab_odontograma_paciente_det` SET  `list_caras`= '". $datosRealizarPrestacion->AxulisttaCaras ."' , ";
+                        $updateOdont2 .= " `json_caras`= '". $datosRealizarPrestacion->json_caras ."' ,";
+                        $updateOdont2 .= " `fk_estado_diente`= '". $datosRealizarPrestacion->estadodiente ."' ,";
+                        $updateOdont2 .= " `obsrvacion`= '". $datosRealizarPrestacion->observacion ."' ";
+                        $updateOdont2 .= " WHERE `rowid` > 0  and fk_tratamiento = ".$datosRealizarPrestacion->fk_plantram_cab." and fk_diente =  ".$datosRealizarPrestacion->iddiente." ";
+
+                        $db->query($updateOdont2);
+
+//                        echo '<pre>';
+//                        print_r($updateOdont1);
+//                        die();
+                    }
+                }
+            }
+
+
+            if( $error == '' )
+            {
+                $rlcr = realizarPrestacionupdate( $datosRealizarPrestacion );
+
+                if( $rlcr == '' ){
+                    $error = $rlcr;
+                }
+            }
+//            print_r($datosRealizarPrestacion);
+//            die();
+
+            $output = [
+                'error' => $error,
+            ];
+
+            echo  json_encode($output);
+
+            break;
+
+
+        case 'eliminar_prestacion_plantram':
+
+            $error = '';
+            $iddetplant = GETPOST('iddetplantram');
+            $idCabplant = GETPOST('idplanCab');
+            $idpaciente = GETPOST('idpaciente');
+
+            $sql = "SELECT 
+                        dt.fk_prestacion , 
+                        dt.estado_pay , 
+                        dt.estadodet , 
+                        (select cfp.descripcion from tab_conf_prestaciones cfp WHERE cfp.rowid = dt.fk_prestacion) as prestacion ,
+                        round(dt.total, 2) as total
+                    FROM
+                        tab_plan_tratamiento_det dt,
+                        tab_plan_tratamiento_cab cb
+                    WHERE
+                        dt.fk_plantratam_cab = $idCabplant and 
+                        cb.rowid = $idCabplant  
+                        and dt.rowid = $iddetplant
+                        and cb.fk_paciente = $idpaciente
+                        limit 1 ";
+
+//            echo '<pre>'; print_r($sql); die();
+            $rsDel = $db->query($sql);
+            if($rsDel && $rsDel->rowCount() > 0)
+            {
+                $obj = $rsDel->fetchObject();
+
+                if( $obj->estado_pay == 'PA')  #COMPRUEBO EL ESTADO PAGADO DE LA PRESTACION
+                {
+                    $error = 'No puede Eliminar esta prestación <b>' .$obj->prestacion .'</b> se encuentra <i class="fa fa-dollar"></i> pagada';
+                }
+                if( $obj->estado_pay == 'PS')  #COMPRUEBO EL ESTADO EN ESTA PRESTACION TIENE SALDO - O  ABONADO
+                {
+                    $error = 'No puede Eliminar esta prestación <b>' .$obj->prestacion .'</b> tiene <i class="fa fa-dollar"></i> saldo asociado comprueba en el modulo de pagos de este plan de tratamiento ';
+                }
+                if( $obj->estadodet == 'R') #REALIZADA
+                {
+                    $error = 'No puede Eliminar esta prestación <b>' .$obj->prestacion .'</b> se encuentra Realizada';
+                }
+
+                if( $error == '' ){
+
+                    if( $obj->estadodet == 'A' && $obj->estado_pay  == 'PE') #PENDIENTE PE o A
+                    {
+                        $sqldelUp = "DELETE FROM tab_plan_tratamiento_det WHERE rowid ='$iddetplant' and fk_plantratam_cab = $idCabplant;";
+//                      $rsDelUp  = $db->query($sqldelUp);
+                    }
+                }
+
+            }else{
+                $error = 'Ocurrio un error no se puede Eliminar esta prestacion, Consulte con soporte Tecnico';
+            }
+
+
+//            die();
+            $output = [
+                'error' => $error,
+            ];
+            echo  json_encode($output);
+            break;
+
+
         case 'fecht_odontograma':
 
             $error = '';
@@ -986,7 +1178,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $idpaciente    = GETPOST('idpaciente');
             $idtratamiento = GETPOST('idtratamiento');
 
-            if($idpaciente != "" && $idtratamiento != ""){
+            if($idpaciente != "" && $idtratamiento != "")
+            {
 
                 $sql = "SELECT * FROM tab_odontograma_update u WHERE u.fk_tratamiento = $idtratamiento and u.fk_paciente = $idpaciente ";
                 $resul = $db->query($sql);
@@ -1321,10 +1514,29 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             }
 
 
-
-
             $output = [
                 'error' => $error , 'errores' => $errores , 'msgConfirm' => $msgConfirm, 'acierto'=> $acierto
+            ];
+
+            echo json_encode($output);
+            break;
+
+
+        case 'evolucion_listprincpl':
+
+            $error = '';
+
+            $idpaciente = GETPOST('idpaciente');
+            $idplantram = GETPOST('idplant');
+
+            $datos['idpaciente'] = $idpaciente;
+            $datos['idplan']     = $idplantram;
+
+            $respuesta = evoluc_listprincpl( $datos );
+
+//            print_r($respuesta); die();
+            $output = [
+                'data' => $respuesta ,
             ];
 
             echo json_encode($output);
@@ -1384,9 +1596,13 @@ function CrearInsertDirecFicheroPaciente($cabezera = array(), $detalle = array()
 }
 
 
-function listcitas_admin($idPaciente, $fechaInicio, $fechafin){
+function listcitas_admin($idPaciente, $fechaInicio, $fechafin)
+{
+
 
     global $db, $conf, $user;
+
+    $fecha_hoy = date('Y-m-d');
 
     $data = array();
 
@@ -1407,8 +1623,11 @@ function listcitas_admin($idPaciente, $fechaInicio, $fechafin){
                     c.comentario ,
                     IFNULL((select es.nombre_especialidad FROM tab_especialidades_doc es where es.rowid = d.fk_especialidad), 'No asignada') as especialidad,
                     (select IFNULL(tc.edit_name, concat('Plan de tratamiento #',tc.numero)) from tab_plan_tratamiento_cab tc where tc.fk_cita = c.rowid limit 1) as plantratamiento ,
-                    (select p.telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil
-                
+                    (select p.telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil ,
+                    
+                    -- citas atrazada con estado no confirmado
+                    if( cast(d.fecha_cita as date) < '".$fecha_hoy."' && d.fk_estado_paciente_cita = 2 , concat('cita agendada atrazada - NO CONFIRMADO - ', date_format(d.fecha_cita, '%Y/%m/%d') , ' - hora ' , d.hora_inicio ) , '') as cita_atrazada
+         
          from 
          
              tab_pacientes_citas_cab c , tab_pacientes_citas_det d
@@ -1431,20 +1650,37 @@ function listcitas_admin($idPaciente, $fechaInicio, $fechafin){
             $label = "";
             $diasTranscurridos = date('Y-m-d');
 
-            if($diasTranscurridos  == date('Y-m-d', strtotime($obj->fecha_cita))) //cita Hoy
-            {
-                $label = "Esta cita es para Hoy";
-                $label = " <small style='padding: 1px; background-color: #48cc58; border-radius: 5px;  color: #f0f0f0'> $label </small>";
+//            if($diasTranscurridos  == date('Y-m-d', strtotime($obj->fecha_cita))) //cita Hoy
+//            {
+//                $label = "Esta cita es para Hoy";
+//                $label = " <small style='padding: 1px; background-color: #48cc58; border-radius: 5px;  color: #f0f0f0'> $label </small>";
+//            }
 
+            //CITAS A TRAZADAS
+            $citas_atrazadas = "";
+            if( $obj->cita_atrazada != "")
+            {
+                $citas_atrazadas = "<small style='display: block; color: red' class='label text-center'> ". $obj->cita_atrazada ." </small>";
             }
 
 
-            $row[] = $obj->fecha_cita;
+            #FECHA Y HORA DE LA CITAS
+            $row[] = "<div title='hora y fecha de entrada'>
+                            <p>". $obj->fecha_cita ."</p>
+                            <p>". $obj->hora_inicio ."</p>
+                      </div>";
+
             $row[] = $obj->especialidad;
-            $row[] = "Cita - " . str_pad($obj->id_cita_cab, 6, "0", STR_PAD_LEFT);
-            $row[] = $obj->comentario;
-            $row[] = $obj->plantratamiento;
+
+            $row[] = "<p title='número de cita'> <img  src='". DOL_HTTP. "/logos_icon/logo_default/cita-medica.png' class='img-sm img-rounded'  > - " . str_pad($obj->id_cita_cab, 6, "0", STR_PAD_LEFT) ."</p>";
+
+            $row[] =  "" . (($obj->comentario == "") ? "" : $obj->comentario) . "" .$citas_atrazadas;
+
+            $row[] = ($obj->plantratamiento == "") ? "" : $obj->plantratamiento;
+
             $row[] = "<label class='label' style='background-color: $obj->color !important; font-size: 1.5rem; color: #333333'> $obj->estado </label>";
+
+            $row[] = "";
 
             $data[] = $row;
         }
@@ -1538,5 +1774,126 @@ function info_type_document_pacient($idpaciente="")
     return $data;
 
 }
+
+
+function realizarPrestacionupdate($datos = array())
+{
+    global  $db , $conf;
+
+    if( count($datos) != 0)
+    {
+        $sqlrealizar =  "INSERT INTO `tab_evolucion_plantramiento` (`fecha_create`, `fk_paciente`, `fk_plantram_cab`, `fk_plantram_det`, `observacion`, `fk_diente`, `json_caras`, `estado_diente`, `fk_doctor`, `id_login`)";
+        $sqlrealizar .= "VALUES (";
+        $sqlrealizar .= " now() ,";
+        $sqlrealizar .= " $datos->fk_paciente , ";
+        $sqlrealizar .= " $datos->fk_plantram_cab , ";
+        $sqlrealizar .= " $datos->fk_plantram_det , ";
+        $sqlrealizar .= " '$datos->observacion' , ";
+        $sqlrealizar .= " $datos->iddiente , ";
+        $sqlrealizar .= " '$datos->json_caras ', ";
+        $sqlrealizar .= " $datos->estadodiente , ";
+        $sqlrealizar .= " $datos->fk_doctor , ";
+        $sqlrealizar .= " $datos->idlogin  ";
+        $sqlrealizar .= " ) ";
+
+        $rs = $db->query($sqlrealizar);
+
+        if(!$rs){
+            return 'Ocurrio un error no se realizar la evolución';
+
+        }else{
+
+            $sqlUpdattramm =  "UPDATE `tab_plan_tratamiento_det` SET";
+            $sqlUpdattramm .= "  `estadodet`       = 'R'  ," ;
+            $sqlUpdattramm .= "  `realizada_fk_dentista`    =  $conf->login_id  ," ;
+            $sqlUpdattramm .= "  `evolucion_escrita`        ='$datos->observacion' , " ;
+            $sqlUpdattramm .= "  `fk_estado_odontograma`    = $datos->estadodiente  " ;
+            $sqlUpdattramm .= "   WHERE `rowid`= $datos->fk_plantram_det ";
+
+            $rsUp = $db->query($sqlUpdattramm);
+            if(!$rsUp){
+                return 'Ocurrio un error no se pudo realizar la evulución de manera correcta';
+            }
+        }
+
+    }
+
+    return '';
+
+}
+
+#LIST EVOLUCIONES PRINCIPAL
+function evoluc_listprincpl( $datos )
+{
+    global  $db;
+
+    $data = array();
+
+    $sqlevolucprip = "SELECT 
+                        ifnull(c.edit_name, concat('Plan de Tratamiento ', 'N. ', c.numero)) plantram ,
+                        ev.fecha_create fechaevul ,
+                        cp.descripcion as presstacion, 
+                        ev.fk_diente as diente , 
+                        (select concat( o.nombre_doc , ' ', o.apellido_doc ) from tab_odontologos o where o.rowid = ev.fk_doctor) as doct , 
+                        ev.observacion , 
+                        ifnull((select odes.descripcion from tab_odontograma_estados_piezas odes where odes.rowid = ev.estado_diente), 'Estado no asignado' )as estadodiente , 
+                        ev.json_caras
+                    FROM
+                        tab_evolucion_plantramiento ev , 
+                        tab_plan_tratamiento_cab c , 
+                        tab_plan_tratamiento_det d , 
+                        tab_conf_prestaciones cp
+                    WHERE
+                        ev.fk_plantram_cab = c.rowid and 
+                        ev.fk_plantram_det = d.rowid and 
+                        d.fk_prestacion = cp.rowid and 
+                    
+                         ";
+    $sqlevolucprip .= " ev.fk_paciente =  " . $datos['idpaciente'] . "  ";
+
+    if( !empty( $datos['idplan'] ) ){
+
+        $sqlevolucprip .= " and ev.fk_plantram_cab =  " . $datos['idplan'] . "  ";
+    }
+
+    $rsevol = $db->query($sqlevolucprip);
+
+    if( $rsevol && $rsevol->rowCount() > 0){
+
+        while ( $objevol =   $rsevol->fetchObject() )
+        {
+
+            $cadena_caras = array();
+            $caras = json_decode($objevol->json_caras);
+
+            $cadena_caras[] = ($caras->vestibular=="true") ? "vestibular" : "";
+            $cadena_caras[] = ($caras->distal=="true") ? "distal" : "";
+            $cadena_caras[] = ($caras->palatino=="true") ? "palatino" : "";
+            $cadena_caras[] = ($caras->oclusal=="true") ? "oclusal" : "";
+            $cadena_caras[] = ($caras->lingual=="true") ? "lingual" : "";
+
+//            print_r( implode(',', array_filter( $cadena_caras )) );
+//            die();
+
+            $row   = array();
+            $row[] = date('Y/d/m', strtotime( $objevol->fechaevul ) );
+            $row[] = $objevol->plantram;
+            $row[] = $objevol->presstacion;
+            $row[] = $objevol->diente;
+            $row[] = $objevol->estadodiente;
+            $row[] = $objevol->doct;
+            $row[] = $objevol->observacion;
+            $row[] = "". (implode(',', array_filter( $cadena_caras ))) ; #lista de caras
+
+            $data[] = $row;
+
+        }
+    }
+
+//    print_r($data); die();
+    return $data;
+
+}
+
 
 ?>

@@ -493,8 +493,9 @@ if($accionOdontograma == 'form_odont')
                             //pinto el odontograma segun lo seleccionado
                             pintarImgOdontogramaDiente( $numeroDiente, imgdiente, estadosDiente.data('id') );
 
-                            //Update Odontograma secuencial
+                            //Update Odontograma secuencial -esta funcion pinta el odontograma TODO LAS PIEZAS CONSTANTEMENTA CADA VES CON UN UPDATE HACIA CUANQUIER PIEZA
                             UpdateSeguidoOdontograma( fk_plantratamiento );
+
                             detallesOdontogramasEstados(); //reload los estado detalles del odontograma
 
                             $('#UpdateInformacionCommentOdontograma').modal('hide');
@@ -554,7 +555,7 @@ if($accionOdontograma == 'form_odont')
         return error;
     }
 
-    //ACTUALIZAR ODONTOGRAMA SEGIDO
+    //ACTUALIZAR ODONTOGRAMA SEGIDO -- SE ACTUALIZA EL ODONTOGRAMA SEGUIDO CADA VEZ QUE ACTUALIZO UNA PIEZA
     function UpdateSeguidoOdontograma(fk_plantratamiento,)
     {
         var $datos = fetchPiezasCaras();
@@ -580,6 +581,7 @@ if($accionOdontograma == 'form_odont')
             var cara = diente.find('.cara');
 
             var CaraActivada = diente.find('.activeCara');
+            // var CaraActivada = diente.find('.cara'); //todas las caras
 
             var estadoDiente = diente.find('.imgdiente');
 
@@ -623,10 +625,9 @@ if($accionOdontograma == 'form_odont')
             });
 
             //para capturar solo el diente
+            /*
             if( $puedopasar > 0){
-
                 piezas.push({
-
                     'diente': diente.data('diente'), //numero del diente
                     'estado_diente': estadoDiente.data('idestado'),
                     'caras' : {
@@ -637,10 +638,21 @@ if($accionOdontograma == 'form_odont')
                         'mesial'     : (mesial > 0) ? true : false,
                         'lingual'    : (lingual > 0) ? true : false,
                     }
-
                 });
+            }*/
 
-            }
+            piezas.push({
+                'diente': diente.data('diente'), //numero del diente
+                'estado_diente': ( (estadoDiente.data('idestado') == undefined) ? 0 : estadoDiente.data('idestado') ),
+                'caras' : {
+                    'vestibular' : (vestibular > 0) ? true : false,
+                    'distal'     : (distal > 0) ? true : false,
+                    'palatino'   : (palatino > 0) ? true : false,
+                    'oclusal'    : (oclusal > 0) ? true : false,
+                    'mesial'     : (mesial > 0) ? true : false,
+                    'lingual'    : (lingual > 0) ? true : false,
+                }
+            });
 
             i++;
 

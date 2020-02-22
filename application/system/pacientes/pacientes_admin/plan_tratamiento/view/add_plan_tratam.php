@@ -29,8 +29,8 @@
      <div class="form-group col-md-6 col-xs-12">
          <ul class="list-inline pull-right">
              <li>
-                 <p class="text-right labeltextBono " style="font-size: 1.5em; font-weight: bold"> Saldo </p>
-                 <p class="text-right labeltextBono " style="font-size: 1.5em; font-weight: bold">$ 0.00 </p>
+                 <p class="text-center labeltextBono " style="font-size: 1.5em; font-weight: bold"> SALDO </p>
+                 <p class="text-center labeltextBono " style="font-size: 1.5em; font-weight: bold"> <i class="fa fa-dollar"></i> <span id="saldoPagado" class="text-center"> 0.00 </span> </p>
              </li>
          </ul>
      </div>
@@ -39,7 +39,7 @@
     <div class="form-group col-xs-12 col-md-12">
 
         <div class="table-responsive">
-            <table class="table" width="100%" id="detalles_plantram">
+            <table class="table table-striped" width="100%" id="detalles_plantram">
                 <thead>
                 <tr>
                     <th width="40%">
@@ -123,5 +123,29 @@
 
     </div>
 
+</div>
+
+
+<!--MODAL ELIMINAR ESTA PRESTACION-->
+<div id="modDeletePrestacion" class="modal fade" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header modal-diseng">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title">ELIMINAR PRESTACIÓN</h4>
+            </div>
+            <div class="modal-body">
+                <p><b>Desea Eliminar esta prestacion ? </b></p>
+                <small> <b>Tener en cuenta que la prestación no podra ser eliminada si se encuentra en estado realizado o  se encuentra pagada o  se encuentre saldo asociado a esta prestación</b> </small>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btnhover" style="font-weight: bolder; color: green" id="AceptarDeletePrestacion" onclick="">Aceptar</a>
+                <a href="#" class="btn btnhover" data-dismiss="modal" style="font-weight: bolder">Close</a>
+            </div>
+        </div>
+
+    </div>
 </div>
 
