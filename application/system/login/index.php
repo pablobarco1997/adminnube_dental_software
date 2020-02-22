@@ -23,13 +23,19 @@ if(isset($_SESSION['is_open']))
     <!--    sweetarlert2 -->
     <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.css'?> ">
 
+    <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/css/css_global/lib_glob_style.css'?> ">
+    <!--    font google-->
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+
     <title>Login</title>
-    <link href="https://fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
 </head>
 <style>
 
     *{
-        font-family: 'Hind', sans-serif;
+        font-family: 'Varela Round', sans-serif;
+
+
     }
     body{
         /*background-image: url("*/<?php //echo DOL_HTTP .'/application/system/login/img/photo_main.jpg'?>/*");*/
@@ -42,7 +48,7 @@ if(isset($_SESSION['is_open']))
         /*background-color: #EBEDEF;*/
         padding: 5px;
         border: none;
-        font-family: 'Karla', sans-serif;
+        font-weight: bolder;
     }
     .form-uic{
         width: 100%;
@@ -64,9 +70,7 @@ if(isset($_SESSION['is_open']))
     input[type="password"]{ color: #333; width: 100%; box-sizing: border-box;}
     :focus{outline: none;}
 
-    input{
-        font-family: 'Hind', sans-serif;
-    }
+
     .col-3{margin: 40px 3%; position: relative;}
 
     body{
@@ -81,7 +85,7 @@ if(isset($_SESSION['is_open']))
     }
 
     .outlogintext{
-        border-radius: 15px;
+        /*border-radius: 15px;*/
         border: solid 1px #cccccc;
         padding: 10px;
     }
@@ -93,7 +97,7 @@ if(isset($_SESSION['is_open']))
 <div class="container">
     <div class="row">
 
-        <div class="center-block" style="width: 300px;">
+        <div class="col-xs-12 col-md-6 col-sm-8 col-centered" >
             <br>
             <br>
 
@@ -109,7 +113,7 @@ if(isset($_SESSION['is_open']))
 
                     <div class="form-group">
                         <div class="col-3">
-                            <label for="">Usuario</label>
+                            <label for="usu" style="font-weight: bolder; font-size: 1.8rem">Usuario</label>
                             <input class="effect-2 outlogintext" type="text" placeholder="Ingrese su Usuario" id="usu">
                             <span class="focus-border"></span>
                         </div>
@@ -117,7 +121,7 @@ if(isset($_SESSION['is_open']))
 
                     <div class="form-group">
                         <div class="col-3">
-                            <label for="">Password</label>
+                            <label for="pass" style="font-weight: bolder; font-size: 1.8rem" >Password</label>
                             <input class="effect-2 outlogintext" type="password" placeholder="Ingrese su Password" id="pass">
                             <span class="focus-border"></span>
                         </div>
