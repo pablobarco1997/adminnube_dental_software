@@ -5,6 +5,7 @@ $VISTAS      = $_GET['view'];
 #VISTAS FORMULARIOS
 switch($VISTAS)
 {
+
     case "dop": #DATOS PEROSNALES
         $VIEW_GLOB_ADMIN_PACIENTES   = "dop_formulario";    #view formulario
         $DIRECTORIO_ADMIN            = "datos_personales";  #directorio
@@ -53,6 +54,21 @@ switch($VISTAS)
         $DIRECTORIO_ADMIN            = "document_clinico";              #directorio
         $_JS_DOCMENT                 = "indx_documclin";                #doc javascript
         $NAME_MODULO                 = "DOCUMENTOS CLINICOS ASOCIADOS";
+        break;
+
+
+    case "pagospaci": #PAGOS DE PACIENTES
+        $VIEW_GLOB_ADMIN_PACIENTES   = "pagos_principl";                    #view Pagos Principal
+        $DIRECTORIO_ADMIN            = "pagos_pacientes";                   #directorio
+        $_JS_DOCMENT                 = "indexpagos";                        #doc javascript
+        $NAME_MODULO                 = "RECAUDACIONES";
+        break;
+
+    case "evoluc":                                                         #EVOLUCIONES DE PACIENTE
+        $VIEW_GLOB_ADMIN_PACIENTES   = "evulocprinp";                       #view Pagos Principal
+        $DIRECTORIO_ADMIN            = "evoluciones";                       #directorio
+        $_JS_DOCMENT                 = "evulprincp";                        #doc javascript
+        $NAME_MODULO                 = "EVOLUCIONES DEL PACIENTE";
         break;
 
 

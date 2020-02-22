@@ -21,15 +21,15 @@
         <div class="table-responsive">
             <div class="table-responsive">
                 <br>
-                <table class="table" width="100%" id="list_citasAsociadas">
+                <table class="table table-striped" width="100%" id="list_citasAsociadas">
                     <thead>
                         <tr>
-                            <th>FECHA - HORA - CITAS</th>
-                            <th>ESPECIALIDA</th>
-                            <th>N. CITA</th>
-                            <th>INFORMACIÓN ADICIONAL</th>
-                            <th>PLAN DE TRATAMIENTO ASOCIADO</th>
-                            <th>ESTADO DE LA CITA</th>
+                            <th width="10%">FECHA - HORA - CITAS</th>
+                            <th width="17%">ESPECIALIDA</th>
+                            <th width="15%">N. CITA</th>
+                            <th width="27%">INFORMACIÓN ADICIONAL</th>
+                            <th width="17%">PLAN DE TRATAMIENTO ASOCIADO</th>
+                            <th width="17%">ESTADO DE LA CITA</th>
                         </tr>
                     </thead>
                 </table>

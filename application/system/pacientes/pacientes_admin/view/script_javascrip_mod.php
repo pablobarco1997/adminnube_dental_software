@@ -10,6 +10,12 @@ switch ($VISTAS)
     case 'plantram': #mod Plan tratamiento
 
         echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/plan_tratamiento/js/plant2.js"></script>';
+
+        if(isset($_GET['v']) && $_GET['v'] == 'planform')
+        {
+            echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/plan_tratamiento/js/plant3.js"></script>';
+        }
+
         break;
 
     case 'odot': #Odontograma
@@ -34,6 +40,16 @@ switch ($VISTAS)
                 }
             }
 
+        }
+
+        break;
+
+    case 'pagospaci':
+
+        //COBRAR PAGOS INDEPENDIENTES
+        if(isset($_GET['v']) && $_GET['v'] == 'paym_pay')
+        {
+            echo '<script src="'.DOL_HTTP.'/application/system/pacientes/pacientes_admin/pagos_pacientes/js/pay_independiente.js" ></script> ';
         }
 
         break;

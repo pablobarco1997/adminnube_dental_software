@@ -32,10 +32,21 @@ $array_citas_asociadas = (object)[
 
 $array_documentAsociado = (object)[
     'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=docummclin&key='.KEY_GLOB .'&id='.tokenSecurityId($idPaciente).'&v=listdocumment',
-    'active'  =>  ($VISTAS == "docummclin") ? "docummclin" : "",
+    'active'  =>  ($VISTAS == "docummclin") ? "ActivaLista" : "",
     'permiso' => ''
 ];
 
+$array_Pagos_pacientes = (object)[
+    'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=pagospaci&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=paym',
+    'active'  =>  ($VISTAS == "pagospaci") ? "ActivaLista" : "",
+    'permiso' => ''
+];
+
+$array_evoluciones = (object)[
+    'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=evoluc&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=list_evul',
+    'active'  =>  ($VISTAS == "evoluc") ? "ActivaLista" : "",
+    'permiso' => ''
+];
 
 
 ?>
@@ -148,7 +159,7 @@ $array_documentAsociado = (object)[
                                         <i class="fa fa-list-ul"></i>&nbsp;&nbsp; PLANES DE TRATAMIENTOS </a>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "") ? "ActivaLista" : "" ?>"><a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/admin_paciente/?view=form_carga_familiares&id='.$idPaciente; ?>">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_evoluciones->active ?>"><a class="lista" href="<?= $array_evoluciones->url;  ?>">&nbsp;&nbsp;
                                         <i class="fa fa-link"></i>&nbsp;&nbsp; EVOLUCIONES </a>
                                 </li>
 
@@ -162,9 +173,22 @@ $array_documentAsociado = (object)[
                                         ODONTOGRAMA </a>
                                 </li>
 
+
+                                <!--                                                               PAGOS ---------------------------->
+                                <li>
+                                    <hr style="margin: 0px; margin-bottom: 4px">
+                                    <p class="text-center" style="font-weight: bold">FACTURACIÓN</p>
+                                </li>
+
+                                <li class="lipaddi <?= $array_Pagos_pacientes->active ?>">
+                                    <a class="lista" href="<?= $array_Pagos_pacientes->url ; ?>">&nbsp;&nbsp;
+                                        <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp; RECAUDACIÓN (<small>PAGOS</small>) </a>
+                                </li>
+
                             </ul>
 
                         </div>
+
                     </div>
 
                 </div>
