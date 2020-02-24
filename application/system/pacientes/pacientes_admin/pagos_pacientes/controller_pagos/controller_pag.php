@@ -144,7 +144,7 @@ function list_pagos_independientes($idpaciente = 0)
             $row[] = "<span class='' style='padding: 5px; border-radius: 5px; font-weight: bolder; background-color: #ffcc00'> <i class='fa fa-dollar'></i> $objpagos->totalprestaciones_realizadas </span>  ";
 
             #pago o saldo ++
-            $row[] = "<span class='' style='padding: 5px; border-radius: 5px; font-weight: bolder; background-color: #ffcc00'> <i class='fa fa-dollar'></i> $objpagos->totalpresta_pagadasSaldo </span>  ";
+            $row[] = "<span class='' style='padding: 5px; border-radius: 5px; font-weight: bolder; background-color: #66CA86'> <i class='fa fa-dollar'></i> ". (($objpagos->totalpresta_pagadasSaldo==null) ? "0.00" : $objpagos->totalpresta_pagadasSaldo) ." </span>  ";
 
             $row[] = "";
 

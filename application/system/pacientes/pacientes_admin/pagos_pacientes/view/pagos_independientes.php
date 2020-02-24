@@ -68,6 +68,11 @@ if(isset($_GET['v']) && $_GET['v'] == 'paym')
 
 ?>
 
+<style>
+
+</style>
+
+
 <div class="form-group col-xs-12 col-md-12">
 
     <div class="table-responsive">
@@ -78,12 +83,13 @@ if(isset($_GET['v']) && $_GET['v'] == 'paym')
                     <th colspan="3">PAGOS POR PLANES DE TRATAMIENTO DE PACIENTES</th>
                 </tr>
                 <tr>
-                    <th width="10%">COBRAR</th>
-                    <th width="15%">FECHA</th>
-                    <th width="30%">PLAN DE TRATAMIENTO</th>
-                    <th width="20%">CITA ASOCIADA</th>
-                    <th width="15%">TOTAL</th>
-                    <th width="15%">REALIZADO</th>
+                    <th width="5%">COBRAR</th>
+                    <th width="8%">FECHA</th>
+                    <th width="25%">PLAN DE TRATAMIENTO</th>
+                    <th width="15%">CITA ASOCIADA</th>
+                    <th width="15%"><i class="fa fa-dollar"></i>&nbsp;TOTAL</th>
+                    <th width="15%"><i class="fa fa-dollar"></i>&nbsp;REALIZADO</th>
+                    <th width="15%"><i class="fa fa-dollar"></i>&nbsp;PAGADO</th>
                 </tr>
             </thead>
         </table>
