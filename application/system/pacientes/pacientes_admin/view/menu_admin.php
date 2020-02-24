@@ -169,7 +169,7 @@ $array_evoluciones = (object)[
                                 </li>
 
                                 <li class="lipaddi <?= $array_odontograma->active ?>"><a class="lista" href="<?= $array_odontograma->url; ?>">&nbsp;&nbsp;
-                                        <img  src=" <?= DOL_HTTP .'/logos_icon/logo_default/diente.png';?>" width="12px" height="14px" alt=""> &nbsp;&nbsp;
+                                        <img  src="<?= DOL_HTTP ?>/logos_icon/logo_default/tooth-solid.svg" width="14px" height="14px" alt="">&nbsp;
                                         ODONTOGRAMA </a>
                                 </li>
 
