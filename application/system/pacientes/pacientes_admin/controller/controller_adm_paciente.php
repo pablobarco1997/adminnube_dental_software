@@ -1004,7 +1004,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $observacion     = GETPOST('observacion');
             $estadoDiente    = GETPOST('fk_estadodiente');
 
-            $tieneOdontograma = false;
+            $tieneOdontograma = ''; #esta variable comprueba si el plan de tratamiento tiene odontogrma
             $datosRealizarPrestacion = [];
 
 
@@ -1068,21 +1068,39 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 {
                     if($estadoDiente!=0){ //solo se actualiza si el estado es diferente de 0
 
-                        $updateOdont1 = "UPDATE `tab_odontograma_update` SET `fk_estado_pieza`=$estadoDiente , json_caras = '". $datosRealizarPrestacion->json_caras ."' WHERE `rowid`>0 and fk_tratamiento = $idCabPlant and fk_diente = $iddiente;";
+                        $updateOdont1 = "UPDATE `tab_odontograma_update` SET `fk_estado_pieza`= $estadoDiente , json_caras = '". $datosRealizarPrestacion->json_caras ."' WHERE `rowid`>0 and fk_tratamiento = $idCabPlant and fk_diente = $iddiente;";
                         $rsultUpdate = $db->query($updateOdont1);
 
+                        #Se actualiza el odontograma detalle
+                        $InsertOdont2  = "INSERT INTO `tab_odontograma_paciente_det` (`fk_diente`, `json_caras`, `fk_estado_diente`, `fk_tratamiento`, `obsrvacion`, `list_caras`, `fecha`, `estado_anulado`)";
+                        $InsertOdont2 .= "VALUES (";
+                        $InsertOdont2 .= "  $datosRealizarPrestacion->iddiente , ";
+                        $InsertOdont2 .= " '$datosRealizarPrestacion->json_caras'  , ";
+                        $InsertOdont2 .= " '$datosRealizarPrestacion->estadodiente' , ";
+                        $InsertOdont2 .= "  $datosRealizarPrestacion->fk_plantram_cab ,";
+                        $InsertOdont2 .= " '$datosRealizarPrestacion->observacion' ,";
+                        $InsertOdont2 .= " '$datosRealizarPrestacion->AxulisttaCaras' ,";
+                        $InsertOdont2 .= " ' " . date("Y-m-d") . " ' ";
+                        $InsertOdont2 .= " 'A' ";
+                        $InsertOdont2 .= " ) ";
+
+                        /*
                         $updateOdont2  = " UPDATE `tab_odontograma_paciente_det` SET  `list_caras`= '". $datosRealizarPrestacion->AxulisttaCaras ."' , ";
                         $updateOdont2 .= " `json_caras`= '". $datosRealizarPrestacion->json_caras ."' ,";
                         $updateOdont2 .= " `fk_estado_diente`= '". $datosRealizarPrestacion->estadodiente ."' ,";
                         $updateOdont2 .= " `obsrvacion`= '". $datosRealizarPrestacion->observacion ."' ";
-                        $updateOdont2 .= " WHERE `rowid` > 0  and fk_tratamiento = ".$datosRealizarPrestacion->fk_plantram_cab." and fk_diente =  ".$datosRealizarPrestacion->iddiente." ";
+                        $updateOdont2 .= " WHERE `rowid` > 0  and fk_tratamiento = ".$datosRealizarPrestacion->fk_plantram_cab." and fk_diente =  ".$datosRealizarPrestacion->iddiente." "; */
 
-                        $db->query($updateOdont2);
+                        $db->query($InsertOdont2);
 
 //                        echo '<pre>';
 //                        print_r($updateOdont1);
 //                        die();
                     }
+
+                }else{
+
+                    $tieneOdontograma = " <br> <img src='". DOL_HTTP."/logos_icon/logo_default/tooth-solid.svg' width='14px' height='14px' alt=''> <b> Este Plan de tratamiento no tiene Asociado un Odontograma </b>";
                 }
             }
 
@@ -1095,12 +1113,14 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $error = $rlcr;
                 }
             }
-//            print_r($datosRealizarPrestacion);
-//            die();
 
             $output = [
                 'error' => $error,
+                'tieneOdontograma' => $tieneOdontograma
             ];
+
+//            print_r($output);
+//            die();
 
             echo  json_encode($output);
 
@@ -1445,10 +1465,26 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             if($subaccion == 'eliminar_plantcab_preguntar')
             {
-                $sql1 = "select rowid, fk_cita, estados_tratamiento,  concat('Plan de Tratamiento: #', '', numero) numero , edit_name from tab_plan_tratamiento_cab where rowid = $idplantcab and fk_paciente = $idpaciente limit 1;";
+                $sql1 = "SELECT  rowid,
+                            fk_cita,
+                            estados_tratamiento,
+                            CONCAT('Plan de Tratamiento: #', '', numero) numero,
+                            edit_name, 
+                            
+                            (SELECT 
+                                    SUM(pg.amount) AS amount
+                                FROM
+                                    tab_pagos_independ_pacientes_det pg
+                                WHERE
+                                    pg.fk_plantram_cab = p.rowid
+                                        AND pg.fk_paciente = p.fk_paciente) AS saldo
+                
+                         FROM tab_plan_tratamiento_cab p where p.rowid = $idplantcab and p.fk_paciente = $idpaciente limit 1;";
                 $rs1 = $db->query($sql1);
 
-                if($rs1->rowCount()>0)
+//                print_r($sql1);
+//                die();
+                if( $rs1->rowCount() > 0 )
                 {
                     $objectplantram = $rs1->fetchObject();
 
@@ -1486,30 +1522,85 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             if($subaccion == 'confirm_eliminar')
             {
-                #UPDATE ESTADO ANULADO
-                $sqlupdatPlant = "UPDATE `tab_plan_tratamiento_cab` SET `estados_tratamiento`='E' WHERE `rowid`='$idplantcab';";
-                $delUpd = $db->query($sqlupdatPlant);
-                if(!$delUpd){
-                    $error++;
-                    $errores = "Ocurrio un error con la eliminación Consulte con soporte";
-                }else{
-                    $acierto++;
+
+                #COMPRUEBO SI EN EL PLAN D ETRATAMIENTO  TIENE PRESTACIONES ASOCIADAS O SALDO
+                $sqlplantrCab = "SELECT p.rowid,
+                                p.fk_cita,
+                                p.estados_tratamiento,
+                                CONCAT('Plan de Tratamiento: #', '', p.numero) numero,
+                                p.edit_name,
+                                (SELECT 
+                                        SUM(pg.amount) AS amount
+                                    FROM
+                                        tab_pagos_independ_pacientes_det pg
+                                    WHERE
+                                        pg.fk_plantram_cab = p.rowid
+                                            AND pg.fk_paciente = p.fk_paciente) AS saldo , 
+                                            
+                                (select count(*) from tab_plan_tratamiento_det d where d.fk_plantratam_cab = p.rowid and d.estadodet = 'R') as prestaciones_realizadas
+                                
+                                FROM 
+                                tab_plan_tratamiento_cab p where p.rowid = $idplantcab and p.fk_paciente = $idpaciente limit 1";
+                $rsplanCab = $db->query($sqlplantrCab);
+                if( $rsplanCab && $rsplanCab->rowCount() > 0 ){
+
+                    $objPlanCab = $rsplanCab->fetchObject();
+
+                    $puedeAnular = 0;
+                    $prestacionesRealizadas = "";
+                    $tieneSaldo = "";
+
+                    if( $objPlanCab->prestaciones_realizadas > 0 ){
+                        $puedeAnular++;
+                        $prestacionesRealizadas .= " tiene ". $objPlanCab->prestaciones_realizadas ." prestaciones realizadas";
+                    }
+                    if( $objPlanCab->saldo > 0 ){
+                        $puedeAnular++;
+                        $tieneSaldo .= " tiene saldo asociado <i class='fa fa-dollar'> </i> ".$objPlanCab->saldo ;
+                    }
+
+                    if($puedeAnular > 0){
+
+                        $acierto = 0; #negativo no se puede eliminar
+                        $msgConfirm = "<div class='form-group col-lg-12 col-xs-12'>
+                                                <b>Error:</b> <br>
+                                                    <p>No se puede <b>anular</b> este plan de tratamiento  ". $prestacionesRealizadas ." ". $tieneSaldo ."</p>    
+                                            </div>";
+                    }
+
+                    if( $puedeAnular == 0)
+                    {
+
+                        $acierto++;  //positivo se puede eliminar
+
+                        #UPDATE ESTADO ANULADO
+                        $sqlupdatPlant = "UPDATE `tab_plan_tratamiento_cab` SET `estados_tratamiento`='E' WHERE `rowid`='$idplantcab';";
+                        $delUpd = $db->query($sqlupdatPlant);
+                        if(!$delUpd)
+                        {
+                            $error++;
+                            $errores = "Ocurrio un error con la eliminación Consulte con soporte";
+
+                        }
+
+                        #ELIMINACION DE PLAN DE TRATAMIENTO
+                        /*
+                        $sqldelcab = "DELETE FROM `tab_plan_tratamiento_cab` WHERE `rowid`='$idplantcab' and fk_paciente = $idpaciente;";
+                        $delrcab = $db->query($sqldelcab);
+
+                        if($delrcab){
+
+                            $sqldeldet = "DELETE FROM `tab_plan_tratamiento_det` WHERE `rowid` > 0 and fk_plantratam_cab = $idplantcab ;";
+                            $db->query($sqldeldet);
+
+                        }else{
+                            $error++;
+                            $errores = "Ocurrio un error con la eliminación Consulte con soporte";
+                        }*/
+
+
+                    }
                 }
-
-                #ELIMINACION DE PLAN DE TRATAMIENTO
-                /*
-                $sqldelcab = "DELETE FROM `tab_plan_tratamiento_cab` WHERE `rowid`='$idplantcab' and fk_paciente = $idpaciente;";
-                $delrcab = $db->query($sqldelcab);
-
-                if($delrcab){
-
-                    $sqldeldet = "DELETE FROM `tab_plan_tratamiento_det` WHERE `rowid` > 0 and fk_plantratam_cab = $idplantcab ;";
-                    $db->query($sqldeldet);
-
-                }else{
-                    $error++;
-                    $errores = "Ocurrio un error con la eliminación Consulte con soporte";
-                }*/
 
             }
 

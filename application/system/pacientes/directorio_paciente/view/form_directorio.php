@@ -42,22 +42,6 @@
                     </div>
                 </div>
 
-                <div class="row">
-
-
-
-<!--                        <div class="col-lg-6 margenTopDiv">-->
-<!---->
-<!---->
-<!--                            <label for="">-->
-<!--                                <a href="--><?//= DOL_HTTP .'/application/system/pacientes/nuevo_paciente/index.php?view=nuev_paciente'?><!--"> <i class="fa fa-users"></i> Nuevo Paciente</a>-->
-<!--                            </label>-->
-<!--                            &nbsp;&nbsp;&nbsp;                            &nbsp;&nbsp;&nbsp;-->
-<!---->
-<!---->
-<!--                        </div>-->
-
-                </div>
 
 
                 <div class="row">
@@ -66,7 +50,7 @@
                         <div class="col-md-12  col-sm-12 margenTopDiv">
                             <div style=" border-radius: 3px; padding: 3px; width: 100%">
                                 <div class="table-responsive">
-                                    <table class="table" id="table_direc" width="100%">
+                                    <table class="table table-striped" id="table_direc" width="100%">
                                         <thead>
                                             <tr>
                                                 <th>NOMBRE</th>
