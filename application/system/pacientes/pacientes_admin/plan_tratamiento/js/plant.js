@@ -70,7 +70,7 @@ function  listplaneTratamiento(){
 
                     //DROPDOWN MENU
                     var listaOpciones = "" +
-                        "<ul class='dropdown-menu pull-right'>\n" +
+                        "<ul class='dropdown-menu pull-left'>\n" +
                                 "\n" +
                                 "   <li><a href=\"#\" onclick='optionTratamiento("+idplantratamiento+", \"editname\")'>Cambiar Nombre de Plan Tratamiento</a></li>\n" +
                                 "   <li><a href=\"#\">Financiamiento</a></li>\n" +
@@ -84,33 +84,29 @@ function  listplaneTratamiento(){
                     //------------------------html ------------------------------------
                 var html = "";
 
-                html += "<div id='boxtratamiento' class='box-ptratamiento row_list_plantram' style=' padding: 7px' >";
-                html += "<div class='row'> " +
+         html += "<div id='boxtratamiento' class='box-ptratamiento row_list_plantram form-group col-lg-12 col-xs-6 col-md-12' style=' padding: 7px' >";
+                html += "<div class='form-group col-md-12 col-xs-12 col-lg-12'> " +
 
+                                " <div class='col-md-11 col-sm-9 col-xs-8'>" +
+                                "       <ul class='list-inline'>" +
+                                "           <li>" +numeroPlantratamiento+ "</li>" +
+                                "           <li>" +
+                                // DROPDOWN MENU ACCIONES PLAN TRATAMIENTO
+                                "             &nbsp;&nbsp;&nbsp;&nbsp;" +
+                                "             <div class='dropdown'>" +
+                                "               <button class=\"btn btn-xs dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> <i class='fa fa-ellipsis-v'></i> </button>" +
+                                "               "+ listaOpciones +"    " +
+                                "             </div> " +
 
-                        " <div class='col-md-11 col-sm-9 col-xs-8'>" +
-                        "       <ul class='list-inline'>" +
-                        "           <li>" +numeroPlantratamiento+ "</li>" +
-                        "           <li></li>" +
-                        "       </ul>   " +
-                        " </div>" +
-
-
-                        // DROPDOWN MENU ACCIONES PLAN TRATAMIENTO
-                        " <div class='col-md-1 col-sm-1 col-xs-1' style='padding: 6px 3px'>" +
-                        "   <div class='dropdown col-md-1 col-xs-1'>" +
-                        "      <button class='btn dropdown-toggle' type='button' data-toggle='dropdown' >" +
-                        "      <i class='fa fa-ellipsis-v'></i> "   +
-                        "      </button>      " +
-                        "       "  + listaOpciones +
-                        "    </div>" +
-                        "</div>" +
+                                "           </li>" +
+                                "       </ul>   " +
+                                " </div>" +
 
                         "</div>" +
 
                         "<br>";
 
-                    html += "   <div class='row'>" +
+          html += " <div class='form-group col-md-12 col-xs-12 col-lg-12'>" +
                         "<div class='col-sm-3'>" +
                                 "<small style='color: #85929E; font-weight: bold'>PROFESIONAL</small>" +
                                 "<br>" +
@@ -150,7 +146,7 @@ function  listplaneTratamiento(){
 
 
                         "   </div>";
-                    html += "</div>";
+            html += "</div>";
 
 
                     // return full[4];

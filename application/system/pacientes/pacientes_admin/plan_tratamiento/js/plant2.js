@@ -291,8 +291,8 @@ if($accion == 'addplan')
 
                         //PRESTACION
                         "<td name='Prestacion[" + $formatoIndexPrestacion + "].detalle' class='prestacion' data-idprestacion='" + idprestacion + "'  data-iddiente='" + detalleDiente.diente + "'>" +
-                        "<p style='margin: 0px'>" + objectPresst.descripcion + "</p>" +
-                        "<small title='Diente: " + detalleDiente.diente + "'>Diente: &nbsp; " + detalleDiente.diente + " <img src='" + $DOCUMENTO_URL_HTTP + "/logos_icon/logo_default/diente.png' width='15px' height='15px' > </small>" +
+                            "<p style='margin: 0px'>" + objectPresst.descripcion + "</p>" +
+                            "<small title='Diente: " + detalleDiente.diente + "'>Diente: &nbsp; " + detalleDiente.diente + " <img src='" + $DOCUMENTO_URL_HTTP + "/logos_icon/logo_default/diente.png' width='15px' height='15px' > </small>" +
                         "</td>" +
 
                         //subtotal
@@ -758,11 +758,18 @@ if($accion == "principal")
                     $('#msg_eliminar_plantram').html( respuesta.msgConfirm );
                     preguntar = true;
 
-                    if(respuesta.acierto > 0){ //DATOS ACTUALIZADOS
+                    if(respuesta.acierto > 0)
+                    {
+                        //DATOS ACTUALIZADOS
                         $('#confirm_eliminar_plantram').modal('hide');
+
                         notificacion('Información Actualizada', 'success');
+
                         listplaneTratamiento();
 
+                    }else{
+
+                        $('#msg_eliminar_plantram').html( respuesta.msgConfirm );
                     }
 
                 }
