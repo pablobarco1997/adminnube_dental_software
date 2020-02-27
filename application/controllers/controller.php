@@ -216,4 +216,75 @@ function ConfirmacionEmailHTML($token)
     return $buttonToken;
 }
 
+function Breadcrumbs_Mod( $titulo, $url, $module )
+{
+
+
+    $Breadcrumbs_Mod = array();
+    $Breadcrumbs = "";
+    $CountBread = 0;
+
+    if( $module == true){
+
+        $_SESSION['breadcrumbsAcu'] = 0;
+        $_SESSION['breadcrumbs'] = array();
+        $_SESSION['breadcrumbs'][] = array( 'url' => $url , 'titulo' => $titulo );
+        $Breadcrumbs_Mod = $_SESSION['breadcrumbs'];
+
+    }else{
+
+        if(is_array($_SESSION['breadcrumbs']) && count($_SESSION['breadcrumbs']) > 0){
+
+            foreach ($_SESSION['breadcrumbs'] as $key => $value)
+            {
+                if($value['titulo'] == $titulo){
+                    unset($_SESSION['breadcrumbs'][$key]);
+                }
+            }
+
+            $_SESSION['breadcrumbs'][] = array( 'url' => $url , 'titulo' => $titulo );
+            $_SESSION['breadcrumbsAcu']++;
+
+            $Breadcrumbs_Mod = $_SESSION['breadcrumbs'];
+            $CountBread = $_SESSION['breadcrumbsAcu'];
+
+        }else{
+
+            foreach ($_SESSION['breadcrumbs'] as $key => $value)
+            {
+                if($value['titulo'] == $titulo){
+                    unset($_SESSION['breadcrumbs'][$key]);
+                }
+            }
+
+            $_SESSION['breadcrumbs'][] = array( 'url' => $url , 'titulo' => $titulo );
+            $Breadcrumbs_Mod = $_SESSION['breadcrumbs'];
+            $_SESSION['breadcrumbsAcu']++;
+            $CountBread = $_SESSION['breadcrumbsAcu'];
+
+        }
+    }
+
+//    echo '<pre>'; print_r($_SESSION['breadcrumbs']); die();
+
+    if(!empty($titulo) )
+    {
+
+        $Breadcrumbs .= '<ol class="list-inline  pull-right breadcrumbsCss">';
+
+        for( $i = 0; $i <= $CountBread; $i++ )
+        {
+            if(isset($Breadcrumbs_Mod[$i])) //verifico si existe o hay valores
+            {
+                $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' "> '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp; <img src="'.DOL_HTTP.'/logos_icon/logo_default/doble-angulo-apuntando-a-la-derecha.png" width="14px" height="14px" alt=""> </a></li>';
+            }
+
+        }
+
+        $Breadcrumbs .= '</ol>' ;
+    }
+
+    return $Breadcrumbs;
+}
+
 ?>

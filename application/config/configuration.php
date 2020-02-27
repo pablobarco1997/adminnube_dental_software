@@ -6,7 +6,7 @@
         var $PERFIL     = "";
         var $EMPRESA    = "";
         var $PACIENTES  = "";
-        var $NOTIFICACIONES_CITAS = "";
+        var $NOTIFICACIONES = "";
         var $DIRECTORIO = "";
         var $NAME_DIRECTORIO = "";
 
@@ -22,7 +22,7 @@
             $this->DIRECTORIO                = new stdClass();
             $this->NAME_DIRECTORIO           = new stdClass();
             $this->PERFIL                    = new stdClass();
-            $this->NOTIFICACIONES_CITAS      = array();
+            $this->NOTIFICACIONES            = (object)array( 'Glob_Notificaciones' => [] , 'Numero' => 0 );
         }
 
         public function ObtenerPaciente($db, $id, $tipo)
@@ -60,67 +60,88 @@
             return $obj;
         }
 
-        function ObtenerInformacionCitasPacientes($db, $independiente, $id_detalle_cita)
+        function ObtnerNoficaciones($db, $puedoAxu)
         {
+                #ESTA VARIABLE CAPTURAR EL NUMERO DE NOTIFICACIONES QUE EXTIS
+                $numeroNotificaciones = 0;
 
-                $OBJ_CITAS = array();
-                $Fecha_Hoy = "now()";
+                $ConsultarCitas = "
+                        SELECT 
+                            d.rowid AS id_detalle_cita,
+                            c.fecha_create,
+                            d.hora_inicio,
+                            d.hora_fin,
+                            CONCAT(d.hora_inicio, ' A ', d.hora_fin) AS cita_desde,
+                            CONCAT(p.nombre, ' ', p.apellido) AS nombre,
+                            c.comentario,
+                            (SELECT 
+                                    CONCAT(o.nombre_doc, ' ', o.apellido_doc)
+                                FROM
+                                    tab_odontologos o
+                                WHERE
+                                    o.rowid = d.fk_doc) AS doctor_cargo,
+                            s.text,
+                            p.rowid AS idpaciente,
+                            d.fk_doc AS iddoctorcargo,
+                            p.fk_convenio AS convenio,
+                            IFNULL((SELECT 
+                                            cv.nombre_conv
+                                        FROM
+                                            tab_conf_convenio_desc cv
+                                        WHERE
+                                            cv.rowid = p.fk_convenio),
+                                    'sin convenio') AS nomconvenio ,
+                            p.icon
+                        FROM
+                            tab_pacientes_citas_cab c,
+                            tab_pacientes_citas_det d,
+                            tab_admin_pacientes p,
+                            tab_pacientes_estado_citas s
+                        WHERE
+                            c.fk_paciente = p.rowid
+                                AND c.rowid = d.fk_pacient_cita_cab
+                                AND d.fk_estado_paciente_cita = s.rowid 
+                                
+                        AND date_format(d.fecha_cita , '%Y-%m-%d') = date_format( now() , '%Y-%m-%d') ";
 
-                $sql2 = "SELECT 
-                        d.rowid as id_detalle_cita,
-                        c.fecha_create , 
-                        d.hora_inicio , 
-                        d.hora_fin ,
-                        concat(d.hora_inicio , ' A ' , d.hora_fin) as cita_desde,
-                        concat(p.nombre , ' ' , p.apellido) as nombre , 
-                        c.comentario,
-                        (select concat(o.nombre_doc , ' ', o.apellido_doc ) from tab_odontologos o where o.rowid = d.fk_doc) as doctor_cargo,
-                        s.text,
-                        
-                        
-                        p.rowid       as idpaciente   , 
-                        d.fk_doc      as iddoctorcargo,
-                        p.fk_convenio as convenio     ,
-                        
-                        ifnull((select cv.nombre_conv from tab_conf_convenio_desc cv where  cv.rowid = p.fk_convenio), 'sin convenio') as nomconvenio
-                        
-                        
-                        FROM tab_pacientes_citas_cab c, tab_pacientes_citas_det d , tab_admin_pacientes p , tab_pacientes_estado_citas s
-                        WHERE c.fk_paciente = p.rowid and c.rowid = d.fk_pacient_cita_cab and d.fk_estado_paciente_cita = s.rowid 
-                        ";
-
-                if($independiente == 1)  //Q me muestre solo un registro de esta informacion
+                #NOTIFICACIONES DE CITAS
+                $rsConsultCitas = $db->query($ConsultarCitas);
+                if($rsConsultCitas->rowCount() > 0)
                 {
-
-                    $sql2 .= " and d.rowid = " . $id_detalle_cita;
-
-                }else{
-
-                    $sql2 .= " and date_format(d.fecha_cita , '%Y-%m-%d') = date_format($Fecha_Hoy , '%Y-%m-%d') ";
-
-                }
-
-
-//            echo '<pre><br>';
-//            print_r($sql2);
-
-                $rs = $db->query($sql2);
-
-                if($rs->rowCount() > 0)
-                {
-                    while ($Obj = $rs->fetchObject())
+                    while ( $CitasConsult = $rsConsultCitas->fetchObject() )
                     {
-                        if($independiente == true)
-                        {
-                            $OBJ_CITAS = $Obj;
 
-                        }else{
-                            $this->NOTIFICACIONES_CITAS[] = $Obj;  // le ENVIO EL OBJ COMPLETO
-                        }
+                        $this->NOTIFICACIONES->Glob_Notificaciones[] = (object)array(
+
+                            'tipo_notificacion'     => 'notificacion_citas_paciente' ,
+
+                            'fecha'                 => date('Y-m-d', strtotime( str_replace('-', '/', $CitasConsult->fecha_create))),
+                            'horaIni'               =>  $CitasConsult->hora_inicio,
+                            'horafin'               =>  $CitasConsult->hora_fin ,
+
+                            'nombe_paciente'        =>  $CitasConsult->nombre,
+                            'comment'               =>  $CitasConsult->comentario,
+                            'doctor_cargo'          =>  $CitasConsult->doctor_cargo,
+                            'icon'                  =>  $CitasConsult->icon,
+
+                            'id_detalle_cita'       =>  $CitasConsult->id_detalle_cita,
+                            'idpaciente'            =>  $CitasConsult->idpaciente,
+                            'iddoctorcargo'         =>  $CitasConsult->iddoctorcargo,
+                        );
+
+                        $numeroNotificaciones++;
                     }
                 }
 
-                return $OBJ_CITAS;
+                #NUMERO DE NOTIFICACIONES
+                $this->NOTIFICACIONES->Numero = (object)array(
+
+                    'NumeroNotificaciones'      => $numeroNotificaciones
+
+                );
+
+
+                return "";
 
 
         }

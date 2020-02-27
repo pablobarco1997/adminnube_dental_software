@@ -35,7 +35,7 @@
         "INFORMACION"   => $entity::INFORMACION_EMPRESA_GLOB($_SESSION["id_Entidad"]) //INFORMACION DE LA ENTIDAD GLOB
     );
 
-    $conf->ObtenerInformacionCitasPacientes($db, 0, '');
+    $conf->ObtnerNoficaciones($db, false);
 
     $conf->DIRECTORIO = DOL_DOCUMENT.'/logos_icon/icon_logos_'.$_SESSION['entidad']; //RUTA DE DIRECTORIO GLOBAL
     $conf->NAME_DIRECTORIO = 'icon_logos_'.$_SESSION['entidad']; //NAME DE LA CARPETA DEL DIRECTORIO
