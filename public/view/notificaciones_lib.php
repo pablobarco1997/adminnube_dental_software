@@ -1,48 +1,78 @@
+<!--NOTIFICACIONES -->
+
+<?php //echo '<pre>';  print_r($conf->NOTIFICACIONES->Glob_Notificaciones); die();  ?>
+
+
 <li class="dropdown messages-menu">
     <!-- Menu toggle button -->
     <a href="#" class="dropdown-toggle" data-toggle="dropdown">
         <i class="fa fa-bell-o"></i>
-        <span class="label label-warning" id="nume_notificacion"><?= count($conf->NOTIFICACIONES_CITAS) ?></span>
+        <span class="label label-warning" id="nume_notificacion"><?= $conf->NOTIFICACIONES->Numero->NumeroNotificaciones ?></span>
     </a>
-    <ul class="dropdown-menu">
 
-        <li class="header"> TIENES <?= count($conf->NOTIFICACIONES_CITAS) ?> NOTIFICACIONES </li>
+    <ul class="dropdown-menu " style="width: 400px ;height: 400px; overflow-y: auto">
+
+        <li class="header">  <?= $conf->NOTIFICACIONES->Numero->NumeroNotificaciones ?> NOTIFICACIONES </li>
+
         <li>
             <!-- Inner Menu: contains the notifications -->
-            <ul class="menu">
+            <ul class="no-margin no-padding" style="width: 100%; height: 100% !important; list-style: none">
 
-                <?php
+                    <li class="notificacion_list" style="padding: 1px;  ">
+                        <ul class="notiflist" style="list-style: none; padding-left: 0px; ">
 
-                    $notifi_citas = $conf->NOTIFICACIONES_CITAS;
+                            <?php
 
-                    foreach ($notifi_citas as $key => $v)
-                    {
+                                foreach ($conf->NOTIFICACIONES->Glob_Notificaciones as $key => $v)
+                                {
 
-                        $hora_desde_A = substr($v->hora_inicio, 0, 5 ) ." A " . substr($v->hora_fin, 0, 5 ); //Corto
-                ?>
+                                    if( $v->tipo_notificacion == 'notificacion_citas_paciente' )
+                                    {
 
-                <li class="notificacion_list"><!-- start notification -->
+                                        $hora_desde_A = substr($v->horaIni, 0, 5 ) ." A " . substr($v->horafin, 0, 5 ); //Corto
 
-                    <a href="#ModalInfoamcionNotificaicion" data-toggle="modal" data-idCita="<?= $v->id_detalle_cita ?>" onclick="ObtenerInformacionNotificaion($(this),<?= $v->id_detalle_cita ?>)">
-                        <div class="pull-left">
-                            <img src="<?php echo DOL_HTTP .'/dist/img/user2-160x160.jpg'; ?>" class="img-circle" alt="User Image">
-                        </div>
-                        <h4 class="text-nowrap"  id="notifi_nombre" data-hora="<?= $hora_desde_A ?>" title="<?= $v->nombre ?>" data-nomb="<?= $v->nombre ?>" data-coment="<?= $v->comentario ?>">
-                            <?= substr($v->nombre , 0, 15)?>
-                            <small id="notifi_hora"><i class="fa fa-clock-o"></i> <?= $hora_desde_A ?></small>
-                        </h4>
+                                        $htmlCitasList = "
+                                                <li style='margin-bottom: 2px; padding: 5px' class='listNotificacion' >
+                                                    <div class='form-group col-md-12 col-xs-12 no-margin no-padding'>
+                                                        <div class='media'>
+                                                            <a class='pull-left'> <img src='".DOL_HTTP."/logos_icon/logo_default/cita-medica.png' class='img-rounded img-md' alt=''> </a>
+                                                            <div class='media-body'>
+                                                                <h5 class='media-heading'>
+                                                                    <b>Doctor:</b> &nbsp;&nbsp; $v->doctor_cargo <br>
+                                                                    <b>Paciente:</b>&nbsp;&nbsp; $v->nombe_paciente <br>
+                                                                    <b>Fecha:</b>&nbsp;&nbsp; $v->fecha <br>
+                                                                    <b>Hora:</b>&nbsp;&nbsp; $hora_desde_A <br>
+                                                                    <b>Comentario:</b>&nbsp;&nbsp; $v->comment
+                                                                    <button class='btn-xs btn btn-block btnhover' style='font-weight: bolder; color: green'>Aceptar</button>
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                                
+                                        ";
 
-                        <p class="trunc text-coment-ontificacion" style="width: 190px!important; overflow:  hidden" title="<?= $v->comentario ?>" id="notifi_comentario"> <?= $v->comentario ?> </p>
-<!--                        <i class="fa fa-users text-aqua"></i> 5 new members joined today-->
-                    </a>
+                                        echo $htmlCitasList; #imprime la lista de citas
+                                    }
 
-                </li>
-                <!-- end notification -->
-                <?php }?>
+                                    #end citas notificacion
+
+
+                                }
+
+                            ?>
+
+                            <li class="divider"></li>
+
+                        </ul>
+                    </li>
+
+
 
             </ul>
-        </li>
-        <li class="footer"><a href="#">View all</a></li>
 
+        </li>
+<!--        <li class="footer"><a href="#">View all</a></li>-->
     </ul>
+
 </li>

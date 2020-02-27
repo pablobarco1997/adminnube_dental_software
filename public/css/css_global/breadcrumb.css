@@ -1,0 +1,12 @@
+.breadcrumbsCss{
+    background-color: #D5D8DC;
+    padding: 8px;
+    border-radius: 10px;
+}
+.breadcrumbsCss a{
+    color: #0f0f0f;
+}
+.breadcrumbsCss a:hover{
+    color: #478fc0;
+}
+

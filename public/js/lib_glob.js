@@ -226,18 +226,6 @@ function SubirImagenes(Este,imageid,url)
     return file;
 }
 
-//Modal informacion citas
-function ObtenerInformacionNotificaion(html, $id)
-{
-    var $padre = html.parents('.notificacion_list');
-    var nombre = $padre.find('#notifi_nombre');
-
-    $("#modalnotifi_nombre").text(nombre.data('nomb'));
-    $("#modalnotifi_horario").text(nombre.data('hora'));
-    $("#modalnotifi_observacion").text(nombre.data('coment'));
-
-    console.log($padre);
-}
 
 // MASKARA BLOBAL DE MONEY
 $('.mask').maskMoney({precision:2,thousands:'', decimal:'.',allowZero:true,allowNegative:true, defaultZero:true,allowEmpty: true});
@@ -320,3 +308,8 @@ function loaddingload_XMLHttpRequest(screen){
         })
 
 }
+
+
+$('.dropdown-menu').on('click', function(e) {
+    e.stopPropagation();
+});

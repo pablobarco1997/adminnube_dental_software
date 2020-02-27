@@ -20,6 +20,8 @@
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/css/skins/skin-blue.min.css'?>">
 
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/css/css_global/lib_glob_style.css'?>">
+    <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/css/css_global/breadcrumb.css'?>">
+
 <!--    datatable-->
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/datatable/datatables.net-bs/css/dataTables.bootstrap.css'?>">
 <!--    select2-->
@@ -39,12 +41,17 @@
 <style>
 
     *{
-        font-family: 'Varela Round', sans-serif;
+        font-family: 'Varela Round', sans-serif ;
+    }
 
+    h3{
+        font-family: 'Varela Round', sans-serif ;
     }
-    table tbody tr td{
-        font-size: 1.4rem !important;
+
+    h5{
+        font-family: 'Varela Round', sans-serif ;
     }
+
 
 </style>
 <body class="skin-blue sidebar-mini sidebar-collapse">
