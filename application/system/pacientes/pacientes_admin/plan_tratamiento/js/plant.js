@@ -12,7 +12,7 @@ function  listplaneTratamiento(){
 
     $('#listtratamientotable').DataTable({
 
-        searching: true,
+        searching: false,
         ordering:false,
         destroy:true,
         paging: false,
@@ -26,7 +26,9 @@ function  listplaneTratamiento(){
                 'ajaxSend':'ajaxSend',
                 'accion':'list_tratamiento',
                 'idpaciente': $id_paciente,
-                'mostrar_anulados': ($('#mostrarAnuladosPlantram').prop('checked') == true) ? 'si': 'no'
+                'mostrar_anulados'   : ($('#mostrarAnuladosPlantram').prop('checked') == true) ? 'si': 'no',
+                'mostrar_finalizados': ($('#mostaraFinalizados').prop('checked') == true) ? 'si': 'no',
+                'idplantmiento': $('#filtrPlantram').find(':selected').val()
 
             } ,
             dataType:'json',
@@ -48,6 +50,8 @@ function  listplaneTratamiento(){
                     var ultimaCitaFecha       = null;
                     var ultimaCitaHora        = null;
                     var estadoPlanTram        = null;
+                    var situacionPlatram      = null;
+                    var estadoanulado         = null;
 
                     idplantratamiento     = full[6];
                     profecionalCargo      = full[1];
@@ -55,10 +59,33 @@ function  listplaneTratamiento(){
                     ultimaCitaFecha       = full[3];
                     ultimaCitaHora        = full[4];
                     estadoPlanTram        = full[8];
+                    situacionPlatram      = full[5];
+                    estadoanulado         = (full[10] == 'E') ? 'disabled_link3': '';
+
+                    console.log(estadoanulado);
+                    var situacion = "";
+                    if(full[10] == 'S') //SALDO
+                    {
+                        situacion = "<i class='fa fa-dollar'></i> &nbsp; "+full[5];
+                    }
+                    if(full[10] == 'A' ) //ACTIVO O PENDIENTE
+                    {
+                        situacion = "<i class='fa fa-user-md'></i> &nbsp; "+ full[5];
+                    }
+                    if(full[10] == 'F' ) // FINALIZADO
+                    {
+                        situacion = "<i class='fa fa-user-md'></i> &nbsp; "+ full[5];
+                    }
+                    if(full[10] == 'E' ) // ANULADO
+                    {
+                        situacion = "<i class='fa fa-user-md'></i> &nbsp; "+ 'ANULADO';
+                    }
+
 
                     //Se bloqueara si ya tiene asociada una cita
                     var disablelinkCitasAsocid = "";
                     var disableEstadoPlantrem  = "";
+                    var disabledFinalizado     = "";
 
                     if(full[7] != 0){
                         disablelinkCitasAsocid = 'disabled_link3'
@@ -68,16 +95,22 @@ function  listplaneTratamiento(){
                         disableEstadoPlantrem = 'disabled_link3';
                     }
 
+                    if(estadoPlanTram == 'F'){
+                        disableEstadoPlantrem = 'disabled_link3';
+                    }
+
+                    var urlRecaudacion = $DOCUMENTO_URL_HTTP + '/application/system/pacientes/pacientes_admin/?view=pagospaci&key='+$keyGlobal+'&id='+Get_jquery_URL('id')+'&v=paym_pay&idplantram='+idplantratamiento;
+
                     //DROPDOWN MENU
                     var listaOpciones = "" +
-                        "<ul class='dropdown-menu pull-left'>\n" +
+                        "<ul class='dropdown-menu pull-left '>\n" +
                                 "\n" +
                                 "   <li><a href=\"#\" onclick='optionTratamiento("+idplantratamiento+", \"editname\")'>Cambiar Nombre de Plan Tratamiento</a></li>\n" +
-                                "   <li><a href=\"#\">Financiamiento</a></li>\n" +
-                                "   <li><a href=\"#\">Recaudar este Tratamiento</a></li>\n" +
+                                "   <li><a href=\"#\" disabled=''  class='disabled_link3'>Financiamiento</a></li>\n" +
+                                "   <li><a href='"+urlRecaudacion+"'>Recaudar este Tratamiento</a></li>\n" +
                                 "   <li><a href=\"#\" class='"+disableEstadoPlantrem+"' onclick='eliminarPlan_tratamiento($(this), "+ idplantratamiento +")' >Anular</a></li>\n" +
-                                "   <li><a href=\"#\">Finalizar</a></li>\n" +
-                                "   <li><a href=\"#\">Duplicar este plan de tratamiento</a></li>\n" +
+                                "   <li><a href=\"#\"   onclick='optionTratamiento("+idplantratamiento+", \"finalizar_plantram\")'  >Finalizar</a></li>\n" +
+                                "   <li><a href=\"#\" disabled=''  class='disabled_link3'>Duplicar este plan de tratamiento</a></li>\n" +
                                 "\n" +
                         "   </ul>";
 
@@ -89,12 +122,12 @@ function  listplaneTratamiento(){
 
                                 " <div class='col-md-11 col-sm-9 col-xs-8'>" +
                                 "       <ul class='list-inline'>" +
-                                "           <li>" +numeroPlantratamiento+ "</li>" +
+                                "           <li class=' "+estadoanulado+" '  >" +numeroPlantratamiento+ "</li>" +
                                 "           <li>" +
                                 // DROPDOWN MENU ACCIONES PLAN TRATAMIENTO
                                 "             &nbsp;&nbsp;&nbsp;&nbsp;" +
                                 "             <div class='dropdown'>" +
-                                "               <button class=\"btn btn-xs dropdown-toggle\" type=\"button\" data-toggle=\"dropdown\"> <i class='fa fa-ellipsis-v'></i> </button>" +
+                                "               <button class=\"btn btn-xs dropdown-toggle  "+ estadoanulado +" "+ disableEstadoPlantrem +"  \" type=\"button\" data-toggle=\"dropdown\"> <i class='fa fa-ellipsis-v'></i> </button>" +
                                 "               "+ listaOpciones +"    " +
                                 "             </div> " +
 
@@ -130,8 +163,7 @@ function  listplaneTratamiento(){
                             "<small style='color: #85929E; font-weight: bold; '>ESTADO FINANCIERO</small>" +
                             "<br>" +
                             "<br>" +
-                                "<small style='font-weight: bold; width: 100%; display: block' class='trunc fontsize'> " +
-                                "<i class='fa fa-user-md'></i> &nbsp; DIAGNOSTICO </small>" +
+                                "<small style='font-weight: bold; width: 100%; display: block' class='trunc fontsize'> "+ situacion +"  </small>" +
                             "<br>" +
                         "</div>" +
 
@@ -299,6 +331,16 @@ if($accion == "principal")
         placeholder: 'Seleccione una opcion',
         allowClear:true,
         language: 'es'
+    });
+
+    $('#filtrPlantram').select2({
+        placeholder: 'Seleccione una opcion',
+        allowClear:true,
+        language: 'es'
+    });
+
+    $('#filtrar_evoluc').click(function() {
+        listplaneTratamiento();
     });
 }
 

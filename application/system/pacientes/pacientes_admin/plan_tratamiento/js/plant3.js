@@ -122,6 +122,7 @@ function DeletePrestacion(iddetplant)
 
                 notificacion('Información Actualizada', 'success');
                 fetch_plantratamiento('consultar');
+                $('#modDeletePrestacion').modal('hide');
 
             }else{
 
@@ -131,3 +132,28 @@ function DeletePrestacion(iddetplant)
     });
 
 }
+
+
+
+function UpdateObservacionPlantramCab()
+{
+    $.ajax({
+        url: $DOCUMENTO_URL_HTTP +'/application/system/pacientes/pacientes_admin/controller/controller_adm_paciente.php',
+        type:'POST',
+        data: {
+            'ajaxSend'   : 'ajaxSend',
+            'accion'     : 'update_observacion' ,
+            'idplantram' : $ID_PLAN_TRATAMIENTO,
+            'observacion': $('#addcomment').val(),
+        },
+        dataType: 'json',
+        async: false,
+        success: function(resp)
+        {
+        }
+    });
+}
+
+$('#addCommentario').click(function() {
+    UpdateObservacionPlantramCab();
+});

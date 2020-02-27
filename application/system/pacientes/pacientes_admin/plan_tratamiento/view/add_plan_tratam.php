@@ -8,8 +8,13 @@
 
 </style>
 
-<!--FORMULARIO  PLAN DE TRATAMIENTO-->
 
+<!--        breadcrumbs-->
+<div class="form-group col-md-6 col-xs-12 col-lg-6 pull-right">
+    <?= Breadcrumbs_Mod($titulo, $url_breadcrumbs, $modulo); ?>
+</div>
+
+<!--FORMULARIO  PLAN DE TRATAMIENTO-->
 <div class="form-group col-xs-12 col-md-12">
 
      <div class="form-group col-md-6 col-xs-12">
@@ -44,7 +49,7 @@
                 <tr>
                     <th width="40%">
                         <label style="float: left">Prestación</label>
-                        <label data-toggle="modal" data-target="#detdienteplantram" style="color: #00a157; font-size: 1.4rem; cursor: pointer; float: right; padding-top: 2.5px" onclick="clearModalDetalle()"> <i class="fa fa-plus-circle"></i> Cargar Prestaciones</label>
+                        <label data-toggle="modal" id="asociarPrestacion" data-target="#detdienteplantram" style="color: #00a157; font-size: 1.4rem; cursor: pointer; float: right; padding-top: 2.5px" onclick="clearModalDetalle()"> <i class="fa fa-plus-circle"></i> Cargar Prestaciones</label>
                     </th>
                     <th width="10%">
                         <label for="">Realización</label>
@@ -97,7 +102,7 @@
 
     <div class="form-group col-xs-12 col-sm-12">
         <label for="">COMENTARIO</label>
-        <textarea name="" id="" rows="5" class="form-control margin-bottom"></textarea>
+        <textarea name="" id="addcomment" rows="5" class="form-control margin-bottom"></textarea>
         <button id="addCommentario" class="btn btnhover btn-block " style="font-weight: bolder; color: green">Guardar</button>
     </div>
 

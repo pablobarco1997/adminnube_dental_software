@@ -38,6 +38,7 @@ if($accion == 'addplan')
                     var cabezera             = respuesta.objetoCab[0];
 
                     //CABEZRA NOMBRE TRATAM - PROFECIONAL
+                    $('#addcomment').val( cabezera.observacion );
                     var abonado              =  cabezera.abonado_cab;
                     var profecional          =  cabezera.nombre_doc;
                     var convenio             =  cabezera.convenio;
@@ -45,6 +46,14 @@ if($accion == 'addplan')
 
                     $convenioValor           = (cabezera.valorConvenio == "") ? "No asignado" : cabezera.valorConvenio; //% Porcentage del convenio asociado
                     $AbonadoGlob             = redondear(abonado, 2, false);
+
+                    //SI EL PLAN DE TRATAMIENTO ESTA FINALIZADO
+                    if(cabezera.estados_tratamiento == 'F'){
+                        notificacion('Este plan de tratamiento se encuentra Finalizado, no puede modificarlo', 'question');
+                        $('#asociarPrestacion').addClass('disabled_link3');
+                        $('#addCommentario').addClass('disabled_link3');
+                        $('#detalle-body').addClass('disabled_link3');
+                    }
 
                     //PINTA LA CABEZERA --------------------
                     print_html_cabezera_viewPrincipal(profecional,convenio, Nomb_tratam);
@@ -716,6 +725,88 @@ if($accion == "principal")
 {
 
 
+    /** COMPORTAMIENTOS LISTA PRINCIPAL **/
+    function  optionTratamiento(idplantratamiento, subaccion)
+    {
+
+        //edit name -- nombre del plan de tratamiento
+        //edit name -- nombre del plan de tratamiento
+        if(idplantratamiento!="" && subaccion == 'editname' )
+        {
+            $('#modnombPlantratamiento').modal('show');
+            $('#idplanTratamientotitulo').attr('data-id', idplantratamiento);
+            $('#nametratamiento').val(null);
+        }
+
+        // finalizar  plan de tratamiento
+        if(idplantratamiento !="" && subaccion == 'finalizar_plantram' )
+        {
+            // finalizarPlanTratamiento(idplantratamiento, 'consultarfinalizado');
+            $('#mg_finalizar_plantramiento').html( null );
+            $('#confirm_finalizar_plantramiento').modal('show');
+            $("#finalizar_plantramiento").attr('onclick', 'finalizarPlanTratamiento('+idplantratamiento+', \'finalizar_plantram\' )');
+        }
+
+    }
+
+    function finalizarPlanTratamiento( idplantratamiento, subaccion )
+    {
+        $.ajax({
+            url: $DOCUMENTO_URL_HTTP + "/application/system/pacientes/pacientes_admin/controller/controller_adm_paciente.php",
+            type:'POST',
+            data: {
+                'ajaxSend'   : 'ajaxSend',
+                'accion'     : 'finalizar_plantramento',
+                'subaccion'  :  subaccion,
+                'idplant'    :  idplantratamiento,
+                'idpaciente' :  $id_paciente
+            },
+            dataType:'json',
+            async: false,
+            success: function(resp)
+            {
+
+                if(subaccion == 'finalizar_plantram')
+                {
+                    if(resp.error.toString() == ''){
+
+                        $('#confirm_finalizar_plantramiento').modal('hide');
+                        notificacion('Información Actualizada', 'success');
+
+                    }else{
+                        $('#mg_finalizar_plantramiento').html( resp.consultar );
+                    }
+                }
+            }
+        });
+    }
+
+        //comportamiento cambiar nombre del tratamiento
+        $('#acetareditNomPlanT').click(function(){
+
+            $.ajax({
+
+                url: $DOCUMENTO_URL_HTTP + "/application/system/pacientes/pacientes_admin/controller/controller_adm_paciente.php",
+                type:'POST',
+                data: {
+                    'ajaxSend':'ajaxSend',
+                    'accion': 'editnametratamiento',
+                    'id': $('#idplanTratamientotitulo').data('id'),
+                    'name' : $('#nametratamiento').val()
+                },
+                dataType:'json',
+                async: false,
+                success: function(resp){
+                    if(resp.error == ''){
+                        $('#modnombPlantratamiento').modal('hide');
+                        var table = $('#listtratamientotable').DataTable();
+                        table.ajax.reload();
+
+                    }
+                }
+
+            });
+        });
 
     /*ESTA FUNCION ME PERMITE ELIMINAR EL PLAN DE TRATAMIENTO*/
     function eliminarPlan_tratamiento(padreDom, $idplantratamientoDom)
@@ -789,6 +880,9 @@ if($accion == "principal")
 
     //MOSTRAR PRODUCTOS ANULADOS
     $('#mostrarAnuladosPlantram').change(function() {
+        listplaneTratamiento();
+    });
+    $('#mostaraFinalizados').change(function() {
         listplaneTratamiento();
     });
 }
