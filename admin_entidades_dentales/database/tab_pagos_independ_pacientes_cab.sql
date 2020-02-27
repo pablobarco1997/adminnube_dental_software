@@ -8,3 +8,8 @@ CREATE TABLE `tab_pagos_independ_pacientes_cab` (
   PRIMARY KEY (`rowid`)
 ) ENGINE=MyISAM AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
 ;
+
+ALTER TABLE `tab_pagos_independ_pacientes_cab`
+ADD COLUMN `fk_plantram` INT(11) NULL DEFAULT 0 AFTER `n_fact_boleta`,
+ADD COLUMN `fk_paciente` INT(11) NULL DEFAULT 0 AFTER `fk_plantram`
+;
