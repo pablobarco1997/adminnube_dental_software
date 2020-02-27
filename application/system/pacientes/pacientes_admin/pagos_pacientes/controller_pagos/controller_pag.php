@@ -114,7 +114,7 @@ function list_pagos_independientes($idpaciente = 0)
                 (SELECT round(sum(pd.amount),2) saldo FROM tab_pagos_independ_pacientes_det pd where pd.fk_plantram_cab = ct.rowid and pd.fk_paciente = ct.fk_paciente) as totalpresta_pagadasSaldo 
                         
                         FROM
-                            tab_plan_tratamiento_cab ct where  ct.estados_tratamiento = 'A'  and ct.fk_paciente = $idpaciente";
+                            tab_plan_tratamiento_cab ct where  ct.estados_tratamiento in('A', 'S')  and ct.fk_paciente = $idpaciente";
 
 //    ECHO '<PRE>';
 //    print_r($sqlpagos); die();
@@ -275,6 +275,7 @@ function realizar_PagoPacienteIndependiente( $datos, $idpaciente, $idplancab )
 
     global  $db, $conf;
 
+    $idpacgos = 0;
     $datosdet   = $datos['datos'];
 
     $t_pagos          = $datos['t_pagos'];
@@ -282,23 +283,27 @@ function realizar_PagoPacienteIndependiente( $datos, $idpaciente, $idplancab )
     $amoun_t          = $datos['amoun_t'];
     $nfact_boleto     = !empty($datos['nfact_boleto']) ? $datos['nfact_boleto'] : 0;
 
-    $sql1  = " INSERT INTO `tab_pagos_independ_pacientes_cab` ( `fecha`, `fk_tipopago`, `observacion`, `monto`, n_fact_boleta )";
+    $sql1  = " INSERT INTO `tab_pagos_independ_pacientes_cab` ( `fecha`, `fk_tipopago`, `observacion`, `monto`, n_fact_boleta, fk_plantram, fk_paciente)";
     $sql1 .= " VALUES( ";
     $sql1 .= " now() ,";
     $sql1 .= " $t_pagos ,";
     $sql1 .= " '$observacion' ,";
     $sql1 .= " $amoun_t ,";
-    $sql1 .= " $nfact_boleto ";
+    $sql1 .= " '$nfact_boleto',  ";
+    $sql1 .= " $idplancab , ";
+    $sql1 .= " $idpaciente  ";
     $sql1 .= ")";
 //    echo '<pre>';
 //    print_r($sql1); die();
     $rsPagos = $db->query($sql1);
 
+    $idpacgos = $db->lastInsertId('tab_pagos_independ_pacientes_cab');
+
     if($rsPagos){
 
         for ( $i = 0; $i <= count($datosdet) -1; $i++ )
         {
-            $sql2  = " INSERT INTO `tab_pagos_independ_pacientes_det` (`feche_create`, `fk_paciente`, `fk_usuario`, `fk_plantram_cab`, `fk_plantram_det`, `fk_prestacion`, `fk_tipopago`, `amount`)";
+            $sql2  = " INSERT INTO `tab_pagos_independ_pacientes_det` (`feche_create`, `fk_paciente`, `fk_usuario`, `fk_plantram_cab`, `fk_plantram_det`, `fk_prestacion`, `fk_tipopago`, `amount`, fk_pago_cab)";
             $sql2 .= " VALUES(";
             $sql2 .= " now(),";
             $sql2 .= " $idpaciente,";
@@ -307,7 +312,8 @@ function realizar_PagoPacienteIndependiente( $datos, $idpaciente, $idplancab )
             $sql2 .= " ". $datosdet[$i]['iddetplantram'] .",";
             $sql2 .= " ". $datosdet[$i]['fk_prestacion'] .",";
             $sql2 .= " $t_pagos ,";
-            $sql2 .= " ". $datosdet[$i]['valorAbonar'] ." ";
+            $sql2 .= " ". $datosdet[$i]['valorAbonar'] ." ,";
+            $sql2 .= " $idpacgos ";
             $sql2 .= ")";
 
             $rs2 = $db->query($sql2);
@@ -373,6 +379,7 @@ function realizar_PagoPacienteIndependiente( $datos, $idpaciente, $idplancab )
                 {
                     if( $pag->estado_pagado == 'PE' ){ //Pago pendiente no hay saldo abonado
                         $Apagar_plantram++;
+                        $hay_saldo++;
                     }
 
                     if( $pag->estado_pagado == 'PS' ){ //Saldo Abonado
