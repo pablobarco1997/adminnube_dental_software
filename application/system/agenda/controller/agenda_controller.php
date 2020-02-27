@@ -26,7 +26,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $agenda->fk_paciente    = $row['fk_paciente'];
             $agenda->comentario     = $row['comment'];
-            $agenda->fk_login_users = 0;
+            $agenda->fk_login_users = $conf->login_id; #USUARIO LOGEADO
             $agenda->detalle        = $row['detalle'];
 
 //            print_r($agenda); die();
@@ -421,7 +421,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             /*
             'name_db'      => $conf->EMPRESA->INFORMACION->nombre_db_entity  , 0
-            'entity'       => $conf->EMPRESA->INFORMACION->numero_entity     , 1
+            'entity'       => $conf->EMPRESA->INFORMACION->numero_entity        , 1
             'name_clinica' => $conf->EMPRESA->INFORMACION->nombre            , 2
             'logo'         => $conf->EMPRESA->INFORMACION->logo              , 3*/
 

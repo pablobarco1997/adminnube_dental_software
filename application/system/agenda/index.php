@@ -14,15 +14,16 @@ require_once DOL_DOCUMENT. '/application/config/main.php'; //el main contiene la
 //$cn = new ObtenerConexiondb();
 //$db = $cn::conectarEmpresa($_SESSION['db_name']);
 
-$url_breadcrumb = $_SERVER['REQUEST_URI'];
 //print_r($url_breadcrumb); die();
 
+$titulo = "";
 $view = "";
 $Active = "";
 if(isset($_GET['view']))
 {
     $view = $_GET['view'];
     $Active = 'agenda';
+
 }
 
 ?>

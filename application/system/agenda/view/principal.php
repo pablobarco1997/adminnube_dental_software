@@ -4,6 +4,20 @@
     }
 </style>
 
+<?php
+
+    $url_breadcrumb = ""; #Obtengo la url
+    $module         = "";
+
+    if(isset($_GET['list']) && $_GET['list'] == 'diaria'){
+
+        $module = true;
+        $url_breadcrumb = $_SERVER['REQUEST_URI'];
+        $titulo         = 'Agenda Diaria';
+
+    }
+
+?>
 
 
 <div class="row" >
@@ -11,6 +25,9 @@
        <div class="col-md-6 col-xs-12 pull-left"></div>
        <div class="col-md-6 col-xs-12 pull-right">
            <h3 class="pull-right"><?= ($_GET['list'] == 'diaria') ? 'AGENDA DIARIA' : '' ?></h3>
+           <div class="form-group col-xs-12 col-md-12 col-lg-12 no-margin no-padding">
+               <?php echo Breadcrumbs_Mod($titulo, $url_breadcrumb, $module) ?>
+           </div>
        </div>
     </div>
 

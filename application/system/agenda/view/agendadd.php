@@ -95,6 +95,18 @@ if($rs->rowCount() > 0)
     }
 }
 
+
+$url_breadcrumb = ""; #Obtengo la url
+$module         = "";
+
+if(isset($_GET['view']) && $_GET['view'] == 'agendadd'){
+
+    $module = false;
+    $url_breadcrumb = $_SERVER['REQUEST_URI'];
+    $titulo         = 'Agendar Citas';
+
+}
+
 ?>
 
 
@@ -111,6 +123,9 @@ if($rs->rowCount() > 0)
         <div class="col-md-6 col-xs-12 pull-left"></div>
         <div class="col-md-6 col-xs-12 pull-right">
             <h3 class="pull-right">AGENDAR CITA</h3>
+            <div class="form-group col-xs-12 col-md-12 col-lg-12 no-margin no-padding">
+                <?php echo Breadcrumbs_Mod($titulo, $url_breadcrumb, $module) ?>
+            </div>
         </div>
     </div>
 </div>
