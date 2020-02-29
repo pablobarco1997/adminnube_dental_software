@@ -572,11 +572,11 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
 
 
 
-            $numeroCita = "<img  src='". DOL_HTTP. "/logos_icon/logo_default/cita-medica.png' class='img-sm img-rounded' >  -";
-            $row[] = $numeroCita . str_pad($acced->id_cita_det, 6, "0", STR_PAD_LEFT);
+            $numeroCita = "<img  src='". DOL_HTTP. "/logos_icon/logo_default/cita-medica.png' class=' img-sm img-rounded'  >  -";
+            $row[] = $numeroCita . str_pad($acced->id_cita_det, 5, "0", STR_PAD_LEFT);
 
             $html1 = "";
-            $html1 .= "<p class='text-center'>".date('Y/m/d', strtotime($acced->fecha_cita))."</p>";
+            $html1 .= "<p class='text-center' >".date('Y/m/d', strtotime($acced->fecha_cita))."</p>";
             $html1 .= "<div style='background-color: $acced->color; padding: 3px'>";
                 $html1 .= "<p class='text-center'>$acced->hora_inicio</p>";
                 $html1 .= "<p class='text-center'><i class='fa fa-arrow-circle-o-down'></i></p>";
@@ -593,13 +593,13 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
             $Url_datospersonales = DOL_HTTP ."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token";
 
             $html2 = "";
-            $html2 .= "<div class='form-group col-md-12 col-xs-12' >";
+            $html2 .= "<div class='form-group col-md-12 col-xs-12 col-lg-12 col-sm-12' >";
 
-                $html2 .= "<div class='col-xs-10 col-md-10 '> <i class='fa fa-user'></i> $acced->paciente </div>";
+            $html2 .= "<div class='col-xs-10 col-md-10 '> <i class='fa fa-user'></i> $acced->paciente </div>";
                 $html2 .= "
-                        <div class='col-xs-2 col-md-2'>
+                        <div class='col-xs-2 col-md-2 no-padding pull-right '>
                             <div class='dropdown pull-right'>
-                                <button class='btn btnhover  dropdown-toggle' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>
+                                <button class='btn btnhover  btn-xs dropdown-toggle' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>
                                 <ul class='dropdown-menu'>";
 
                                 $tienePlanTratamiento = "";
@@ -622,23 +622,23 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
 
                                 $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det, $(this))' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
 
-                    $html2 .= "</ul>";
-                $html2 .= "</div> 
-                    </div>";
+                         $html2 .= "</ul>";
+                    $html2 .= "</div> 
+                            </div>";
             $html2 .= "</div>";
 
             #comentario y numero de telefonos
             $html4  = "";
             $html4 .= "<div class='form-group col-md-12 col-xs-12'>
-                <div class='col-xs-12 col-md-12'>";
+                             <div class='col-xs-12 col-md-12'>";
 
             #COMENTARIOS OPCIONAL - PACIENTE
             if(!empty($acced->comentario))
             {
 
-                $html4 .= '<p style="width: 400px" class="text-sm text-justify" title="' .$acced->comentario. '">  
+                $html4 .= '<span class="text-sm text-justify" title="' .$acced->comentario. '">  
                                 <i class="fa fa-x3 fa-comment" style="cursor: pointer" ></i> '. $acced->comentario .'
-                            </p>';
+                            </span> <br>';
 
             }
 
@@ -646,14 +646,14 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
             if(!empty($acced->telefono_movil))
             {
 
-                $html4 .= '<p> <i class="fa fa-phone-square" style="cursor: pointer" title=" '. $acced->telefono_movil .' "></i> '. $acced->telefono_movil .'  </p>';
+                $html4 .= '<span> <i class="fa fa-phone-square" style="cursor: pointer" title=" '. $acced->telefono_movil .' "></i> '. $acced->telefono_movil .'  </span>';
 
             }
 
             #CITAS ATRAZADAS CON ESTADO NO CONFIRMADO - ID DEL ESTADO = 2
             if(!empty($acced->cita_atrazada))
             {
-                $html4 .= '<small style="color: red; display: block"  class="label text-center" title="'. $acced->cita_atrazada .'"> '. $acced->cita_atrazada .' </small>';
+                $html4 .= '<small style="color: red; display: block"  class="" title="'. $acced->cita_atrazada .'"> '. $acced->cita_atrazada .' </small>';
             }
 
             $html4 .= "</div>
@@ -662,12 +662,12 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
             $row[] = $html2 ."".$html4;
 
             //DOCTOR
-            $html5 = "<div class='form-group col-md-12 col-xs-12'>";
-                $html5 .= "<p class='text-left'>Doc(a). $acced->doct</p>";
-                $html5 .= "<p class='trunc'> <i class='fa fa-user-md'></i> &nbsp;&nbsp; $acced->especialidad </p>";
+            $html5 = "<div class='form-group col-md-12 col-xs-12 col-sm-12'>";
+                $html5 .= "<span class='text-left'>Doc(a). $acced->doct</span>";
+                $html5 .= "<span class='trunc'> <i class='fa fa-user-md'></i> &nbsp;&nbsp; $acced->especialidad </span>";
 
                 if($acced->comentario_adicional){
-                    $html5 .= "<p class=' text-sm' title='$acced->comentario_adicional'> <i class='fa fa-comment'></i> &nbsp;&nbsp; $acced->comentario_adicional </p>";
+                    $html5 .= "<br><small class=' text-sm' title='$acced->comentario_adicional'> <i class='fa fa-comment'></i> &nbsp;&nbsp; $acced->comentario_adicional </small>";
                 }
             $html5 .= "</div>";
             $row[] = $html5;
@@ -675,14 +675,14 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
             #DROPDOWN -------------------------------------------------------------------------------------------------
             $html3 = "";
             $html3 .= "<div class='form-group col-md-12 col-xs-12'>
-                        <div class='col-xs-12 col-ms-10 col-md-10'> 
-                            <label for='' class='text-justify' title='$acced->estado' >$acced->estado</label> 
+                        <div class='col-xs-12 col-ms-10 col-md-10 no-padding'> 
+                            <label for='estadoDropw' class='text-justify' title='$acced->estado' >$acced->estado</label> 
                         </div>";
 
-            $html3 .= "<div class='col-xs-12 col-ms-2 col-md-2'>
+            $html3 .= "<div class='col-xs-12 col-ms-2 col-md-2 no-padding no-margin'>
                             <div class='dropdown pull-right'>";
 //            onclick='menuDropdownCita($(this), 0)'
-                $html3 .= "    <button class='btn btnhover  dropdown-toggle' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>";
+                $html3 .= "    <button class='btn btnhover  dropdown-toggle btn-xs ' id='estadoDropw' type='button' data-toggle='dropdown' style='height: 100%'> <i class='fa fa-ellipsis-v'></i> </button>";
                         $html3 .= " <ul class='dropdown-menu pull-right'>";
 
                         $sqlMenuDrowpdown = "SELECT * FROM tab_pacientes_estado_citas";

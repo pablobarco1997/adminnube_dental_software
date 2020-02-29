@@ -67,18 +67,18 @@
            <table class="table table-striped" id="tableAgenda" width="100%" >
                <thead>
                    <tr>
-                       <th class="text-left" width="5%">
+                       <th class="text-left" width="3%">
                            <span class="custom-checkbox-myStyle">
 								<input type="checkbox" id="checkeAllCitas" >
 								<label for="checkeAllCitas"></label>
 							</span>
                        </th>
-                       <th class="text-center" width="15%">N.- CITA</th>
+                       <th class="text-center" width="8%">N.- CITA</th>
                        <th class="text-center" width="10%">HORA</th>
-                       <th class="text-center" width="14%">PACIENTE</th>
-                       <th class="text-center" width="15%">DOCTOR</th>
-                       <th class="text-center" width="30%">ESTADO CITA</th>
-                       <th class="text-center" width="15%">SITUACIÓN</th>
+                       <th class="text-center" width="23%">PACIENTE</th>
+                       <th class="text-center" width="10%">DOCTOR</th>
+                       <th class="text-center" width="15%">ESTADO CITA</th>
+                       <th class="text-center" width="10%">SITUACIÓN</th>
                    </tr>
                </thead>
            </table>
