@@ -13,7 +13,7 @@
         var $apellido       = "";
         var $rud_dni        = "";
         var $email          = "";
-        var $convenio       = "";
+        var $convenio       = 0;
         var $n_interno      = "";
         var $sexo           = "";
         var $fech_nacimit   = "";
@@ -73,6 +73,8 @@
         public function create_paciente()
         {
 
+                $date_nacimiento = empty($this->fech_nacimit) ? "null" : "'$this->fech_nacimit'";
+
                 $sql = "INSERT INTO `tab_admin_pacientes` (`nombre`, `apellido`, `rut_dni`,`email`,`fk_convenio`,`numero_interno`,`sexo`, `fecha_nacimiento`,`fk_ciudad`,`comuna`,`direccion`,`telefono_fijo`, `telefono_movil`, `actividad_profecion`, `empleador`, `observacion`,`apoderado`,`referencia`, `fk_tipo`) ";
                 $sql .= "VALUES(";
                 $sql .= "'$this->nombre',";
@@ -82,7 +84,7 @@
                 $sql .= "'$this->convenio', ";
                 $sql .= "'$this->n_interno', ";
                 $sql .= "'$this->sexo', ";
-                $sql .= "'$this->fech_nacimit', ";
+                $sql .= " $date_nacimiento, ";
                 $sql .= "'$this->ciudad', ";
                 $sql .= "'$this->comuna', ";
                 $sql .= "'$this->direcc', ";
@@ -95,7 +97,8 @@
                 $sql .= "'$this->refer',";
                 $sql .= "'0'";
                 $sql .= ");";
-
+//                echo '<pre>';
+//                print_r( $sql ); die();
                 $rs = $this->db->query($sql);
                 if ($rs)
                 {
