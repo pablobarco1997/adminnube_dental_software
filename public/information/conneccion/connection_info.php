@@ -4,8 +4,8 @@
     function connection($db_name)
     {
         $host     = "localhost";
-        $username = "root";
-        $password = "";
+        $username = "adminnub_entidad_dental";
+        $password = "Pablo_1997";
         $database = $db_name;
 
         $cn = mysqli_connect($host, $username, $password, $database);
