@@ -1,8 +1,6 @@
-
-
 <?php
 
-//    include_once DOL_DOCUMENT .'/public/information/controller/informacion_controller.php';
+
 
     $fecha = GET_DATE_SPANISH( date('Y-m-d') );
 
@@ -13,12 +11,12 @@
         $objPacienteInfo = json_decode(decomposeSecurityTokenId($_GET['token']));
     }
 
-    $name_db_entity = $objPacienteInfo[1];
-    $id_citadet     = $objPacienteInfo[0];
+    $name_db_entity = $objPacienteInfo[1];  #nombre de la entidad a conectar
+    $id_citadet     = $objPacienteInfo[0];  #id de la cita detalle
 
-//    echo '<pre>';
-//    print_r($objPacienteInfo); die();
+    $db_encrytp = tokenSecurityId($name_db_entity); #NAME DATA BASE ENCRIPTADO
 
+    #echo '<pre>'; print_r($objPacienteInfo); die();
 ?>
 
 <style>
@@ -30,6 +28,10 @@
         -o-box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         box-shadow: inset 0 3px 6px rgba(0, 0, 0, 0.16), 0 3px 6px rgba(0, 0, 0, 0.23);
         padding-top: 15px;
+    }
+
+    #swal2-content{
+        font-size: 1.6rem !important;
     }
 
 </style>
@@ -68,7 +70,7 @@
 
                     <div class="row">
                         <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
-                            <a  class=" action-button animate-buton blue" id="asistir" style="font-weight: bolder; float: left" >ASISTIR </a>
+                            <a  class=" action-button animate-buton blue" id="asistir" style="font-weight: bolder; float: left" onclick="ConfirmarCitasAsistir()">ASISTIR </a>
                         </div>
 
                         <div class="form-group col-xs-12  col-md-6 col-sm-12" style="margin-top: 25px!important;">
@@ -88,7 +90,44 @@
 
 <script>
 
+    $dbname = "<?= $db_encrytp ?>";
+
+    function ConfirmarCitasAsistir()
+    {
+
+        $.ajax({
+
+            url: "<?= DOL_HTTP ?>" + '/public/information/controller/informacion_controller',
+            type:"POST",
+            data:{
+                'ajaxSend': 'ajaxSend',
+                'accion'  : 'asistir_confim',
+                'dbname'  : $dbname,
+                'idcita'  : "<?= $id_citadet ?>",
+            },
+            dataType:'json',
+            success: function(resp){
 
 
+                if(resp.error.toString() == "")
+                {
+                    Swal.fire(
+                        'Exito!',
+                        'Información Actualizada',
+                        'success'
+                    );
+
+                }else{
+
+                    Swal.fire(
+                        'Oops!',
+                         resp.error,
+                        'error'
+                    );
+                }
+            }
+
+        });
+    }
 
 </script>

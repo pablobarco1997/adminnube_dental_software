@@ -3,6 +3,7 @@
 
 require_once '../../application/config/lib.global.php';
 require_once DOL_DOCUMENT .'/application/controllers/controller.php';
+require_once 'conneccion/connection_info.php';
 
 ?>
 
@@ -26,7 +27,14 @@ require_once DOL_DOCUMENT .'/application/controllers/controller.php';
 
     <!-- Font Awesome -->
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/font-awesome/css/font-awesome.min.css'?>">
+
+<!--    font google -->
     <link href="https://fonts.googleapis.com/css?family=Hind&display=swap" rel="stylesheet">
+
+<!--    alert-->
+    <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.css'?> ">
+    <script src="<?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.all.js'?>" ></script>
+
 
 </head>
 <style>
