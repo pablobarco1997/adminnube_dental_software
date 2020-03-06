@@ -101,7 +101,7 @@ function invalic_paciente()
     if($('#rud_dni').val() == ''){
         cont++;
         $('#rud_dni').focus();
-        $('#noti_ruddni').text("ingrese un rud o dni del paciente");
+        $('#noti_ruddni').text("ingrese un rud o cedula del paciente");
     }else{
         $('#noti_ruddni').text(null);
     }
@@ -139,11 +139,53 @@ function invalic_paciente()
     }
 
 }
-//eventos
 
-    $('#guardar').on('click', function(){
-        GuardarDatosPacientes();
+function carga_subida_masiva_pacientes()
+{
+    $('#subida_masiva_pasiente').trigger('click');
+}
+$('#carga_masv_pasiente').click(function() {
+    carga_subida_masiva_pacientes();
+});
+
+$('#subida_masiva_pasiente').change(function() {
+
+    var inputFile = document.getElementById('subida_masiva_pasiente');
+    console.log(inputFile.files[0]);
+
+    var form = new FormData();
+
+    form.append('ajaxSend', 'ajaxSend');
+    form.append('accion', 'carga_masiva_pacientes');
+    form.append('file', inputFile.files[0]);
+
+    $.ajax({
+        url: $DOCUMENTO_URL_HTTP +'/application/system/pacientes/nuevo_paciente/controller/nuevo_pacit_controller.php',
+        type:"POST",
+        data: form,
+        dataType: 'json',
+        async: false,
+        contentType:false,
+        processData: false,
+        success: function(resp)
+        {
+            if(resp.errores.error == '' && resp.req == ''){
+                notificacion('información Actualizada', 'success');
+                // location.reload();
+            }else{
+
+                notificacion( resp.errores.error + '<br>' + resp.req , 'error');
+            }
+        }
     });
+
+});
+
+//eventos
+$('#guardar').on('click', function(){
+    GuardarDatosPacientes();
+});
+
 
 $(document).ready(function() {
 
