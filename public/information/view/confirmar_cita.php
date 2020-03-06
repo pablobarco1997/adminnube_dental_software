@@ -97,7 +97,7 @@
 
         $.ajax({
 
-            url: "<?= DOL_HTTP ?>" + '/public/information/controller/informacion_controller',
+            url: "<?= DOL_HTTP ?>" + '/public/information/controller/informacion_controller.php',
             type:"POST",
             data:{
                 'ajaxSend': 'ajaxSend',
