@@ -525,8 +525,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $row[] = $ob->convenio;
                     $row[] = $ob->valor;
 
-                    $row[] = " <a href='".DOL_HTTP."/application/system/configuraciones/index.php?view=form_prestaciones&act=mod&id=$ob->rowid' ><i class='fa fa-edit'></i></a>
-                               <a onclick='eliminar_prestacion($ob->rowid)' style='cursor: pointer; color: #9f191f'><i class='fa fa-trash'></i></a>  ";
+                    $row[] = " <a href='".DOL_HTTP."/application/system/configuraciones/index.php?view=form_prestaciones&act=mod&id=$ob->rowid'  style='cursor: pointer; color: green; font-size: 1.8rem'  class='btn btnhover' ><i class='fa fa-edit'></i></a>
+                               <a onclick='eliminar_prestacion($ob->rowid)' class='btn btnhover'  style='cursor: pointer; color: #9f191f; font-size: 1.8rem'><i class='fa fa-trash'></i></a>  ";
                     $row[] = $ob->rowid;
 
                     $data[] = $row;
@@ -571,7 +571,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $idprestacion = GETPOST("id");
             $tieneAsociado = 0;
 
-            $sqlConsult = "SELECT * FROM tab_plan_tratamiento_det WHERE fk_prestacion = $idprestacion";
+            $sqlConsult = "SELECT * FROM tab_plan_tratamiento_det WHERE fk_prestacion = '$idprestacion' ";
             $rsConsult = $db->query($sqlConsult);
 
             if($rsConsult->rowCount() > 0){
@@ -719,9 +719,10 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $subaccion  = GETPOST('subaccion');
 
-            $nombre     = GETPOST("nombre");
-            $valor      = GETPOST("valor");
-            $descri     = GETPOST("descrip");
+            $nombre         = GETPOST("nombre");
+            $valor          = GETPOST("valor");
+            $descri         = GETPOST("descrip");
+            $iddescConve    = GETPOST('id');
 
             if($subaccion == 'nuevo'){
 
@@ -739,16 +740,47 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             if($subaccion == 'modificar'){
 
-                $sqlM = "UPDATE `tab_conf_convenio_desc` SET `nombre_conv`='$nombre', `descrip`='$descri', `valor`='$valor' WHERE `rowid`=".GETPOST('id');
+                $sqlM = "UPDATE `tab_conf_convenio_desc` SET `nombre_conv`='$nombre', `descrip`='$descri', `valor`='$valor' WHERE `rowid`= ".$iddescConve;
                 $rs = $db->query($sqlM);
                 if(!$rs){
                     $error = 'Ocurrrió un error con la Operación , Modificar Convenio';
                 }
             }
+
+            if($subaccion == 'eliminar')
+            {
+
+                $puedeEliminar = 0;
+                $msg_error = "";
+
+                $sqlcomp = "SELECT * FROM  tab_conf_prestaciones  WHERE  fk_convenio = $iddescConve";
+                $rsConv = $db->query($sqlcomp);
+
+                if(  $rsConv->rowCount()>0 ){
+                    $error = "No puede Eliminar esta Descuento tiene asociado  prestaciones <br>";
+                    $puedeEliminar++;
+                }
+
+                $sqlcomp2 = "SELECT * FROm tab_admin_pacientes where fk_convenio = $iddescConve";
+                $rsCom2 = $db->query($sqlcomp2);
+                if( $rsCom2->rowCount()>0){
+                    $error = "No puede Eliminar esta Descuento esta asociado a un paciente <b> confirme el directorio de paciente </b> <br>";
+                    $puedeEliminar++;
+                }
+
+
+                if( $puedeEliminar == 0){
+                    $del = "DELETE FROM `tab_conf_convenio_desc` WHERE `rowid`='$iddescConve';";
+                    $db->query($del);
+//                    print_r($del); die();
+                }
+            }
 //            print_r($sqlM); die();
 
+//            print_r($error);
+//            die();
             $output = [
-                'error' => $error
+                'error' => $error,
             ];
 
             echo json_encode($output);
@@ -1031,7 +1063,7 @@ function list_convenios($id = "", $uno)
 
     $data = array();
 
-    $sql = "SELECT rowid , nombre_conv , descrip , valor FROM tab_conf_convenio_desc WHERE rowid > 0";
+    $sql = "SELECT rowid , nombre_conv , descrip , round(valor, 2) valor FROM tab_conf_convenio_desc WHERE rowid > 0";
     if($id != ""){
         $sql .= " and rowid = $id";
     }
@@ -1040,7 +1072,8 @@ function list_convenios($id = "", $uno)
     $rs  = $db->query($sql);
     if($rs){
 
-        while ($obj = $rs->fetchObject()){
+        while ($obj = $rs->fetchObject())
+        {
 
             $row = array();
 
@@ -1050,11 +1083,15 @@ function list_convenios($id = "", $uno)
 
             #pido con el id
             if($uno == true){
+                $row[] = $obj->valor;
                 return $row;
+            }else{
+                $row[] = " <ul class='list-inline pull-right'>
+                            <li>  <a href='#modal_conf_convenio' class='btn btnhover btn-xs' data-toggle='modal' style='cursor: pointer; display: inline-block; text-align: right; font-size: 1.8rem' onclick='fetch_modificar_convenio($obj->rowid)'><i class='fa fa-edit'></i></a> </li>
+                            <li>  <a href='#' class='btn btnhover btn-xs'  style='color: #9f191f;  display: inline-block; cursor: pointer; text-align: right; font-size: 1.8rem' onclick='nuevoUpdateConvenio(\"eliminar\", $obj->rowid);'><i class='fa fa-trash'></i></a>  </li>
+                        </ul> ";
             }
 
-            $row[] = "<a href='#modal_conf_convenio' data-toggle='modal' style='cursor: pointer; display: inline-block; text-align: right' onclick='fetch_modificar_convenio($obj->rowid)'><i class='fa fa-edit'></i></a> 
-                      <a href='#' style='color: #9f191f;  display: inline-block; cursor: pointer; text-align: right'><i class='fa fa-trash'></i></a> ";
 
             $data[] = $row;
 

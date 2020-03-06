@@ -75,13 +75,10 @@ if(isset($_GET['view']))
                         <div class="box-body">
                             <br>
 
-                            <div class="center-block" style="width: 70%;">
-                                <div class="row">
-                                    <div class="col-md-12">
-
+                            <div class="row">
+                                    <div class="form-group col-md-8 col-lg-9 col-sm-12 col-xs-12 col-centered">
                                         <?php include_once DOL_DOCUMENT . '/application/system/configuraciones/view/view_configuration.php';?>
                                     </div>
-                                </div>
                             </div>
 
                         </div>

@@ -6,35 +6,29 @@
     <div class="box-body">
         <br>
 
-        <div class="center-block" style="width: 70%;">
+        <div class="form-group col-xs-12 col-md-10 col-lg-10 col-sm-12 col-centered">
 
-            <div class="row">
-                <div class="col-md-12">
-                    <div class="" style="background-color: #E5E8E8; padding: 3px; height: 30px; border-radius: 4px">
-                        <label for="" style="cursor: pointer; " data-toggle="modal" data-target="#modal_conf_convenio" onclick="modalCleanInputs(); "> &nbsp;&nbsp;<i class="fa fa-file-text-o"></i> &nbsp;&nbsp; Agregar Convenio</label>
-                    </div>
+            <div class="form-group col-sm-12 col-md-12 col-xs-12">
+                <ul class="list-inline pull-right">
+                    <li> <b> <a  href="#modal_conf_convenio" data-toggle="modal" class="btn btnhover " onclick="InputsClean()"> <i class="fa fa-plus"></i> Agregar Convenio </a> </b> </li>
+                </ul>
+            </div>
+
+            <div class="form-group col-xs-12 col-md-12 col-lg-12">
+                <div class="table-responsive">
+                    <table class="table table-striped" id="conf_table_convenio" width="100%">
+                        <thead >
+                            <tr>
+                                <th WIDTH="25%">NOMBRE</th>
+                                <th WIDTH="25%">DESCRIPCIÓN</th>
+                                <th WIDTH="6%">DESCUENTO %</th>
+                                <th WIDTH="10%"></th>
+                            </tr>
+                        </thead>
+                    </table>
                 </div>
             </div>
 
-            <br>
-            <br>
-
-            <div class="row">
-               <div class="col-md-12">
-                   <div class="table-responsive">
-                       <table class="table" id="conf_table_convenio" width="100%">
-                           <thead style="background-color: #E5E8E8">
-                               <tr>
-                                   <th WIDTH="30%">NOMBRE</th>
-                                   <th WIDTH="25%">DESCRIPCIÓN</th>
-                                   <th WIDTH="20%">VALOR</th>
-                                   <th WIDTH="5%"></th>
-                               </tr>
-                           </thead>
-                       </table>
-                   </div>
-               </div>
-            </div>
 
         </div>
 
@@ -50,7 +44,7 @@
         <div class="modal-content">
             <div class="modal-header">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" id="comportamiento">AGREGAR CONVENIO</h4>
+                <h4 class="modal-title" id="comportamiento" >AGREGAR CONVENIO</h4>
             </div>
             <div class="modal-body">
 
@@ -65,16 +59,19 @@
                         <textarea name="" class="form-control input-sm" id="descrip_conv" rows="3"></textarea>
                     </div>
                     <div class="form-group">
-                        <label for="">valor</label>
-                        <input type="number" id="valor_conv" class="form-control input-sm ">
+                        <label for="">Descuento %</label>
+                        <input type="text" id="valor_conv" class="form-control input-sm mask">
+                        <small style="color: red; " id="msg_descuento"></small>
                     </div>
 
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="guardar_convenio_conf" >Aceptar</button>
+
+                <a href="#" class="btn btnhover " style="font-weight: bolder; color: green" id="guardar_convenio_conf">Aceptar</a>
+                <a href="#" class="btn btnhover" style="font-weight: bolder;" data-dismiss="modal">Close</a>
+
             </div>
         </div>
 

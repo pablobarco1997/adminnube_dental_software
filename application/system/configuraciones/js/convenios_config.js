@@ -43,7 +43,8 @@ function list_convenios_configurados()
 }
 
 
-function nuevoUpdateConvenio($subaccion, id){
+function nuevoUpdateConvenio($subaccion, id)
+{
 
     var puedo = 0;
 
@@ -57,6 +58,11 @@ function nuevoUpdateConvenio($subaccion, id){
         nombre.removeClass('INVALIC_ERROR');
     }
 
+    if(valor.val() > 100){
+        $('#msg_descuento').text('El descuento no puede ser mayor al 100%');
+        valor.addClass('INVALIC_ERROR');
+        puedo++;
+    }
     if(valor.val() == ''){
         valor.addClass('INVALIC_ERROR');
         puedo++;
@@ -64,17 +70,18 @@ function nuevoUpdateConvenio($subaccion, id){
         valor.removeClass('INVALIC_ERROR');
     }
 
-    if( puedo == 0){
+    var parametros = {
+        'accion'  :'nuevoConvenio',
+        'ajaxSend': 'ajaxSend' ,
+        'subaccion' : $subaccion,
+        'id' : id  ,
+        'nombre'  : nombre.val() ,
+        'valor'   : valor.val() ,
+        'descrip' : $('#descrip_conv').val(),
+    };
 
-        var parametros = {
-            'accion'  :'nuevoConvenio',
-            'ajaxSend': 'ajaxSend' ,
-            'subaccion' : $subaccion,
-            'id' : id  ,
-            'nombre'  : nombre.val() ,
-            'valor'   : valor.val() ,
-            'descrip' : $('#descrip_conv').val(),
-        };
+    if( puedo == 0)
+    {
 
         $.ajax({
             url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
@@ -88,13 +95,40 @@ function nuevoUpdateConvenio($subaccion, id){
                     notificacion( resp.error , 'error');
                 }else{
                     notificacion( 'Informacion Actualizada' , 'success');
-                    reloadPagina();
+                    list_convenios_configurados();
+                    $('#modal_conf_convenio').modal('hide');
                 }
             }
 
         });
 
     }
+
+    if($subaccion == 'eliminar')
+    {
+        $.ajax({
+            url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
+            type:'POST',
+            data: parametros ,
+            dataType:'json',
+            async:false,
+            success:function(resp){
+
+                if(resp.error != ''){
+                    notificacion( resp.error , 'error');
+                }else{
+                    notificacion( 'Informacion Actualizada' , 'success');
+                    list_convenios_configurados();
+                    // $('#modal_conf_convenio').modal('hide');
+                }
+            }
+
+        });
+    }
+    setTimeout(function() {
+
+        $('#msg_descuento').text(null)
+    },3000);
 }
 
 function  fetch_modificar_convenio(id) {
@@ -120,7 +154,7 @@ function  fetch_modificar_convenio(id) {
 
                     var nombre  = datos[0];
                     var descrip = datos[1];
-                    var valor   = datos[2];
+                    var valor   = datos[3];
 
                     $('#nomb_conv').val( nombre );
                     $('#descrip_conv').val( descrip );
@@ -133,6 +167,15 @@ function  fetch_modificar_convenio(id) {
             }
         });
     }
+}
+
+function InputsClean()
+{
+    $('#nomb_conv').val(null).removeClass('INVALIC_ERROR');
+    $('#descrip_conv').val(null).removeClass('INVALIC_ERROR');
+    $('#valor_conv').val(null).removeClass('INVALIC_ERROR');
+
+    $('#comportamiento').attr('data-subaccion', 'nuevo').attr('data-id','');
 }
 
 function modalCleanInputs(){

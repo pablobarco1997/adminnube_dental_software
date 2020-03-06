@@ -33,7 +33,7 @@
             <br>
 
 
-            <div class="center-block" style="width: 70%;">
+            <div class="form-group col-centered col-md-8 col-lg-8 col-xs-12 col-sm-12" >
 
                    <ul id="confulprest" style="width: 600px; float: right; list-style: none">
                        <?php if($accion == 'modificar'){ ?>
@@ -75,9 +75,8 @@
                                     <i class="fa fa-minus"></i>
                                 </div>
 
-                                <small style="color: red; display: block;" id="msg_categoria"></small>
                             </div>
-
+                            <small style="color: red; display: block;" id="msg_categoria"></small>
                         </div>
 
                  </div>
@@ -87,7 +86,7 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <label for="">Prestación</label>
+                        <label for="">PRESTACIÓN</label>
                         <input type="text" class="form-control invalic_prestaciones " id="prestacion_descr">
                         <small style="color: red;" id="msg_prestaciones"></small>
                     </div>
@@ -118,13 +117,13 @@
                 <div class="row">
 
                     <div class="col-md-6">
-                        <label for="">Valor de la Prestación $</label>
-                        <input type="text" class="form-control invalic_prestaciones mask" id="valorPrestacion">
+                        <label for="">COSTOS DE LA PRESTACIÓN <i class="fa fa-dollar"></i></label>
+                        <input type="text" class="form-control invalic_prestaciones mask"   id="valorPrestacion">
                         <small style="color: red;" id="msg_valor"></small>
                     </div>
 
                     <div class="col-md-6">
-                        <label for="">Descuento de Convenio</label>
+                        <label for="">DESCUENTO ASOCIADO <i class="fa fa-dollar"></i></label>
 
                         <div class="input-group">
                             <select name="" id="convenioConf" class="select2_max_ancho">
@@ -147,7 +146,7 @@
                             <div class="input-group-addon" style="cursor: pointer" data-toggle="modal" data-target="#modal_conf_convenio">
                                 <i class="fa fa-plus"></i>
                             </div>
-                            <div class="input-group-addon" style="cursor: pointer">
+                            <div class="input-group-addon" style="cursor: pointer" data-toggle="modal" data-target="#Modaldescuento">
                                 <i class="fa fa-minus"></i>
                             </div>
                         </div>
@@ -159,7 +158,7 @@
                 <br>
                 <div class="row">
                     <div class="col-xs-12">
-                        <button class="btn btn-success btn-block" id="guardar_prestacion">CARGAR INFORMACIÓN</button>
+                        <button class="btn btnhover btn-block" id="guardar_prestacion" style="color: green;"> <b>CARGAR PRESTACIÓN</b></button>
                     </div>
                 </div>
 
@@ -178,16 +177,14 @@
         <div class="modal-content">
             <div class="modal-header modal-diseng">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title">AGREGAR CONVENIO</h4>
+                <h4 class="modal-title">AGREGAR DESCUENTO</h4>
             </div>
             <div class="modal-body">
 
                 <div style="padding: 10px">
 
                     <div class="form-group">
-                        <div class="alert-info alert">
-                            <small>Tener en cuenta que al momento de crear un descuento la pagina web se refrescara automáticamente</small>
-                        </div>
+                        <small style="color:#eb9627; font-weight: bolder "> <i class="fa fa-info-circle"></i> El descuento se calculara en porcentage - Tener en cuanta que el descuento solo si aplicara si la prestacion tiene asociado dicho descuento </small>
                     </div>
 
                     <div class="form-group">
@@ -200,15 +197,16 @@
                     </div>
                     <div class="form-group">
                         <label for="">valor</label>
-                        <input type="number" id="valor_conv" class="form-control input-sm">
+                        <input type="text" id="valor_conv" class="form-control input-sm mask">
+                        <small id="msg_descuento" style="color: red"></small>
                     </div>
 
                 </div>
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="guardar_convenio_conf" onclick="nuevoUpdateConvenio()">Aceptar</button>
+                <a href="#" class="btn btnhover" style="font-weight: bolder; color: green" onclick="nuevoUpdateConvenio('nuevo')" id="guardar_convenio_conf">Aceptar</a>
+                <a href="#" class="btn btnhover" style="font-weight: bolder;"  data-dismiss="modal">Close</a>
             </div>
         </div>
 
@@ -229,9 +227,7 @@
 
                 <div style="padding: 10px">
                     <div class="form-group">
-                        <div class="alert-info alert">
-                            <small>Tener en cuenta que al momento de crear una categoría la pagina web se refrescara automáticamente</small>
-                        </div>
+                        <small style="color:#eb9627; font-weight: bolder "> <i class="fa fa-info-circle"></i> Crear Categoria - la pagina se refrescara al momento de crear la categoria </small>
                     </div>
                     <div class="form-group">
                         <label for="">Nombre</label>
@@ -246,8 +242,8 @@
 
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="guardar_categoria_conf">Aceptar</button>
+                <a href="#" class="btn btnhover" style="font-weight: bolder; color: green" id="guardar_categoria_conf">Aceptar</a>
+                <a href="#" class="btn btnhover" style="font-weight: bolder;"  data-dismiss="modal">Close</a>
             </div>
         </div>
 
@@ -271,14 +267,14 @@
 
                    <div class="form-group">
                        <div class="table-responsive">
-                           <table class="table" id="listprestacionestable" width="100%">
-                               <thead style="background-color: #E5E8E8">
+                           <table class="table table-striped" id="listprestacionestable" width="100%">
+                               <thead>
                                     <tr>
                                         <th>FECHA</th>
                                         <th>PRESTACIÓN</th>
                                         <th>CATEGORIA</th>
                                         <th>CONVENIO</th>
-                                        <th>VALOR $</th>
+                                        <th>COSTO <i class="fa fa-dollar"></i></th>
                                         <th></th>
                                     </tr>
                                </thead>
@@ -295,8 +291,7 @@
     </div>
 </div>
 
-<!--MODAL ELIMINAR-->
-<!-- Modal -->
+<!--MODAL ELIMINAR CATEGORIA DE LA PRESTACION-->
 <div class="modal fade" id="ModaleliminarConfCatDesc" role="dialog">
     <div class="modal-dialog">
 
@@ -310,8 +305,30 @@
                 <p>Seguro desea <b>Eliminar este registro seleccionado ?</b> </p>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                <button type="button" class="btn btn-success" data-dismiss="modal" id="eliminarConfCategoriaDescuento">Aceptar</button>
+                <a href="#" class="btn btnhover" style="font-weight: bolder; color: green" id="eliminarConfCategoriaDescuento">Aceptar</a>
+                <a href="#" class="btn btnhover" style="font-weight: bolder;"  data-dismiss="modal">Close</a>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<div class="modal fade" id="Modaldescuento" role="dialog">
+    <div class="modal-dialog">
+
+        <!-- Modal content-->
+        <div class="modal-content">
+            <div class="modal-header modal-diseng">
+                <button type="button" class="close" data-dismiss="modal">&times;</button>
+                <h4 class="modal-title" id="tomar" data-id="0" data-subaccion="">ELIMNAR</h4>
+            </div>
+            <div class="modal-body">
+                <p>Seguro desea <b>Eliminar este registro seleccionado ?</b> </p>
+                <p> <b> <small style="color: #eb9627; font-weight: bolder "> <i class="fa fa-info-circle"></i> Tener en cuenta que no puede eliminar un descuento si se encuentra asociado a una prestacion o a un paciente</small> </b> </p>
+            </div>
+            <div class="modal-footer">
+                <a href="#" class="btn btnhover" style="font-weight: bolder; color: green" id="eliminarDescuento" onclick="nuevoUpdateConvenio('eliminar')">Aceptar</a>
+                <a href="#" class="btn btnhover" style="font-weight: bolder;"  data-dismiss="modal">Close</a>
             </div>
         </div>
 

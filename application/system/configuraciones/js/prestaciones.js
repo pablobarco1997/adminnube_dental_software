@@ -165,40 +165,11 @@ function eliminar_categoria_desc_prestacion(subaccion){
     if(subaccion == 'categoria'){
         id = $('#conf_cat_prestaciones').find(':selected').val();
     }
-    if(subaccion == ''){
-        id = $('#select2_max_ancho').find(':selected').val();
-    }
     if( id != "" &&  subaccion != "")
     {
         var puedo = 0;
 
         $('#eliminarConfCategoriaDescuento').removeClass('disabled_link3');
-
-        $('#eliminarConfCategoriaDescuento').click(function() {
-
-            if(puedo == 0){
-
-                $.ajax({
-                    url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
-                    type:'POST',
-                    data: {'accion':'eliminar_conf_categoria_desc', 'ajaxSend':'ajaxSend', 'id': id, 'subaccion':subaccion} ,
-                    dataType:'json',
-                    async:false,
-                    success: function(resp){
-
-                        if(resp.error != ''){
-                            notificacion( resp.error , 'error');
-                        }else{
-                            notificacion('Información Actualizada', 'success');
-                            reloadPagina();
-                        }
-                    }
-                });
-            }
-
-            puedo++;
-
-        });
 
     }else{
 
@@ -210,8 +181,29 @@ function eliminar_categoria_desc_prestacion(subaccion){
 
 }
 
+$('#eliminarConfCategoriaDescuento').click(function() {
+
+    $.ajax({
+        url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
+        type:'POST',
+        data: {'accion':'eliminar_conf_categoria_desc', 'ajaxSend':'ajaxSend', 'id': $('#conf_cat_prestaciones').find(':selected').val(), 'subaccion': 'categoria'} ,
+        dataType:'json',
+        async:false,
+        success: function(resp){
+
+            if(resp.error != ''){
+                notificacion( resp.error , 'error');
+            }else{
+                notificacion('Información Actualizada', 'success');
+                reloadPagina();
+            }
+        }
+    });
+
+});
+
 //convenio
-function nuevoUpdateConvenio(){
+function nuevoUpdateConvenio(subacion){
 
     var puedo = 0;
 
@@ -236,7 +228,7 @@ function nuevoUpdateConvenio(){
 
         var parametros = {
             'accion'  :'nuevoConvenio',
-            'subaccion' :'nuevo',
+            'subaccion' :subacion,
             'ajaxSend': 'ajaxSend' ,
             'nombre'  : nombre.val() ,
             'valor'   : valor.val() ,
@@ -262,6 +254,74 @@ function nuevoUpdateConvenio(){
         });
 
     }
+}
+
+function nuevoUpdateConvenio(subaccion)
+{
+
+    var puedo = 0;
+
+    var idConveinoDesc = ($('#convenioConf').find(':selected').val() == "") ? 0 :  $('#convenioConf').find(':selected').val();
+
+    var nombre  = $('#nomb_conv');
+    var valor   = $('#valor_conv');
+
+    if(nombre.val() == ''){
+        nombre.addClass('INVALIC_ERROR');
+        puedo++;
+    }else{
+        nombre.removeClass('INVALIC_ERROR');
+    }
+
+    if(valor.val() > 100)
+    {
+        $('#msg_descuento').text('El descuento no puede ser mayor al 100%');
+        valor.addClass('INVALIC_ERROR');
+        puedo++;
+    }
+    if(valor.val() == '')
+    {
+        valor.addClass('INVALIC_ERROR');
+        puedo++;
+    }else{
+        valor.removeClass('INVALIC_ERROR');
+    }
+
+    if( puedo == 0 || subaccion == 'eliminar'){
+
+        var parametros = {
+            'accion'  :'nuevoConvenio',
+            'ajaxSend': 'ajaxSend' ,
+            'subaccion' : subaccion,
+            'id': idConveinoDesc,
+            'nombre'  : nombre.val() ,
+            'valor'   : valor.val() ,
+            'descrip' : $('#descrip_conv').val(),
+        };
+        $.ajax({
+            url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
+            type:'POST',
+            data: parametros ,
+            dataType:'json',
+            async:false,
+            success:function(resp){
+
+                if(resp.error != ''){
+
+                    notificacion( resp.error , 'error');
+
+                }else{
+
+                    notificacion( 'Informacion Actualizada' , 'success');
+                    location.reload();
+
+                }
+            }
+
+        });
+    }
+
+
 }
 
 /*Modifca la categoria de la prestacion*/
@@ -353,6 +413,8 @@ $('#guardar_categoria_conf').click(function() {
     }
 });
 
+
+
 //eventos
 $('#guardar_prestacion').click(function() {
     invalic_prestaciones();
@@ -377,3 +439,4 @@ $('#convenioConf').select2({
     allowClear: true,
     language:'es'
 });
+
