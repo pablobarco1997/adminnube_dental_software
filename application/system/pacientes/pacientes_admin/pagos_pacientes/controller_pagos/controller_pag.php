@@ -283,7 +283,7 @@ function realizar_PagoPacienteIndependiente( $datos, $idpaciente, $idplancab )
     $amoun_t          = $datos['amoun_t'];
     $nfact_boleto     = !empty($datos['nfact_boleto']) ? $datos['nfact_boleto'] : 0;
 
-    $sql1  = " INSERT INTO `tab_pagos_independ_pacientes_cab` ( `fecha`, `fk_tipopago`, `observacion`, `monto`, n_fact_boleta, fk_plantram, fk_paciente)";
+    $sql1  = " INSERT INTO `tab_pagos_independ_pacientes_cab` ( `fecha`, `fk_tipopago`, `observacion`, `monto`, n_fact_boleta, fk_plantram, fk_paciente, id_login)";
     $sql1 .= " VALUES( ";
     $sql1 .= " now() ,";
     $sql1 .= " $t_pagos ,";
@@ -291,7 +291,8 @@ function realizar_PagoPacienteIndependiente( $datos, $idpaciente, $idplancab )
     $sql1 .= " $amoun_t ,";
     $sql1 .= " '$nfact_boleto',  ";
     $sql1 .= " $idplancab , ";
-    $sql1 .= " $idpaciente  ";
+    $sql1 .= " $idpaciente , ";
+    $sql1 .= " $conf->login_id  ";
     $sql1 .= ")";
 //    echo '<pre>';
 //    print_r($sql1); die();
