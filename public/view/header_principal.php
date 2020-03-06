@@ -42,6 +42,7 @@
 
     *{
         font-family: 'Varela Round', sans-serif ;
+        /*font-size: 0.8rem !important;*/
     }
 
     h3{
@@ -49,6 +50,10 @@
     }
 
     h5{
+        font-family: 'Varela Round', sans-serif ;
+    }
+
+    div{
         font-family: 'Varela Round', sans-serif ;
     }
 

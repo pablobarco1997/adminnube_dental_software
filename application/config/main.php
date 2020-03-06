@@ -1,6 +1,6 @@
 <?php
 
-    global   $db, $conf, $user, $global, $permisos;
+    global   $db, $conf, $user, $global, $permisos, $dateZoneCurrent;
 
     require_once  DOL_DOCUMENT .'/application/config/conneccion_entidad.php';       //Connecion de Entidad
     require_once  DOL_DOCUMENT .'/application/system/conneccion/conneccion.php';    //Coneccion de Empresa
@@ -44,6 +44,10 @@
 
     require_once  DOL_DOCUMENT .'/application/controllers/controller.php';           //se declara funciones de php globales
 
+    # OBTENGO LA FECHA Y HORA ACTUAL CON MYSQL
+    $sqlCurrentDatezone = "SELECT NOW() datezpnecurrent;";
+    $dateZoneCurrent    = $db->query($sqlCurrentDatezone)->fetchObject()->datezpnecurrent;
+
 
     # OPTENGO LOS PERMISOS
     $sqllogin = "SELECT permisos FROM tab_login_users WHERE usuario = '$user->name' and fk_doc = '$user->id' limit 1";
@@ -62,7 +66,8 @@
         "eliminar"    => ($objPermisos->eliminar   == "true") ? ""   : "disabled_link3" ,
     );
 
-//    echo '<pre>';
-//    print_r($permisos); die();
+    /*
+    echo '<pre>';
+    print_r($dateZoneCurrent); die();*/
 
 ?>

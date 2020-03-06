@@ -43,7 +43,7 @@
                                                                     <b>Fecha:</b>&nbsp;&nbsp; $v->fecha <br>
                                                                     <b>Hora:</b>&nbsp;&nbsp; $hora_desde_A <br>
                                                                     <b>Comentario:</b>&nbsp;&nbsp; $v->comment
-                                                                    <button class='btn-xs btn btn-block btnhover' style='font-weight: bolder; color: green'>Aceptar</button>
+                                                                    <button class='btn-xs btn btn-block btnhover' style='font-weight: bolder; color: green'>EN SALA DE ESPERA</button>
                                                                 </h5>
                                                             </div>
                                                         </div>
