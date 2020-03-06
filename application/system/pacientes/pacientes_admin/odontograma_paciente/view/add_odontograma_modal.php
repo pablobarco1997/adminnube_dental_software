@@ -17,7 +17,7 @@
                             <option value=""></option>
                             <?php
 
-                            $sql1 = "SELECT * , ifnull(edit_name, concat('Plan de tratamiento # ', numero)) as editnum from tab_plan_tratamiento_cab where fk_paciente = ".$idPaciente ." and estados_tratamiento = 'A' ";
+                            $sql1 = "SELECT * , ifnull(edit_name, concat('Plan de tratamiento # ', numero)) as editnum from tab_plan_tratamiento_cab where fk_paciente = ".$idPaciente ." and estados_tratamiento in('A', 'S') ";
                             $rs1 = $db->query($sql1);
                             if($rs1->rowCount() > 0)
                             {

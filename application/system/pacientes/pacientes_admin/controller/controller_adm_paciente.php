@@ -662,6 +662,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 $sql .= " and dc.fk_paciente = ".$idpaciente;
             }
 
+            $sql .= ' order by dc.rowid desc';
             $resul = $db->query($sql);
 
             if($resul->rowCount() > 0){
