@@ -522,7 +522,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
              -- validaciones
              
              -- citas atrazados con estado no confirmado
-              if( cast(d.fecha_cita as date) < '".$fecha_hoy."' && d.fk_estado_paciente_cita = 2 , concat('cita agendada atrazada - NO CONFIRMADO - ', date_format(d.fecha_cita, '%Y/%m/%d') , ' - hora ' , d.hora_inicio ) , '') as cita_atrazada
+             IF( now() > CAST(d.fecha_cita AS DATETIME)   && d.fk_estado_paciente_cita = 2 , concat('Atrazada NO CONFIRMADO ', '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , '') as cita_atrazada
                         
          from 
              tab_pacientes_citas_cab c , tab_pacientes_citas_det d
@@ -552,7 +552,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
 
     $sql .= " ".$permisos->consultar;
 
-//    print_r($sql); die();
+//    echo '<pre>'; print_r($sql); die();
 
     $rs = $db->query($sql);
 
@@ -616,7 +616,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
                                 }
 
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' class='$tienePlanTratamiento' onclick='create_plandetratamiento($acced->idpaciente, $acced->id_cita_det, $acced->iddoctor , $(this));'  >Plan de Tratamiento</a> </li>";
-                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Recaudación</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". DOL_HTTP ."/application/system/pacientes/pacientes_admin/?view=pagospaci&key=".KEY_GLOB."&id=". tokenSecurityId($acced->idpaciente) ."&v=paym' >Recaudación</a> </li>";
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". $Url_datospersonales ."' >Datos personales</a> </li>";
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a> </li>";
 
@@ -676,7 +676,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
             $html3 = "";
             $html3 .= "<div class='form-group col-md-12 col-xs-12'>
                         <div class='col-xs-12 col-ms-10 col-md-10 no-padding'> 
-                            <label for='estadoDropw' class='text-justify' title='$acced->estado' >$acced->estado</label> 
+                            <label class='text-justify' title='$acced->estado' >$acced->estado</label> 
                         </div>";
 
             $html3 .= "<div class='col-xs-12 col-ms-2 col-md-2 no-padding no-margin'>

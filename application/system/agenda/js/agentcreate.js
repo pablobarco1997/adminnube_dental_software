@@ -136,8 +136,8 @@ $('.fechaIni').change(function() {
 function invalic_date_dateif(fecha_insertada, inputfecha, unoMismo)
 {
 
-
     var fecha_repetida = 0;
+    var fecha_invalic  = 0;
 
 
     // alert(unoMismo);
@@ -165,6 +165,20 @@ function invalic_date_dateif(fecha_insertada, inputfecha, unoMismo)
 
             }
         }
+
+    }
+
+    var Meses = [ '01', '02', '03', '04' , '05', '06', '07', '08', '09', '10', '11', '12' ];
+
+    if(fecha_insertada != ''){
+
+        var fechaValidar = fecha_insertada.replace('/', '-').replace('/','-');
+        var fechaActual  = '';
+
+        if(  fechaValidar < fechaActual  ){
+
+        }
+        // console.log( date + '<'  + fechaValidar);
 
     }
 

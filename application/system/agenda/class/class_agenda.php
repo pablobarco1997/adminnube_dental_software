@@ -99,13 +99,14 @@ class admin_agenda{
                     $sql1 .= "$fk_doc,";
                     $sql1 .= "$recursos,";
                     $sql1 .= "$duracion,";
-                    $sql1 .= "'$dateformat',";
+                    $sql1 .= "'$dateformat ".$Hora_Fin."',"; #FECHA FINAL JUNTO CON HORA DATETIME
                     $sql1 .= "'$hora:00',";
                     $sql1 .= "0,";
                     $sql1 .= "'$Hora_inicio',";
                     $sql1 .= "'$Hora_Fin' ";
                     $sql1 .= ")";
 
+//                    echo '<pre>'; print_r($sql1); die();
                     $this->db->query($sql1);
 
             }

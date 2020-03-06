@@ -98,12 +98,19 @@
                             tab_admin_pacientes p,
                             tab_pacientes_estado_citas s
                         WHERE
-                            c.fk_paciente = p.rowid
+                                c.fk_paciente = p.rowid
                                 AND c.rowid = d.fk_pacient_cita_cab
                                 AND d.fk_estado_paciente_cita = s.rowid 
                                 
-                        AND date_format(d.fecha_cita , '%Y-%m-%d') = date_format( now() , '%Y-%m-%d') ";
+                        -- ALERTA LA NOTIFICACION DE LA CITA CON FECHA HASTA LA HORA FIN 
+                        AND date_format(d.fecha_cita , '%Y-%m-%d') = date_format( now() , '%Y-%m-%d') 
+                        AND TRIM(SUBSTRING(NOW(), 11, 17)) <= TRIM(d.hora_fin) 
+                        -- SOLO LAS CITAS QUE ESTEN NO CONFIRMADAS
+                        AND s.rowid = 2 ";
 
+//                echo '<pre>';
+//                print_r( date('Y-m-d  h:s:m')); echo '<br>';
+//                print_r($ConsultarCitas); die();
                 #NOTIFICACIONES DE CITAS
                 $rsConsultCitas = $db->query($ConsultarCitas);
                 if($rsConsultCitas->rowCount() > 0)
