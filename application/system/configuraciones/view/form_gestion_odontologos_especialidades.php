@@ -1,5 +1,12 @@
 <?php
 
+$accionDoctorEspicialidad = "";
+if(isset($_GET['v']))
+{
+    $accionDoctorEspicialidad = $_GET['v'];
+}
+
+
 $option1 = "<option></option>";
 $sql = "SELECT * FROM tab_odontologos";
 $rs = $db->query($sql);
@@ -11,6 +18,11 @@ if($rs->rowCount()>0)
 }
 
 ?>
+
+<script>
+    //accion si es especialidad o Doctor     MODULO
+    $accion = "<?= $accionDoctorEspicialidad ?>";
+</script>
 
 <div class="box box-solid">
 
@@ -32,17 +44,16 @@ if($rs->rowCount()>0)
                 </ul>
             </div>
 
-            <?php if(isset($_GET["v"]) && $_GET["v"] == "dentist"){ ?>
+            <?php       #DENTISTA
+                        if(isset($_GET["v"]) && $_GET["v"] == "dentist"){ ?>
 
             <div class="row">
-                <div class="col-md-12 margin-bottom">
-                    <div class="" style="background-color: #E5E8E8; padding: 3px; height: 30px; border-radius: 4px">
-                        <ul class="list-inline">
-                            <li><label for=""  class=" text-left" style="cursor: pointer; " data-toggle="modal" data-target="#modal_conf_doctor"  onclick="cambiarattr()"> &nbsp;&nbsp;<i class="fa fa-user-md"></i> &nbsp;&nbsp; Agregar Odontólogos</label></li>
-                            <li><label for=""  class=" text-left" style="cursor: pointer; " data-toggle="modal" data-target="#ModalCrearUsuario"  onclick="ModificarUsuario(0,0,'0')" > &nbsp;&nbsp;<i class="fa fa-user"></i> &nbsp;&nbsp; Crear Usuario</label></li>
-                            <li> <div class="checkbox" style="margin: 0px"><label for="desabilitado_doctores" style="margin: 0px; font-weight: bolder"><input type="checkbox" id="desabilitado_doctores"><i class="fa fa-user-times"></i> Ver lista de doctores desabilitados</label></div></li>
-                        </ul>
-                    </div>
+                <div class="form-group col-md-12">
+                    <ul class="list-inline" style="border-bottom: 1px solid #333333; padding-bottom: 1.5px">
+                        <li><a  style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  "  data-toggle="modal" data-target="#modal_conf_doctor"  onclick="cambiarattr()"> &nbsp;&nbsp;<i class="fa fa-user-md"></i> &nbsp;&nbsp; crear odontólogos</a></li>
+                        <li><a style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  " data-toggle="modal" data-target="#ModalCrearUsuario"  onclick="ModificarUsuario(0,0,'0')" > &nbsp;&nbsp;<i class="fa fa-user"></i> &nbsp;&nbsp; Crear Usuario</a></li>
+                        <li> <div class="checkbox btnhover" style="margin: 0px; padding: 5px; "><label for="desabilitado_doctores" style=" font-weight: bolder"><input type="checkbox" id="desabilitado_doctores"><i class="fa fa-user-times"></i> Ver lista de doctores desabilitados</label></div></li>
+                    </ul>
                 </div>
 
                 <br>
@@ -68,22 +79,28 @@ if($rs->rowCount()>0)
 
             <?php } ?>
 
-            <?php if(isset($_GET["v"]) && $_GET["v"] == "specialties"){ ?>
+            <?php  #ESPECIALIDAD
+                    if(isset($_GET["v"]) && $_GET["v"] == "specialties"){ ?>
 
                 <div class="row">
-                    <div class="col-md-12 margin-bottom">
-                        <div class="" style="background-color: #E5E8E8; padding: 3px; height: 30px; border-radius: 4px">
-                            <label for=""  class=" text-left" style="cursor: pointer; "  data-toggle="modal" data-target="#ModalConfEspecialidades"> &nbsp;&nbsp;<i class="fa fa-file-text-o"></i> &nbsp;&nbsp; Agregar Especialidades</label>
-                        </div>
+                    <div class="form-group col-xs-12 col-md-12">
+                        <ul class="list-inline" style="border-bottom: 1px solid #333333; padding-bottom: 2px">
+                            <li><a class="btnhover btn"  data-toggle="modal" data-target="#ModalConfEspecialidades" style="font-weight: bolder; color: #333333"> <i class="fa fa-list"></i> &nbsp; crear especialidad </a> </li>
+                        </ul>
                     </div>
 
-                    <div class="col-md-12">
-                        <div class="alert alert-info" style="">
-                            <strong><i class="fa fa-info-circle"></i></strong>&nbsp; Tener en cuenta que si elimina una especialidad, aquellos Odontólogos relacionados con esta, se actualizaran a especialidad General
-                        </div>
+                    <div class="form-group col-md-12">
+                       <div class="form-group col-md-12 ">
+                            <span style="font-weight: bolder; color: #eb9627">
+                            <i class="fa fa-info-circle"></i>
+                                Tener en cuenta que si elimina una especialidad, aquellos Odontólogos
+                                relacionados con esta, se actualizaran a especialidad General incluyendo todas las citas asociadas con la especialidad
+                                eliminada
+                            </span>
+                       </div>
                     </div>
 
-                    <div class="col-md-12">
+                    <div class="form-group col-md-12">
                         <div class="table-responsive">
                             <table width="100%" class="table" id="gention_especialidades">
                                 <thead>
@@ -97,6 +114,7 @@ if($rs->rowCount()>0)
                     </div>
 
                 </div>
+
             <?php } ?>
 
         </div>
@@ -113,7 +131,7 @@ if($rs->rowCount()>0)
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header modal-diseng">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title"> <span data-id="0" id="accion">NUEVO</span> ODONTÓLOGO </h4>
             </div>
@@ -122,103 +140,85 @@ if($rs->rowCount()>0)
                 <div class="margin">
 
                     <div class="tab-content">
+                        <div class="row">
+                            <div class="form-group col-md-12 no-margin">
 
-                            <div class="row">
+                                <div class="form-group col-md-6">
+                                    <p class="text-center" style="margin: 0px;">
+                                        <label for="icon_doct">
+                                            <img id="icon_usuario_doct" src="<?= DOL_HTTP .'/logos_icon/logo_default/doct-icon.png' ;?>" class="img-circle" width="100px" height="100px" alt="">
+                                            <input type="file" id="icon_doct" style="display: none">
+                                        </label>
+                                        <span style="display: block"> </span>
+                                    </p>
+                                </div>
 
-                                <div style="width: 70%" class="center-block">
+                                <div class="form-group col-md-6">
+                                    <label for="">Nombre</label>
+                                    <input type="text" id="nombre_doct" class="form-control input-sm">
+                                </div>
 
-                                    <div class="row">
-                                        <br>
-                                        <div class="col-md-12">
+                                <div class="form-group col-md-6">
+                                    <label for="">Apellido</label>
+                                    <input type="text" name="" class="form-control input-sm" id="apellido_doct" >
+                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                <p class="text-center" style="margin: 0px;">
-                                                    <label for="icon_doct">
-                                                        <img id="icon_usuario_doct" src="<?= DOL_HTTP .'/logos_icon/logo_default/doct-icon.png' ;?>" class="img-circle" width="100px" height="100px" alt="">
-                                                        <input type="file" id="icon_doct" style="display: none">
-                                                    </label>
-                                                    <span style="display: block"> ICON</span>
-                                                </p>
-                                            </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">celular</label>
+                                    <input type="text" name="" class="form-control input-sm" id="celular_doct" >
+                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label for="">Nombre</label>
-                                                <input type="text" id="nombre_doct" class="form-control input-sm">
-                                            </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">Telefono</label>
+                                    <input type="text" name="" class="form-control input-sm" id="TelefonoConvencional_doct" >
+                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label for="">Apellido</label>
-                                                <input type="text" name="" class="form-control input-sm" id="apellido_doct" >
-                                            </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">E-mail</label>
+                                    <input type="text" name="" class="form-control input-sm" id="email_doct" >
+                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label for="">celular</label>
-                                                <input type="text" name="" class="form-control input-sm" id="celular_doct" >
-                                            </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">Dirección</label>
+                                    <input type="text" name="" class="form-control input-sm" id="direccion_doct" >
+                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label for="">Telefono Convencional</label>
-                                                <input type="text" name="" class="form-control input-sm" id="TelefonoConvencional_doct" >
-                                            </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">Ciudad</label>
+                                    <input type="text" name="" class="form-control input-sm" id="ciudad_doct" >
+                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label for="">E-mail</label>
-                                                <input type="text" name="" class="form-control input-sm" id="email_doct" >
-                                            </div>
+                                <div class="form-group col-md-6">
+                                    <label for="">Epecialidad</label>
+                                    <select name="" id="especialidad_doct" class="form-control select2_max_ancho input-sm">
+                                        <option value="0">General</option>
+                                        <?php
+                                        $sql35 = "select es.rowid,  es.tms as fecha ,es.nombre_especialidad , es.descripcion from tab_especialidades_doc es;";
+                                        $rs35 = $db->query($sql35);
+                                        if($rs35->rowCount()>0)
+                                        {
+                                            while ($rows35 = $rs35->fetchObject())
+                                            {
+                                                echo "<option value='$rows35->rowid'>$rows35->nombre_especialidad</option>";
+                                            }
+                                        }
+                                        ?>
+                                    </select>
+                                </div>
 
-                                            <div class="form-group col-md-6">
-                                                <label for="">Dirección</label>
-                                                <input type="text" name="" class="form-control input-sm" id="direccion_doct" >
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label for="">Ciudad</label>
-                                                <input type="text" name="" class="form-control input-sm" id="ciudad_doct" >
-                                            </div>
-
-                                            <div class="form-group col-md-6">
-                                                <label for="">Epecialidad</label>
-                                                <select name="" id="especialidad_doct" class="form-control select2_max_ancho input-sm">
-                                                    <option value="0">General</option>
-                                                    <?php
-                                                    $sql35 = "select es.rowid,  es.tms as fecha ,es.nombre_especialidad , es.descripcion from tab_especialidades_doc es;";
-                                                    $rs35 = $db->query($sql35);
-                                                    if($rs35->rowCount()>0)
-                                                    {
-                                                        while ($rows35 = $rs35->fetchObject())
-                                                        {
-                                                            echo "<option value='$rows35->rowid'>$rows35->nombre_especialidad</option>";
-                                                        }
-                                                    }
-                                                    ?>
-                                                </select>
-                                            </div>
-
-                                            <div class="form-group col-md-12">
-                                                <div class="form-group">
-                                                    <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>
-                                                    <button type="button" class="btn btn-success" id="guardar_informacion_odontologos" style="float: right">Aceptar</button>
-                                                </div>
-                                            </div>
-
-
-                                        </div>
+                                <div class="form-group col-md-12 no-margin">
+                                    <div class="form-group no-margin pull-right">
+                                        <a class="btn btnhover " style="font-weight: bolder" data-dismiss="modal" > Cerrar </a>
+                                        <a class="btn btnhover " style="font-weight: bolder; color: green" id="guardar_informacion_odontologos" > Aceptar </a>
                                     </div>
-
                                 </div>
 
                             </div>
-
+                        </div>
                     </div>
                 </div>
             </div>
-
-<!--            <div class="modal-footer" style="padding-top: 0px">-->
-<!--                <button type="button" class="btn btn-default" data-dismiss="modal">Cerrar</button>-->
-<!--            </div>-->
         </div>
-
-
     </div>
 </div>
 
@@ -228,9 +228,9 @@ if($rs->rowCount()>0)
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header modal-diseng">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" data-id="0" id="accionUsuario" >ADMIN USURIO</h4>
+                <h4 class="modal-title" data-id="0" id="accionUsuario" >CREAR USURIO</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -318,7 +318,7 @@ if($rs->rowCount()>0)
 
         <!-- Modal content-->
         <div class="modal-content">
-            <div class="modal-header">
+            <div class="modal-header modal-diseng">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
                 <h4 class="modal-title">  <span data-id="0" id="accion_especialidad">NUEVO</span> ESPECIALIDAD</h4>
             </div>

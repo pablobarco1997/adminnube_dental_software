@@ -253,7 +253,7 @@
 
 <!-- LISTA INFORMATIVA DE LAS PRESTACIONES -->
 <div id="modal_list_prestacion" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
+    <div class="modal-dialog modal-lg" style="width: 80% !important; margin: auto; ">
 
         <!-- Modal content-->
         <div class="modal-content">

@@ -195,8 +195,11 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
         case 'consultar_usuario':
 
-            $error = "";
-            $subaccion = GETPOST('subaccion');
+            $error          = "";
+            $iddoctUsuario  = GETPOST('');
+            $subaccion      = GETPOST('subaccion');
+            $idEntidad      = $conf->EMPRESA->ID_ENTIDAD; #id de la entidad de la empresa de los usuarios
+
             $sql = "SELECT * FROM tab_login_users WHERE rowid > 0 ";
 
             if($subaccion == 'doct_usuario'){ #doctor con usuario
@@ -205,6 +208,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             if($subaccion == 'usuario_rep'){ #usuario repetido
                 $sql .= " and usuario = '".GETPOST('usuario') ."'";
             }
+//            print_r($sql); die();
             $rs = $db->query($sql);
 
             if($rs->rowCount()>0){ #si encuentro Usuario
@@ -216,7 +220,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $error = "Este Usuario ya se encuentra en Uso, Ingrese un Usuario que no este en Uso";
 
                     $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
-                    $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') );  #compruebo el usuario global
+                    $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
                 }
 
             }
@@ -253,7 +257,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $permisos       = GETPOST('permisos');
 
 //            die();
-            if($subaccion == 'nuevo'){
+            if($subaccion == 'nuevo')
+            {
 
                 $sqlinvalic = "SELECT * FROM tab_login_users where fk_doc = $doctor";
                 $rsinvalic  = $db->query($sqlinvalic);
@@ -297,11 +302,15 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         $error = GenerarUsuarioGlob($datos, $subaccion);
                     }
             }
-            if($subaccion == 'modificar'){
+
+            if($subaccion == 'modificar')
+            {
 
                 $idUsuariolink = GETPOST('idUsuario'); #id usuario de la tab_login_users
 
-                if( $idUsuariolink != ""  || $idUsuariolink != "0"){
+
+                if( $idUsuariolink != ""  || $idUsuariolink != "0")
+                {
 
                     $sql1  = " UPDATE `tab_login_users` SET ";
                     $sql1 .= "`usuario`='$usuario' ,";
@@ -396,8 +405,19 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
         case 'delete_especialidad':
 
             $error= '';
+            $id  = GETPOST('id'); #id especialidad
+            $idCitasAsociadas = [];
 
-            $id  = GETPOST('id');
+
+            #CONSULTAR CITAS EN CASO DE HABER CITAS ASOCIADAS ENTONCES SE ACTUALIZA A 0 EL FK_ESPECIALIDAD => ESPECIALIDAD GENERAL
+            $sqlCitasEspecialidad = "SELECT rowid FROM tab_pacientes_citas_det where fk_especialidad = $id";
+            $rscitas = $db->query($sqlCitasEspecialidad);
+            if($rscitas && $rscitas->rowCount()>0){
+                while($ci = $rscitas->fetchObject()){
+                    $idCitasAsociadas[] = $ci->rowid;
+                }
+            }
+
 
             $sql = "DELETE FROM tab_especialidades_doc WHERE `rowid`='$id';";
             $rs = $db->query($sql);
@@ -417,6 +437,13 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
                     $sql2 = "UPDATE `tab_odontologos` SET `fk_especialidad`= 0 WHERE `rowid` in( ". implode(',', $iddoct) ." );";
                     $db->query($sql2);
+                }
+
+                if( count($idCitasAsociadas) > 0){
+
+                    $sql3 = "UPDATE `tab_pacientes_citas_det` SET `fk_especialidad` = '0' WHERE `rowid` in( ". (implode(',', $idCitasAsociadas)) ." );";
+                    $db->query($sql3);
+
                 }
             }
             if(!$rs){
