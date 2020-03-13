@@ -17,3 +17,7 @@ CREATE TABLE `tab_pacientes_citas_det` (
   PRIMARY KEY (`rowid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
 ;
+
+ALTER TABLE `tab_pacientes_citas_det`
+ADD COLUMN `fk_cita_email_noti` INT(11) NULL DEFAULT 0 AFTER `comentario_adicional`
+;
