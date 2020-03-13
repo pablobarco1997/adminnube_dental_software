@@ -26,12 +26,12 @@
                                 foreach ($conf->NOTIFICACIONES->Glob_Notificaciones as $key => $v)
                                 {
 
-                                    if( $v->tipo_notificacion == 'notificacion_citas_paciente' )
+                                    if( $v->tipo_notificacion == 'NOTIFICAIONES_CITAS_PACIENTES' )
                                     {
 
                                         $hora_desde_A = substr($v->horaIni, 0, 5 ) ." A " . substr($v->horafin, 0, 5 ); //Corto
 
-                                        $htmlCitasList = "
+                                        $HTML_CITAS_PACIENTES = "
                                                 <li style='margin-bottom: 2px; padding: 5px' class='listNotificacion' >
                                                     <div class='form-group col-md-12 col-xs-12 no-margin no-padding'>
                                                         <div class='media'>
@@ -43,7 +43,7 @@
                                                                     <b>Fecha:</b>&nbsp;&nbsp; $v->fecha <br>
                                                                     <b>Hora:</b>&nbsp;&nbsp; $hora_desde_A <br>
                                                                     <b>Comentario:</b>&nbsp;&nbsp; $v->comment
-                                                                    <button class='btn-xs btn btn-block btnhover' style='font-weight: bolder; color: green'>EN SALA DE ESPERA</button>
+                                                                    <button class='btn-xs btn btn-block btnhover' onclick='Actulizar_notificacion_citas($v->id_detalle_cita)' style='font-weight: bolder; color: green'>EN SALA DE ESPERA</button>
                                                                 </h5>
                                                             </div>
                                                         </div>
@@ -52,11 +52,33 @@
                                                 
                                         ";
 
-                                        echo $htmlCitasList; #imprime la lista de citas
+                                        echo $HTML_CITAS_PACIENTES; #imprime la lista de citas
+                                        #end citas notificacion
                                     }
 
-                                    #end citas notificacion
 
+                                    #notificaiones x pacientes - confirmaciones de pacientes via email
+                                    if( $v->tipo_notificacion == 'NOTIFICACION_CONFIRMAR_PACIENTE' )
+                                    {
+                                            $HTML_NOTIFICACION_X_PACIENTES_EMAIL = "
+                                                <li style='margin-bottom: 2px; padding: 5px' class='listNotificacion' >
+                                                    <div class='form-group col-md-12 col-xs-12 no-margin no-padding'>
+                                                        <div class='media'>
+                                                            <a class='pull-left'> <img src='".DOL_HTTP."/logos_icon/".$conf->NAME_DIRECTORIO."/".$v->icon_paciente."' class='img-rounded img-md' alt=''> </a>    
+                                                            <div class='media-body'>
+                                                                <h5 class='media-heading'>
+                                                                    <b>Paciente:</b> &nbsp;&nbsp;   $v->paciente <br>
+                                                                    <b>información adicional:</b> &nbsp;&nbsp;   $v->accion <br>
+                                                                    <button class='btn-xs btn btn-block btnhover'  onclick='to_accept_noti_confirmpacient($v->id)' style='font-weight: bolder; color: green'>ACEPTAR</button> 
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            ";
+
+                                            echo $HTML_NOTIFICACION_X_PACIENTES_EMAIL;
+                                    }
 
                                 }
 
