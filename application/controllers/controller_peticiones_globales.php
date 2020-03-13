@@ -78,6 +78,38 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             break;
 
 
+            case 'fetch_paciente':
+
+                $sql    = "SELECT count(*) as fetchpaciente FROM tab_admin_pacientes WHERE estado = 'A'";
+                $resul  = $db->query($sql)->fetchObject();
+
+                $output = [
+                    'fetchNumero' => $resul->fetchpaciente,
+                ];
+
+                echo json_encode($output);
+                break;
+
+
+        case 'accept_noti_confirm_pacient':
+
+            $error = "";
+
+            $id = GETPOST('id');
+
+            $query = "UPDATE `tab_noti_confirmacion_cita_email` SET `noti_aceptar`='1' WHERE `rowid`= $id;";
+            $rs = $db->query($query);
+            if(!$rs){
+                $error = 'Ocurrio un error';
+            }
+
+            $output = [
+                'error' => $error,
+            ];
+
+            echo json_encode($output);
+            break;
+
     }
 
 }

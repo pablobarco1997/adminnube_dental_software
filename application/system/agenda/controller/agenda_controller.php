@@ -52,7 +52,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $fechaFin    ="";
             if(!empty($fecha))
             {
-                $fecha   = explode('-',GETPOST("fecha"));
+                $fecha       = explode('-',GETPOST("fecha"));
                 $fechaInicio = date("Y-m-d", strtotime( str_replace("/", "-", trim($fecha[0]))));
                 $fechaFin    = date("Y-m-d", strtotime( str_replace("/", "-", trim($fecha[1]))));
             }
@@ -510,7 +510,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
             (select s.color from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as color,
             d.fk_estado_paciente_cita , 
             c.comentario ,
-            (select es.nombre_especialidad FROM tab_especialidades_doc es where es.rowid = d.fk_especialidad) as especialidad,
+            ifnull((select es.nombre_especialidad FROM tab_especialidades_doc es where es.rowid = d.fk_especialidad),'General') as especialidad,
             
             (select p.telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil,
             
@@ -522,7 +522,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
              -- validaciones
              
              -- citas atrazados con estado no confirmado
-             IF( now() > CAST(d.fecha_cita AS DATETIME)   && d.fk_estado_paciente_cita = 2 , concat('Atrazada NO CONFIRMADO ', '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , '') as cita_atrazada
+             IF( now() > CAST(d.fecha_cita AS DATETIME)   && d.fk_estado_paciente_cita in(2,1,3,4,7,8,9,10)  , concat('Atrazada NO CONFIRMADO ', '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , '') as cita_atrazada
                         
          from 
              tab_pacientes_citas_cab c , tab_pacientes_citas_det d
@@ -551,9 +551,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
     $sql .= " order by d.fecha_cita desc ";
 
     $sql .= " ".$permisos->consultar;
-
 //    echo '<pre>'; print_r($sql); die();
-
     $rs = $db->query($sql);
 
     if( $rs && $rs->rowCount() > 0 )
@@ -618,7 +616,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' class='$tienePlanTratamiento' onclick='create_plandetratamiento($acced->idpaciente, $acced->id_cita_det, $acced->iddoctor , $(this));'  >Plan de Tratamiento</a> </li>";
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". DOL_HTTP ."/application/system/pacientes/pacientes_admin/?view=pagospaci&key=".KEY_GLOB."&id=". tokenSecurityId($acced->idpaciente) ."&v=paym' >Recaudación</a> </li>";
                                 $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". $Url_datospersonales ."' >Datos personales</a> </li>";
-                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a> </li>";
+                                $html2 .= "<li class='hide'>   <a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a> </li>";
 
                                 $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det, $(this))' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
 
@@ -663,7 +661,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
 
             //DOCTOR
             $html5 = "<div class='form-group col-md-12 col-xs-12 col-sm-12'>";
-                $html5 .= "<span class='text-left'>Doc(a). $acced->doct</span>";
+                $html5 .= "<span class='text-left'>Doc(a). $acced->doct</span> <br>";
                 $html5 .= "<span class='trunc'> <i class='fa fa-user-md'></i> &nbsp;&nbsp; $acced->especialidad </span>";
 
                 if($acced->comentario_adicional){
@@ -994,8 +992,38 @@ function notificarCitaEmail($datos, $token_confirmacion)
 //        print_r($sql);
 //        die();
         $rs = $db->query($sql);
+
         if(!$rs){
             $error_insert_notific_email = 'Ocurrio un error, el sistema no logro registrar el correo enviado';
+        }
+
+        if($rs)
+        {
+
+            $fk_notifi_id = $db->lastInsertId('tab_notificacion_email');
+
+            $queryDel   = " DELETE FROM tab_noti_confirmacion_cita_email where rowid > 0 and fk_cita = $datos->idcita ";
+            $r1 = $db->query($queryDel);
+
+            if($r1)
+            {
+                $queryNoti  = " INSERT INTO `tab_noti_confirmacion_cita_email` (`fk_paciente`, `fk_cita`, `estado` , `fk_noti_email`) ";
+                $queryNoti .= " VALUES(";
+                $queryNoti .= " $datos->idpaciente ,";
+                $queryNoti .= " $datos->idcita ,";
+                $queryNoti .= " 1 ,"; #notificar x email
+                $queryNoti .= " $fk_notifi_id ";
+                $queryNoti .= " )";
+                $db->query($queryNoti);
+//              print_r($queryNoti);
+                $idnotiConfirmacion = $db->lastInsertId('tab_noti_confirmacion_cita_email'); #id de la notificaion de insert confirmacion
+
+                if(!empty($idnotiConfirmacion) )
+                {
+                    $Update = " UPDATE `tab_pacientes_citas_det` SET `fk_cita_email_noti` = $idnotiConfirmacion WHERE `rowid` = '$datos->idcita' ";
+                    $db->query($Update);
+                }
+            }
         }
 
     }

@@ -58,7 +58,17 @@ $horaCita = "
     <option value=\"18:00\">18:00</option>
     <option value=\"18:15\">18:15</option>
     <option value=\"18:30\">18:30</option>
-    <option value=\"18:45\">18:45</option>";
+    <option value=\"18:45\">18:45</option>
+    <option value=\"19:00\">19:00</option>
+    <option value=\"19:15\">19:15</option>
+    <option value=\"19:30\">19:30</option>
+    <option value=\"19:45\">19:45</option>
+    <option value=\"20:00\">20:00</option>
+    <option value=\"20:15\">20:15</option>
+    <option value=\"20:30\">20:30</option>
+    <option value=\"20:45\">20:45</option>
+    <option value=\"21:00\">21:00</option>
+    ";
 
 
 

@@ -68,7 +68,7 @@
 
                 <li>
                     <div class="callbox">
-                        <div class="form-group">
+                        <div class="form-group disabled_link3">
                             <div class="checkbox  <?= $permisos->consultar  ?>">
                                 <a style="color: #333333" href="<?php echo DOL_HTTP.'/application/system/agenda/index.php?view=principal&list=diariaglob'?>" class="btn btnhover <?= $permisos->consultar  ?>">
                                     DIARIA GLOBAL
