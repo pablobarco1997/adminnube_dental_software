@@ -68,6 +68,99 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             echo json_encode($Output);
             break;
+
+
+        case 'list_pagos_particular':
+
+            $idpaciente   = GETPOST('idpaciente');
+
+            $data = [];
+
+            $query = " SELECT 
+                        p.rowid , 
+                        cast(p.fecha as date) fecha,
+                        p.fk_paciente , 
+                        ifnull((select ifnull(c.edit_name, concat('Plan de Tratamiento #', c.numero)) from tab_plan_tratamiento_cab c where c.rowid = p.fk_plantram) , 'error plan de tratamiento no asigando consulte con soporte tecnico')as nombplan,
+                        p.rowid  n_pago, 
+                        p.n_fact_boleta, 
+                        p.monto, 
+                        (select pt.descripcion from tab_tipos_pagos pt where pt.rowid = p.fk_tipopago) as mediopago
+                        
+                    FROM tab_pagos_independ_pacientes_cab p where p.rowid > 0 ";
+            if($idpaciente>0){
+                $query .= " and p.fk_paciente = $idpaciente";
+            }
+
+            $resul = $db->query($query);
+            if($resul && $resul->rowCount()>0)
+            {
+                while ($ob = $resul->fetchObject()){
+
+                    $row = array();
+
+                    $row[] = $ob->fecha;
+                    $row[] = $ob->n_pago;
+                    $row[] = $ob->nombplan;
+                    $row[] = $ob->mediopago;
+                    $row[] = $ob->n_fact_boleta;
+                    $row[] = $ob->monto;
+                    $row[] = "
+                       <div class='dropdown col-centered col-xs-1 '>
+                            <button class='btn btnhover  btn-xs dropdown-toggle' data-toggle=\"dropdown\" type='button' aria-expanded='false'>
+                                <i class=\"fa fa-ellipsis-v\"></i>
+                            </button>
+                                <ul class='dropdown-menu pull-right' >
+                                   
+                                    <li> <a href='".DOL_HTTP."/application/system/pacientes/pacientes_admin/pagos_recibidos/export/export_pagoparticular.php?npag=$ob->n_pago&idpac=$idpaciente' target='_blank'> <i class='fa fa-print'></i> Imprimir  </a> </li>
+                                    <li> <a href='#'> <i class='fa fa-envelope'></i> Enviar Email  </a> </li>
+                                    <li> <a href='#detalleprestacionPagos' data-toggle='modal' onclick='detalle_prestaciones_pagosParticulares($ob->n_pago)'> <i class='fa fa-list-ul'></i> Mostrar detalle  </a> </li>
+                                   
+                                </ul>
+                        </div> ";
+
+                    $data[] = $row;
+                }
+            }
+
+            $Output = [
+                'data' => $data
+            ];
+
+            echo json_encode($Output);
+            break;
+
+        case 'detalle_pagos_particular':
+
+            $idpaciente   = GETPOST('idpaciente');
+            $idpagos      = GETPOST('idpago');
+
+            $data = array();
+
+            $querydetallePagos = "SELECT 
+                            (select c.descripcion from tab_conf_prestaciones c where c.rowid = d.fk_prestacion) as prestacion,
+                            (select ifnull(dt.fk_diente, '') from tab_plan_tratamiento_det dt where dt.rowid = d.fk_plantram_det) as diente , 
+                            d.amount 
+                            FROM tab_pagos_independ_pacientes_det d 
+                            where d.fk_paciente = $idpaciente and d.fk_pago_cab = $idpagos;";
+//            print_r($querydetallePagos); die();
+            $rs =  $db->query($querydetallePagos);
+            if($rs && $rs->rowCount()>0){
+                while($dp = $rs->fetchObject())
+                {
+                    $row = array();
+
+                    $row[] = $dp->prestacion." &nbsp;&nbsp;&nbsp; ". (($dp->diente==0) ? "" : " <img src='".DOL_HTTP."/logos_icon/logo_default/diente.png' width='17px' height='17px' > ".$dp->diente );
+                    $row[] = $dp->amount;
+                    $data[] = $row;
+                }
+            }
+
+            $Output = [
+                'data' => $data
+            ];
+
+            echo json_encode($Output);
+            break;
     }
 
 

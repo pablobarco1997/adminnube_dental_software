@@ -71,6 +71,13 @@ switch($VISTAS)
         $NAME_MODULO                 = "EVOLUCIONES DEL PACIENTE";
         break;
 
+    case "pagrealipricp":                                                          #PAGOS REALIZADOS DEL PACIENTE
+        $VIEW_GLOB_ADMIN_PACIENTES   = "pago_realprincp";                    #view Pagos realizados Principal
+        $DIRECTORIO_ADMIN            = "pagos_recibidos";                    #directorio
+        $_JS_DOCMENT                 = "pagrealizadprincp";                  #doc javascript
+        $NAME_MODULO                 = "PAGOS REALIZADOS";
+        break;
+
 
 }
 

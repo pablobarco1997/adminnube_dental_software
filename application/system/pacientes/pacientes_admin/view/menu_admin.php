@@ -48,6 +48,12 @@ $array_evoluciones = (object)[
     'permiso' => ''
 ];
 
+$array_PagosRealizados = (object)[
+    'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=pagrealipricp&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=pagospartic',
+    'active'  =>  ($VISTAS == "pagrealipricp") ? "ActivaLista" : "",
+    'permiso' => ''
+];
+
 
 ?>
 
@@ -183,6 +189,11 @@ $array_evoluciones = (object)[
                                 <li class="lipaddi <?= $array_Pagos_pacientes->active ?>">
                                     <a class="lista" href="<?= $array_Pagos_pacientes->url ; ?>">&nbsp;&nbsp;
                                         <i class="fa fa-shopping-cart"></i>&nbsp;&nbsp; RECAUDACIÓN (<small>PAGOS</small>) </a>
+                                </li>
+
+                                <li class="lipaddi <?= $array_PagosRealizados->active ?>">
+                                    <a class="lista" href="<?= $array_PagosRealizados->url ; ?>">&nbsp;&nbsp;
+                                        <i class="fa fa-briefcase"></i>&nbsp;&nbsp; PAGOS REALIZADOS  </a>
                                 </li>
 
                             </ul>
