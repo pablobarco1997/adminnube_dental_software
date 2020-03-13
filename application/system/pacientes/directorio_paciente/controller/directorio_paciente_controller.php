@@ -48,7 +48,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $row[] = "<a id='ruddni_link' class='link_pacientes_id' data-id='$fila->rowid' 
                                     href='".DOL_HTTP."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token'> $fila->rut_dni </a> ";
                     $row[] = $fila->email;
-                    $row[] = $fila->numero_interno;
+                    $row[] = $fila->telefono_movil;
 
                     if($estado=='A')
                     {

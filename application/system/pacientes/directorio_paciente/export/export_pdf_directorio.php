@@ -89,7 +89,7 @@ $pdf .= "<table width='100%' class=\"tables\">";
     $pdf .= "<thead>
                 <tr class='tables'>
                     <th>PACIENTE</th>
-                    <th>Rud/Dni</th>
+                    <th>Rud/Cedula</th>
                     <th>E-mail</th>
                     <th>TELEFONO</th>
                 </tr>
