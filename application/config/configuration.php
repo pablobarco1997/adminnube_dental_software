@@ -60,6 +60,7 @@
             return $obj;
         }
 
+        #OBTENER NOTIFICACIONES DEL SISTEMA
         function ObtnerNoficaciones($db, $puedoAxu)
         {
                 #ESTA VARIABLE CAPTURAR EL NUMERO DE NOTIFICACIONES QUE EXTIS
@@ -106,11 +107,8 @@
                         AND date_format(d.fecha_cita , '%Y-%m-%d') = date_format( now() , '%Y-%m-%d') 
                         AND TRIM(SUBSTRING(NOW(), 11, 17)) <= TRIM(d.hora_fin) 
                         -- SOLO LAS CITAS QUE ESTEN NO CONFIRMADAS
-                        AND s.rowid = 2 ";
+                        AND s.rowid in(2,1,3,4,7,8,9,10) ";
 
-//                echo '<pre>';
-//                print_r( date('Y-m-d  h:s:m')); echo '<br>';
-//                print_r($ConsultarCitas); die();
                 #NOTIFICACIONES DE CITAS
                 $rsConsultCitas = $db->query($ConsultarCitas);
                 if($rsConsultCitas->rowCount() > 0)
@@ -120,7 +118,7 @@
 
                         $this->NOTIFICACIONES->Glob_Notificaciones[] = (object)array(
 
-                            'tipo_notificacion'     => 'notificacion_citas_paciente' ,
+                            'tipo_notificacion'     => 'NOTIFICAIONES_CITAS_PACIENTES' ,
 
                             'fecha'                 => date('Y-m-d', strtotime( str_replace('-', '/', $CitasConsult->fecha_create))),
                             'horaIni'               =>  $CitasConsult->hora_inicio,
@@ -134,6 +132,40 @@
                             'id_detalle_cita'       =>  $CitasConsult->id_detalle_cita,
                             'idpaciente'            =>  $CitasConsult->idpaciente,
                             'iddoctorcargo'         =>  $CitasConsult->iddoctorcargo,
+                        );
+
+                        $numeroNotificaciones++;
+                    }
+                }
+
+                #CONFIRMAR NITIFICACIONES POR PACIENTES
+                $ConsultarCitasConfirmadas = "SELECT 
+                                                (select concat( p.nombre , ' ' , p.apellido)  from tab_admin_pacientes p where p.rowid = e.fk_paciente) as paciente  , 
+                                                (select p.icon  from tab_admin_pacientes p where p.rowid = e.fk_paciente) as icon_paciente , 
+                                                e.action ,
+                                                e.noti_aceptar ,
+                                                e.date_confirm , 
+                                                e.rowid
+                                            FROM tab_noti_confirmacion_cita_email e  , tab_pacientes_citas_det d WHERE e.fk_cita = d.rowid and e.action != '' and e.noti_aceptar = 0 
+                                            AND  now() <= cast(e.fecha_cita as datetime)";
+                $rsCitasConfirmadas        = $db->query($ConsultarCitasConfirmadas);
+                if($rsCitasConfirmadas && $rsCitasConfirmadas->rowCount() > 0)
+                {
+                    while ( $NotiConfirmPacientes = $rsCitasConfirmadas->fetchObject() )
+                    {
+                        $confirmacion = "Consultando";
+
+                        if($NotiConfirmPacientes->action == 'ASISTIR'){
+                            $confirmacion = 'Este paciente confirmo el email <i class="fa fa-bell"></i> ASISTIRA A LA CONSULTA';
+                        }
+
+                        $this->NOTIFICACIONES->Glob_Notificaciones[] = (object)array(
+                            'tipo_notificacion'      => 'NOTIFICACION_CONFIRMAR_PACIENTE' ,
+                            'paciente'               => $NotiConfirmPacientes->paciente ,
+                            'icon_paciente'          => $NotiConfirmPacientes->icon_paciente ,
+                            'accion'                 => $confirmacion   ,
+                            'tab'                    => 'tab_noti_confirmacion_cita_email',
+                            'id'                     => $NotiConfirmPacientes->rowid
                         );
 
                         $numeroNotificaciones++;
