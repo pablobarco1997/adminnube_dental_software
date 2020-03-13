@@ -24,8 +24,8 @@ if(isset($_POST['dbname']))
             case 'asistir_confim':
 
                 $error = '';
-                $iddetcita  = GETPOST('idcita');
-                $idpaciente = GETPOST('idpaciente');
+                $iddetcita  = GETPOST('idcita'); #id de la cita detalle
+
 
                 if($iddetcita != '' && $iddetcita > 0)
                 {
@@ -39,6 +39,7 @@ if(isset($_POST['dbname']))
 
                         $obcita = $rsCita->fetch_object();
 
+//                        print_r($obcita->rowid); echo '<br>'; print_r($obcita->fk_paciente); die();
 //                        print_r($obcita); die();
                         /** FECHAS ASIGNADAS FECHA DE LA CITA ACTUAL **/
                         $FechaCitas  = $obcita->fecha_cita;
@@ -49,45 +50,49 @@ if(isset($_POST['dbname']))
                         if( $FechaActual <= $FechaCitas  )
                         {
                             #echo '<pre>';  print_r( $FechaCitas .' >= '. $DateNow ); die();
-                            if( $obcita->fk_estado_paciente_cita == 1)
+                            if( $obcita->fk_estado_paciente_cita == 1 )
                             {
                                 #SE ACTUALIZA A ESTADO CONFIRMADO X PACIENTE EMAIL
                                 $sqlUpdatConfirmPacient = "UPDATE `tab_pacientes_citas_det` SET `fk_estado_paciente_cita` = 10 WHERE `rowid`= $iddetcita ;";
                                 $rs = $db->query($sqlUpdatConfirmPacient);
-                                if(!$rs){
+                                if(!$rs)
+                                {
                                     $error = 'Ocurrio un error intentelo de nuevo';
                                 }
+
                                 if($rs){
 
                                     if($iddetcita!="")
                                     {
+
                                         $consult = " SELECT rowid FROM tab_noti_confirmacion_cita_email where fk_cita = $iddetcita";
                                         $rsulConsult = $db->query($consult);
-                                        if($rsulConsult){
+//                                        print_r($rsulConsult); die();
+                                        if( $rsulConsult )
+                                        {
 
-                                            if($rsulConsult->num_rows == 0){
+                                            if($rsulConsult->num_rows > 0)
+                                            {
                                                 #SI EN CASO CONFIRMA QUE SI ASISTIRA
-                                                $queryNotificemail       = " INSERT INTO `tab_noti_confirmacion_cita_email` (`fk_paciente`, `fk_cita`, `date_confirm`, `estado`, `fecha_cita` , `action`) ";
-                                                $sqlUpdatConfirmPacient .= " VALUES(";
-                                                $sqlUpdatConfirmPacient .= " $obcita->fk_paciente , ";
-                                                $sqlUpdatConfirmPacient .= " $iddetcita , ";
-                                                $sqlUpdatConfirmPacient .= " now() , ";
-                                                $sqlUpdatConfirmPacient .= " 10 , ";
-                                                $sqlUpdatConfirmPacient .= " $FechaCitas , ";
-                                                $sqlUpdatConfirmPacient .= " 'ASISTIR' ";
-                                                $sqlUpdatConfirmPacient .= " )";
+                                                $sqlUpdatConfirmPacient = " UPDATE `tab_noti_confirmacion_cita_email` SET `date_confirm`= now(), `estado`='10', `fecha_cita`= '$FechaCitas', `comment`='', `action`='ASISTIR' WHERE `rowid` > 0 and fk_cita = $iddetcita ";
+                                                $rsConfirm = $db->query($sqlUpdatConfirmPacient);
 
-                                                $rsUpdateNoti = $db->query($sqlUpdatConfirmPacient);
-                                                if(!$rsUpdateNoti){
-                                                    $error = 'Ocurrio un error con la Operacion - <b> No puede confirmar esta cita porfavor intentarlo mas tarde </b> ';
+                                                if( $rsConfirm ){
+                                                    #
+                                                }
+
+                                                if(!$rsConfirm){
+                                                    $error = 'Ocurrio un error con la Operacion - <b> No puede confirmar esta cita por favor intentarlo mas tarde </b> ';
                                                 }
 
                                             }else{
-                                                $error = 'Se encontro registrada una respuesta';
+                                                $error = 'No puede confirmar esta Cita';
                                             }
 
                                         }else{
+
                                             $error = 'Ocurrio un error con la Operacion';
+
                                         }
                                     }
                                 }
