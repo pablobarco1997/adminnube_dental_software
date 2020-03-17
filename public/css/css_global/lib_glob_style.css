@@ -29,7 +29,7 @@ li.Active_link a{
 
 *::-webkit-scrollbar-thumb{
     background-color: #cccccc;
-    border-radius: 5px;
+    /*border-radius: 5px;*/
 }
 
 

@@ -32,9 +32,10 @@ function Actulizar_notificacion_citas(idcita)
     });
 }
 
-
+/*
 /**FILTRAR X RANGO DE FECHA*/
-$('#startDate').daterangepicker({
+
+/***$('#startDate').daterangepicker({
 
     locale: {
         format: 'YYYY/MM/DD' ,
@@ -77,7 +78,9 @@ $('#startDate').daterangepicker({
     }
 });
 
+
 $('.rango span').click(function() {
     $(this).parent().find('input').click();
 });
+**/
 
