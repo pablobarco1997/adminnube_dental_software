@@ -23,12 +23,13 @@ function  listplaneTratamiento(){
             type:'POST',
             data:{
 
-                'ajaxSend':'ajaxSend',
-                'accion':'list_tratamiento',
-                'idpaciente': $id_paciente,
-                'mostrar_anulados'   : ($('#mostrarAnuladosPlantram').prop('checked') == true) ? 'si': 'no',
-                'mostrar_finalizados': ($('#mostaraFinalizados').prop('checked') == true) ? 'si': 'no',
-                'idplantmiento': $('#filtrPlantram').find(':selected').val()
+                'ajaxSend'               : 'ajaxSend',
+                'accion'                 : 'list_tratamiento',
+                'idpaciente'             : $id_paciente,
+                'mostrar_anulados'       : ($('#mostrarAnuladosPlantram').prop('checked') == true) ? 'si': 'no',
+                'mostrar_finalizados'    : ($('#mostaraFinalizados').prop('checked') == true) ? 'si': 'no',
+                'idplantmiento'          : $('#filtrPlantram').find(':selected').val(),
+                'fecha_range'            : $('.filtroFecha').val(),
 
             } ,
             dataType:'json',
@@ -220,8 +221,7 @@ function  listplaneTratamiento(){
 //PANTALLA PRINCIPAL TRATAMIENTO  --------------------------------------------------------------------------------------
 if($accion == "principal")
 {
-    // READY DOCUMENT
-    listplaneTratamiento();
+
 
     //CREA EL PLEN DE TRATAMIENTO DESDE EL MODULO PLAN DE TRATAMIENTO
     $('#createPlanTratamientoCab').click(function() {
@@ -342,6 +342,58 @@ if($accion == "principal")
     $('#filtrar_evoluc').click(function() {
         listplaneTratamiento();
     });
+
+
+    /**FECHA X RANGO*/
+    $('#startDate').daterangepicker({
+
+        locale: {
+            format: 'YYYY/MM/DD' ,
+            daysOfWeek: [
+                "Dom",
+                "Lun",
+                "Mar",
+                "Mie",
+                "Jue",
+                "Vie",
+                "Sáb"
+            ],
+            monthNames: [
+                "Enero",
+                "Febrero",
+                "Marzo",
+                "Abril",
+                "Mayo",
+                "Junio",
+                "Julio",
+                "Agosto",
+                "Septiembre",
+                "Octubre",
+                "Noviembre",
+                "Diciembre"
+            ],
+        },
+
+        startDate: moment().startOf('month'),
+        endDate: moment(),
+        ranges: {
+            'Hoy': [moment(), moment()],
+            'Ayer': [moment().subtract(1, 'days'), moment().subtract(1, 'days')],
+            'Últimos 7 Dias': [moment().subtract(6, 'days'), moment()],
+            'Últimos 30 Dias': [moment().subtract(29, 'days'), moment()],
+            'Mes Actual': [moment().startOf('month'), moment().endOf('month')],
+            'Mes Pasado': [moment().subtract(1, 'month').startOf('month'), moment().subtract(1, 'month').endOf('month')],
+            'Año Actual': [moment().startOf('year'), moment().endOf('year')],
+            'Año Pasado': [moment().subtract(1, 'year').startOf('year'), moment().subtract(1, 'year').endOf('year')],
+        }
+    });
+
+
+    $('.rango span').click(function() {
+        $(this).parent().find('input').click();
+    });
+
+    listplaneTratamiento();
 }
 
 

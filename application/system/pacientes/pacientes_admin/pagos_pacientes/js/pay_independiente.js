@@ -273,9 +273,10 @@ function fetch_apagar()
     return data_pagos;
 }
 
-
+/**PAGAR PLAN DE TRATAMIENTO ------------------*/
 $('#btnApagar').click(function() {
 
+    $(this).addClass('disabled_link3');
     var puedo = 0;
 
     if($('#t_pagos').find(':selected').val() == 0){
@@ -324,6 +325,7 @@ $('#btnApagar').click(function() {
 
                     listaprestacionesApagar();
                     notificacion('Pago realizado con Exito !', 'success');
+                    location.reload();
 
                 }else{
                     notificacion(respuesta.error, 'error');

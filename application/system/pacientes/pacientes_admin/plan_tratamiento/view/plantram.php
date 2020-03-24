@@ -148,6 +148,15 @@
 
 <!--        OTRAS OPCIONES DE FILTRO  -->
         <div class="form-group col-xs-12 col-md-12 col-lg-12 collapse" id="contentFilter">
+
+            <div class="form-group col-xs-12 col-md-4 col-sm-6">
+                <label for="">Fecha - range</label>
+                <div class="input-group form-group rango" style="margin: 0">
+                    <input type="text" class="form-control filtroFecha  " readonly id="startDate" value="">
+                    <span class="input-group-addon" style="border-radius: 0"><i class="fa fa-calendar"></i></span>
+                </div>
+            </div>
+
             <div class="form-group col-xs-12 col-md-4 col-sm-6">
                 <label for="filtrPlantram|">Plan de Tramamiento</label>
                 <select id="filtrPlantram" class="form-control select2_max_ancho">

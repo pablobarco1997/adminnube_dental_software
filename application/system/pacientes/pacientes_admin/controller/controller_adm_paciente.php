@@ -878,6 +878,12 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $estadotram = GETPOST('mostrar_anulados');
             $estadoMostrarFinalizados = GETPOST('mostrar_finalizados');
 
+            $fecha_range   = explode('-', GETPOST('fecha_range'));
+
+            $fechaIni = trim( str_replace('/', '-', $fecha_range[0] ) );
+            $fechaFin = trim( str_replace('/', '-', $fecha_range[1] ) );
+
+
             $dataprincipal = array();
 
             $sql = "SELECT 
@@ -929,6 +935,10 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 $sql .= " and tc.rowid = $idplantmiento";
             }
 
+            if(is_array($fecha_range))
+            {
+                $sql .= " and cast(tc.fecha_create as date) between cast('$fechaIni' as date) and cast('$fechaFin' as date) ";
+            }
 //            echo '<pre>';
 //            print_r($sql);
 //            die();
@@ -1112,7 +1122,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         $InsertOdont2 .= "  $datosRealizarPrestacion->fk_plantram_cab ,";
                         $InsertOdont2 .= " '$datosRealizarPrestacion->observacion' ,";
                         $InsertOdont2 .= " '$datosRealizarPrestacion->AxulisttaCaras' ,";
-                        $InsertOdont2 .= " ' " . date("Y-m-d") . " ' ";
+                        $InsertOdont2 .= " ' " . date("Y-m-d") . " ' ,  ";
                         $InsertOdont2 .= " 'A' ";
                         $InsertOdont2 .= " ) ";
 

@@ -26,7 +26,7 @@ function  realizarPrestacionModal($Dom)
     $('#descripEvolucion').val(null);
 
 
-    idcabplantram = $ID_PLAN_TRATAMIENTO;
+    idcabplantram = $ID_PLAN_TRATAMIENTO; //el id del plan de tratamiento global
     iddetplantram = padre.find('.statusdet').data('iddet');
     iddiente      = padre.find('.dientePieza').data('iddiente');
 
