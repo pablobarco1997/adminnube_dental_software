@@ -54,4 +54,10 @@ global $conf, $db;
 
 </script>
 
+<?php
+    if(isset($_GET['view']) && trim($_GET['view']) == trim('inicio'))
+    {
+        print "<script src='".DOL_HTTP ."/public/js/home.js' ></script>";
+    }
+?>
 
