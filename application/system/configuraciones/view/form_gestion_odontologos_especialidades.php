@@ -34,7 +34,7 @@ if($rs->rowCount()>0)
 
         <br>
 
-        <div class="center-block" style="width: 80%;">
+        <div class="col-centered col-xs-12 col-md-9 col-lg-9">
 
             <div class="form-group col-md-12 " style="padding: 0px">
                 <ul class="list-inline">
@@ -44,8 +44,13 @@ if($rs->rowCount()>0)
                 </ul>
             </div>
 
-            <?php       #DENTISTA
-                        if(isset($_GET["v"]) && $_GET["v"] == "dentist"){ ?>
+            <?php
+
+            #DENTISTA
+            if(isset($_GET["v"]) && $_GET["v"] == "dentist")
+            {
+
+            ?>
 
             <div class="row">
                 <div class="form-group col-md-12">
@@ -80,39 +85,38 @@ if($rs->rowCount()>0)
             <?php } ?>
 
             <?php  #ESPECIALIDAD
-                    if(isset($_GET["v"]) && $_GET["v"] == "specialties"){ ?>
+                    if(isset($_GET["v"]) && $_GET["v"] == "specialties")
+                    {
+            ?>
 
-                <div class="row">
-                    <div class="form-group col-xs-12 col-md-12">
-                        <ul class="list-inline" style="border-bottom: 1px solid #333333; padding-bottom: 2px">
-                            <li><a class="btnhover btn"  data-toggle="modal" data-target="#ModalConfEspecialidades" style="font-weight: bolder; color: #333333"> <i class="fa fa-list"></i> &nbsp; crear especialidad </a> </li>
-                        </ul>
+                <div class="form-group">
+                    <ul class="list-inline" style="border-bottom: 1px solid #333333; padding-bottom: 2px">
+                        <li><a class="btnhover btn"  data-toggle="modal" data-target="#ModalConfEspecialidades" style="font-weight: bolder; color: #333333"> <i class="fa fa-list"></i> &nbsp; crear especialidad </a> </li>
+                    </ul>
+                </div>
+
+                <div class="form-group col-md-12">
+                   <div class="form-group col-md-12 ">
+                        <span style="font-weight: bolder; color: #eb9627">
+                        <i class="fa fa-info-circle"></i>
+                            Tener en cuenta que si elimina una especialidad, aquellos Odontólogos
+                            relacionados con esta, se actualizaran a especialidad General incluyendo todas las citas asociadas con la especialidad
+                            eliminada
+                        </span>
+                   </div>
+                </div>
+
+                <div class="form-group col-md-12">
+                    <div class="table-responsive">
+                        <table width="100%" class="table" id="gention_especialidades">
+                            <thead>
+                                <th width="30%">FECHA CREACION</th>
+                                <th width="30%">ESPECIALIDAD</th>
+                                <th width="30%">DESCRIPCIÓN</th>
+                                <th ></th>
+                            </thead>
+                        </table>
                     </div>
-
-                    <div class="form-group col-md-12">
-                       <div class="form-group col-md-12 ">
-                            <span style="font-weight: bolder; color: #eb9627">
-                            <i class="fa fa-info-circle"></i>
-                                Tener en cuenta que si elimina una especialidad, aquellos Odontólogos
-                                relacionados con esta, se actualizaran a especialidad General incluyendo todas las citas asociadas con la especialidad
-                                eliminada
-                            </span>
-                       </div>
-                    </div>
-
-                    <div class="form-group col-md-12">
-                        <div class="table-responsive">
-                            <table width="100%" class="table" id="gention_especialidades">
-                                <thead>
-                                    <th width="30%">FECHA CREACION</th>
-                                    <th width="30%">ESPECIALIDAD</th>
-                                    <th width="30%">DESCRIPCIÓN</th>
-                                    <th ></th>
-                                </thead>
-                            </table>
-                        </div>
-                    </div>
-
                 </div>
 
             <?php } ?>

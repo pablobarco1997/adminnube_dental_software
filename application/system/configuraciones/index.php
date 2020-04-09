@@ -96,31 +96,31 @@ if(isset($_GET['view']))
                 {
                     case 'form_prestaciones':
 
-                        include_once $DOL_DOCUMENT.'/application/system/configuraciones/view/form_configuraciones_prestaciones.php';
+                        include_once DOL_DOCUMENT.'/application/system/configuraciones/view/form_configuraciones_prestaciones.php';
 
                         break;
 
                     case 'form_convenios_desc':
 
-                        include_once $DOL_DOCUMENT.'/application/system/configuraciones/view/form_convenios_desc.php';
+                        include_once DOL_DOCUMENT.'/application/system/configuraciones/view/form_convenios_desc.php';
 
                         break;
 
                     case 'form_laboratorios_conf':
 
-                        include_once $DOL_DOCUMENT.'/application/system/configuraciones/view/form_laboratorios_conf.php';
+                        include_once DOL_DOCUMENT.'/application/system/configuraciones/view/form_laboratorios_conf.php';
 
                         break;
 
                     case 'form_gestion_odontologos_especialidades':
 
-                        include_once $DOL_DOCUMENT.'/application/system/configuraciones/view/form_gestion_odontologos_especialidades.php';
+                        include_once DOL_DOCUMENT.'/application/system/configuraciones/view/form_gestion_odontologos_especialidades.php';
 
                     break;
 
                     case 'document_assoct':
 
-                        include_once $DOL_DOCUMENT.'/application/system/configuraciones/view/document_assoct.php';
+                        include_once DOL_DOCUMENT.'/application/system/configuraciones/view/document_assoct.php';
 
                     break;
                 }
@@ -132,8 +132,8 @@ if(isset($_GET['view']))
 
 </div>
 
-<?php include_once $DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
-<?php include_once $DOL_DOCUMENT .'/public/view/footer_principal.php';?>
+<?php include_once DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
+<?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
 
 <script>
     $DOCUMENTO_URL_HTTP = "<?php echo DOL_HTTP ?>";
