@@ -32,12 +32,12 @@ if(isset($_GET['view']))
 </style>
 
 <!--header principal-->
-<?php include_once $DOL_DOCUMENT .'/public/view/header_principal.php';?>
+<?php include_once DOL_DOCUMENT .'/public/view/header_principal.php';?>
 
 <div class="wrapper">
     <!-- Main Header -->
-    <?php include_once $DOL_DOCUMENT.'/public/view/header.php'?>
-    <?php include_once $DOL_DOCUMENT.'/public/view/menu.php'?>
+    <?php include_once DOL_DOCUMENT.'/public/view/header.php'?>
+    <?php include_once DOL_DOCUMENT.'/public/view/menu.php'?>
 
     <!-- Content Wrapper. Contains page content -->
     <div class="content-wrapper">
@@ -53,7 +53,7 @@ if(isset($_GET['view']))
                 {
                     case 'nuev_paciente':
 
-                        include_once $DOL_DOCUMENT.'/application/system/pacientes/nuevo_paciente/view/form_nuevo_paciente.php';
+                        include_once DOL_DOCUMENT.'/application/system/pacientes/nuevo_paciente/view/form_nuevo_paciente.php';
 
                         break;
                 }
@@ -64,8 +64,8 @@ if(isset($_GET['view']))
     </div>
 
 </div>
-<?php include_once $DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
-<?php include_once $DOL_DOCUMENT .'/public/view/footer_principal.php';?>
+<?php include_once DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
+<?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
 
 <script>
     $DOCUMENTO_URL_HTTP = "<?php echo DOL_HTTP ?>";

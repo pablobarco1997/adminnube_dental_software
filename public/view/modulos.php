@@ -1,8 +1,50 @@
 
-<li class=" <?php if(isset($Active) && $Active =='inicio'){ echo 'disabled_link3'; } ?>"><a href="#buscarPacienteModal" data-toggle="modal"><i class="fa fa-search"></i> <span>Buscar</span></a></li>
+<?php
 
-<li class=" <?php if(isset($Active) && $Active =='inicio'){ echo 'Active_link '; } ?>">
-    <a href="<?php echo DOL_HTTP .'?view=inicio'; ?>"><i class="fa fa-home"></i>
+    $Permissions_inicio = array(
+        'url'     => DOL_HTTP .'?view=inicio',
+        'Active'  => ( isset($Active) && $Active == 'inicio') ? 'Active_link' : '',
+        'permiso' => '',
+    );
+
+    $Permissions_agenda = array(
+        'url'     => DOL_HTTP.'/application/system/agenda/index.php?view=principal&list=diaria',
+        'Active'  => ( isset($Active) && $Active == 'agenda') ? 'Active_link' : '',
+        'permiso' => '',
+    );
+
+    $Permissions_pacientes = array(
+        'url'     => array(
+                'directorioPaciente' => DOL_HTTP.'/application/system/pacientes/directorio_paciente/index.php?view=directorio' ,
+                'nuevoPaciente'      => DOL_HTTP.'/application/system/pacientes/nuevo_paciente/index.php?view=nuev_paciente'   ,
+        ),
+        'Active'  => ( isset($Active) && $Active == 'pacientes') ? 'Active_link' : '',
+        'permiso' => '',
+    );
+
+    $Permissions_configuration = array(
+        'url'     => DOL_HTTP .'/application/system/configuraciones/index.php',
+        'Active'  => (isset($Active)  && $Active == 'configuraciones') ? 'Active_link' : '' ,
+        'permiso' => '',
+    );
+
+?>
+
+
+
+
+
+
+
+
+
+
+<li class=" <?php if(isset($Active) && $Active =='inicio'){ echo 'disabled_link3'; } ?>">
+    <a href="#buscarPacienteModal" data-toggle="modal"><i class="fa fa-search"></i> <span>Buscar</span></a>
+</li>
+
+<li class="<?= $Permissions_inicio['Active'] ?>">
+    <a href="<?= $Permissions_inicio['url'] ?>"><i class="fa fa-dashcube"></i>
         <span>INICIO</span>
     </a>
 </li>
@@ -26,14 +68,14 @@
 
 
 <!--MODULO AGENDA-->
-<li class=" <?php if(isset($Active) && $Active =='agenda'){ echo 'Active_link'; } ?>">
-    <a href="<?php echo DOL_HTTP.'/application/system/agenda/index.php?view=principal&list=diaria'?>">
+<li class="<?= $Permissions_agenda['Active'] ?>">
+    <a href="<?= $Permissions_agenda['url'] ?>">
         <i class="fa fa-list-alt"></i> <span>AGENDA</span>
     </a>
 </li>
 
 <!--MODULO PACIENTES-->
-<li class="treeview <?php if(isset($Active)  && $Active == 'pacientes'){ echo 'Active_link'; }?> " style="cursor: pointer">
+<li class="treeview <?= $Permissions_pacientes['Active'] ?> " style="cursor: pointer">
 
     <a ><i class="fa fa-users"></i> <span>PACIENTES</span>
         <span class="pull-right-container">
@@ -43,8 +85,8 @@
 
     <ul class="treeview-menu">
 
-        <li><a href="<?php echo DOL_HTTP.'/application/system/pacientes/directorio_paciente/index.php?view=directorio'?>" >Directorio de pacientes</a></li>
-        <li><a href="<?php echo DOL_HTTP.'/application/system/pacientes/nuevo_paciente/index.php?view=nuev_paciente'?>">Nuevo Paciente</a></li>
+        <li><a href="<?= $Permissions_pacientes['url']['directorioPaciente'] ?>" >Directorio de pacientes</a></li>
+        <li><a href="<?= $Permissions_pacientes['url']['nuevoPaciente'] ?>"      >Nuevo Paciente</a></li>
 
     </ul>
 
@@ -52,4 +94,4 @@
 
 <!--MODULO CONFIGURACIONES-->
 
-<li class=" <?php if(isset($Active)  && $Active == 'configuraciones'){ echo 'Active_link'; }?>"><a href="<?php echo DOL_HTTP.'/application/system/configuraciones/index.php'?>"><i class="fa fa-wrench"></i> <span>CONFIGURACIONES</span></a></li>
+<li class="<?= $Permissions_configuration['Active'] ?>"><a href="<?= $Permissions_configuration['url'] ?>"><i class="fa fa-wrench"></i> <span>CONFIGURACIONES</span></a></li>
