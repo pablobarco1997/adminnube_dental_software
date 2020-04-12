@@ -21,7 +21,7 @@
 
                             <?php
 
-                                $sqldoc = "SELECT concat(nombre_doc, ' ', apellido_doc) as nomb , rowid FROM tab_odontologos WHERE estado != 'E' ";
+                                $sqldoc = " SELECT concat(nombre_doc, ' ', apellido_doc) as nomb , rowid, estado FROM tab_odontologos WHERE estado = 'A' ";
                                 $rsdoc  = $db->query($sqldoc);
                                 if($rsdoc && $rsdoc->rowCount() > 0)
                                 {

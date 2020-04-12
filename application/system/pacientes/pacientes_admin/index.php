@@ -64,7 +64,7 @@ if(isset($_GET['id']))
                         <div class="form-group col-md-12 col-xs-12">
                             <ul class="list-inline">
                                 <li>
-                                    <a href="#menu_admin" data-toggle="modal"  class="btn btnhover">  <i class="fa fa-bars"></i>&nbsp;&nbsp; MOSTRAR MENU  </a>
+                                    <a href="#menu_admin" data-toggle="modal"  class="btn btnhover" style="font-weight: bolder; color: #333333">  <i class="fa fa-bars"></i>&nbsp;&nbsp; MOSTRAR MENU  </a>
                                 </li>
                             </ul>
                             <hr>

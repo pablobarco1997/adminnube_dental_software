@@ -222,6 +222,7 @@ function Breadcrumbs_Mod( $titulo, $url, $module )
 
     $Breadcrumbs_Mod = array();
     $Breadcrumbs = "";
+    $htmlBreadcrumbs = "";
     $CountBread = 0;
 
     if( $module == true){
@@ -270,21 +271,32 @@ function Breadcrumbs_Mod( $titulo, $url, $module )
     if(!empty($titulo) )
     {
 
+        /*
         $Breadcrumbs .= '<ol class="list-inline  pull-right breadcrumbsCss">';
-
         for( $i = 0; $i <= $CountBread; $i++ )
         {
             if(isset($Breadcrumbs_Mod[$i])) //verifico si existe o hay valores
             {
                 $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' "> '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp; <img src="'.DOL_HTTP.'/logos_icon/logo_default/doble-angulo-apuntando-a-la-derecha.png" width="14px" height="14px" alt=""> </a></li>';
             }
-
         }
-
         $Breadcrumbs .= '</ol>' ;
+
+        */
+
+        $htmlBreadcrumbs .= '<div class="btn-group btn-breadcrumb pull-right">';
+        $htmlBreadcrumbs .= '            <a href="#" class="btn btn-default"><i class="fa fa-dashcube"></i></a>';
+        for( $i = 0; $i <= $CountBread; $i++ )
+        {
+            if(isset($Breadcrumbs_Mod[$i])){
+                $htmlBreadcrumbs .= '<a href="'. $Breadcrumbs_Mod[$i]['url'] .'" class="btn btn-default"> '. $Breadcrumbs_Mod[$i]['titulo'] .' </a>';
+            }
+        }
+        $htmlBreadcrumbs .= '</div>';
+
     }
 
-    return $Breadcrumbs;
+    return $htmlBreadcrumbs;
 }
 
 ?>
