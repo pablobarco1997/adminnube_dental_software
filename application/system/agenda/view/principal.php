@@ -70,7 +70,7 @@
                     <div class="callbox">
                         <div class="form-group disabled_link3">
                             <div class="checkbox  <?= $permisos->consultar  ?>">
-                                <a style="color: #333333" href="<?php echo DOL_HTTP.'/application/system/agenda/index.php?view=principal&list=diariaglob'?>" class="btn btnhover <?= $permisos->consultar  ?>">
+                                <a style="color: #333333" href="<?= DOL_HTTP.'/application/system/agenda/index.php?view=principal&list=diariaglob'?>" class="btn btnhover <?= $permisos->consultar  ?>">
                                     DIARIA GLOBAL
                                 </a>
                             </div>
@@ -115,7 +115,7 @@
         <div class="form-group col-md-4 col-xs-12">
             <label for="">Fecha</label>
             <div class="input-group form-group rango" style="margin: 0">
-                <input type="text" class="form-control filtroFecha <?= $permisos->consultar  ?> " id="startDate" value="">
+                <input type="text" class="form-control filtroFecha <?= $permisos->consultar  ?> " readonly id="startDate" value="">
                 <span class="input-group-addon" style="border-radius: 0"><i class="fa fa-calendar"></i></span>
             </div>
         </div>
@@ -126,13 +126,15 @@
             <select name="" id="filtro_doctor" class="filtrar_doctor select2_max_ancho <?= $permisos->consultar  ?>" >
                 <option value=""></option>
                 <?php
-                $sql = "SELECT * FROM tab_odontologos;";
+
+
+                $sql = "SELECT rowid , nombre_doc , apellido_doc , if(estado = 'A' , 'Activo' , 'Inactivo') as iestado FROM tab_odontologos;";
                 $rs = $db->query($sql);
                 if($rs->rowCount() > 0)
                 {
                     while ($obj = $rs->fetchObject())
                     {
-                        echo "<option value='$obj->rowid'>$obj->nombre_doc  $obj->apellido_doc</option>";
+                        echo "<option value='$obj->rowid'>$obj->nombre_doc  $obj->apellido_doc &nbsp; ( <small>$obj->iestado</small>  ) </option>";
                     }
                 }
                 ?>
@@ -144,6 +146,7 @@
             <label for="">Estados</label>
             <select name="" id="filtroEstados" class="select2_max_ancho filtrar_estados <?= $permisos->consultar  ?>" multiple>
                 <?php
+
                 $sql = "SELECT * FROM tab_pacientes_estado_citas;";
                 $rs = $db->query($sql);
                 if($rs->rowCount() > 0)

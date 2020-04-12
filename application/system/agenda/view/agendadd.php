@@ -72,8 +72,8 @@ $horaCita = "
 
 
 
-$opcionPacientes = "";
-$sql = "SELECT * FROM tab_admin_pacientes;";
+$opcionPacientes = ""; //pacientes activados
+$sql = "SELECT * FROM tab_admin_pacientes where estado = 'A' ;";
 $rs = $db->query($sql);
 if($rs->rowCount() > 0)
 {
@@ -83,7 +83,7 @@ if($rs->rowCount() > 0)
     }
 }
 
-$opcionEspecialidad = "";
+$opcionEspecialidad = ""; // especialidades
 $sql = "SELECT * FROM tab_especialidades_doc;";
 $rs = $db->query($sql);
 if($rs->rowCount() > 0)
@@ -94,14 +94,14 @@ if($rs->rowCount() > 0)
     }
 }
 
-$opcionOdont = "";
-$sql = "SELECT * FROM tab_odontologos;";
+$opcionOdont = ""; //odontologos
+$sql = "SELECT rowid , nombre_doc , apellido_doc , if(estado = 'A' , 'Activo' , 'Inactivo') as iestado FROM tab_odontologos;";
 $rs = $db->query($sql);
 if($rs->rowCount() > 0)
 {
-    while ($obj = $rs->fetchObject())
+    while ($objodont = $rs->fetchObject())
     {
-        $opcionOdont .= "<option value='$obj->rowid'>$obj->nombre_doc  $obj->apellido_doc</option>";
+        $opcionOdont .= "<option value='$objodont->rowid'>$objodont->nombre_doc &nbsp; $objodont->apellido_doc &nbsp; (<small> $objodont->iestado </small>) </option>";
     }
 }
 
