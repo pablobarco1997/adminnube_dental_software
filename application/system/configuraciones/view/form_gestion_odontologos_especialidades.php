@@ -8,7 +8,7 @@ if(isset($_GET['v']))
 
 
 $option1 = "<option></option>";
-$sql = "SELECT * FROM tab_odontologos";
+$sql = "SELECT * FROM tab_odontologos WHERE estado = 'A'";
 $rs = $db->query($sql);
 if($rs->rowCount()>0)
 {
@@ -66,7 +66,7 @@ if($rs->rowCount()>0)
 
                 <div class="col-md-12">
                     <div class="table-responsive">
-                        <table width="100%" class="table" id="gention_odontologos_list">
+                        <table width="100%" class="table table-striped" id="gention_odontologos_list">
                             <thead>
 <!--                                <th width="5%"></th>-->
                                 <th width="18%">NOMBRE APELLIDO</th>
@@ -84,9 +84,12 @@ if($rs->rowCount()>0)
 
             <?php } ?>
 
-            <?php  #ESPECIALIDAD
-                    if(isset($_GET["v"]) && $_GET["v"] == "specialties")
-                    {
+            <?php
+
+                #ESPECIALIDAD   <------------------------------------------------------------------------------------------------------------------------------------------------------------->
+                if(isset($_GET["v"]) && $_GET["v"] == "specialties")
+                {
+
             ?>
 
                 <div class="form-group">
@@ -108,7 +111,7 @@ if($rs->rowCount()>0)
 
                 <div class="form-group col-md-12">
                     <div class="table-responsive">
-                        <table width="100%" class="table" id="gention_especialidades">
+                        <table width="100%" class="table table-striped" id="gention_especialidades">
                             <thead>
                                 <th width="30%">FECHA CREACION</th>
                                 <th width="30%">ESPECIALIDAD</th>
@@ -128,8 +131,7 @@ if($rs->rowCount()>0)
 
 
 
-<!--MODAL CREAR ODONTOLOGO-->
-
+<!--MODAL CREAR ODONTOLOGO -------------------------------------------------------------------------------------------->
 <div id="modal_conf_doctor" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -226,7 +228,8 @@ if($rs->rowCount()>0)
     </div>
 </div>
 
-<!--CREAR USUARIO CON SUS PERMISOS-->
+
+<!--CREAR USUARIO CON SUS PERMISOS ================================================================================= -->
 <div id="ModalCrearUsuario" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -316,7 +319,7 @@ if($rs->rowCount()>0)
 </div>
 
 
-<!--MODAL ESPECIALIDADES-->
+<!--MODAL ESPECIALIDADES ---------------------------------------------------------------------------------------------->
 <div id="ModalConfEspecialidades" class="modal fade" role="dialog">
     <div class="modal-dialog">
 

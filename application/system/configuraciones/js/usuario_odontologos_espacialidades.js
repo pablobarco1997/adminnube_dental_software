@@ -300,10 +300,14 @@ if($accion == 'dentist')
         }
 
         //nuevo
-        if($subaccion.toString() == "0"){
+        if($subaccion.toString() == "0")
+        {
+
             $('#accionUsuario').attr('data-id', 0);
             // console.log( $('#accionUsuario') );
-            $("#usu_doctor").attr('onchange', 'UsuarioOdctor($(this))');
+
+            //se aplica la funcion crear usuario
+            $("#usu_doctor").attr('onchange', 'UsuarioOdctor($(this))').prop('disabled', false);
 
             $('#msg_doctorUsuario').text(null);
             $('#msg_usuario_repit').text(null);
@@ -643,7 +647,7 @@ if($accion == 'dentist')
                     $("#chek_eliminar").prop('checked', ( permisos.eliminar == "true" ) ? true : false);
 
 
-                    $("#usu_doctor").val( doctor ).trigger('change');
+                    $("#usu_doctor").val( doctor ).trigger('change').prop('disabled', true);
                     $('#usu_usuario').val( usuario );
                     $('#usu_password').val( descrytar_base64(password) );
                     $('#usu_confir_password').val( descrytar_base64(confir_password) );
