@@ -46,9 +46,9 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $row[] = $fila->apellido;
                     #$row[] = "<a id='ruddni_link' class='link_pacientes_id' data-id='$fila->rowid' href='".DOL_HTTP."/application/system/pacientes/admin_paciente?view=form_datos_personales&id=$fila->rowid'>$fila->rut_dni</a>";
                     $row[] = "<a id='ruddni_link' class='link_pacientes_id' data-id='$fila->rowid' 
-                                    href='".DOL_HTTP."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token'> $fila->rut_dni </a> ";
+                                    href='".DOL_HTTP."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token'> $fila->ruc_ced </a> ";
                     $row[] = $fila->email;
-                    $row[] = $fila->telefono_movil;
+                    $row[] = (($fila->telefono_movil == "") ? "No asignado" : $fila->telefono_movil);
 
                     if($estado=='A')
                     {

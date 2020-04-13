@@ -55,7 +55,7 @@
                                             <tr>
                                                 <th>NOMBRE</th>
                                                 <th>APELLIDO</th>
-                                                <th>RUD - CEDULA</th>
+                                                <th>RUC - CEDULA</th>
                                                 <th>E-MAIL</th>
                                                 <th>TELEFONO CEL.</th>
                                                 <th>&nbsp;</th>
