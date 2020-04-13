@@ -21,7 +21,7 @@ function obtenerDatosP($id)
 
                 $('#nombre').val(data['nombre']);
                 $('#apellido').val(data['apellido']);
-                $('#rud_dni').val(data['rut_dni']);
+                $('#rud_dni').val(data['ruc_ced']);
                 $('#email').val(data['email']);
                 $('#convenio').val(data['fk_convenio']).trigger('change');
                 $('#n_interno').val(data['numero_interno']);
