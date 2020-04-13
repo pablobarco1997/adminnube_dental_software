@@ -285,17 +285,23 @@ if($accion == 'dentist')
     {
 
         //modificar
-        if( $subaccion.toString() == '1'){
+        if( $subaccion.toString() == '1')
+        {
+            //se quita las funciones
+            $('#usu_usuario').attr('onkeyup','');
             $('#accionUsuario').attr('data-id', idusuario); //id usuario
             // console.log( $('#accionUsuario') );
-            $("#usu_doctor").attr('onchange', '');
+            // $("#usu_doctor").attr('onchange', '');
             $('#msg_doctorUsuario').text(null);
-            $('#msg_usuario_repit').text(null);
             $('#msg_password_d').text(null);
             $('#msg_password').text(null);
             $('#msg_permisos').text(null);
 
             fecth_modUsuarioDoct( idusuario ); //obtengo los valeres listo para modificar
+
+            $('#accionUsuario').text('MODIFICAR USUARIO');
+            $('#msg_usuario_repit').text(null);
+            $('#usu_usuario').removeClass('INVALIC_ERROR');
 
         }
 
@@ -306,9 +312,6 @@ if($accion == 'dentist')
             $('#accionUsuario').attr('data-id', 0);
             // console.log( $('#accionUsuario') );
 
-            //se aplica la funcion crear usuario
-            $("#usu_doctor").attr('onchange', 'UsuarioOdctor($(this))').prop('disabled', false);
-
             $('#msg_doctorUsuario').text(null);
             $('#msg_usuario_repit').text(null);
             $('#msg_password_d').text(null);
@@ -318,6 +321,7 @@ if($accion == 'dentist')
             //clear
             $('#tipoUsuario').val(null).trigger('change');
             $('#usu_doctor').val(null).trigger('change');
+
             $('#usu_usuario').val(null);
             $('#usu_password').val(null);
             $('#usu_confir_password').val(null);
@@ -326,6 +330,13 @@ if($accion == 'dentist')
             $('#chek_agregar').prop('checked', false);
             $('#chek_modificar').prop('checked', false);
             $('#chek_eliminar').prop('checked', false);
+
+            //onkeyup funciones  ---------------------------
+            $('#usu_usuario').attr('onkeyup','comprobar_usuario_en_uso(); invalicUsuario();');
+            //se aplica la funcion crear usuario
+            $("#usu_doctor").attr('onchange', 'UsuarioOdctor($(this))').prop('disabled', false);
+
+            $('#accionUsuario').text('NUEVO USUARIO');
 
         }
 
@@ -371,34 +382,68 @@ if($accion == 'dentist')
     function comprobar_usuario_en_uso()
     {
 
+        var puedoPasar  = 0;
+
         var usuario = $('#usu_usuario').val();
 
-        $.ajax({
-            url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
-            type:'POST',
-            data: {'ajaxSend':'ajaxSend','accion':'consultar_usuario', 'usuario': usuario, 'subaccion':'usuario_rep'},
-            dataType:'json',
-            async:false,
-            success: function(resp){
+        if( usuario != ''){
 
-                console.log(resp);
+            $.ajax({
+                url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
+                type:'POST',
+                data:
+                    {
+                        'ajaxSend':'ajaxSend',
+                        'accion':'consultar_usuario',
+                        'usuario': usuario,
+                        'subaccion':'usuario_rep'
+                    },
+                dataType:'json',
+                async:false,
+                success: function(resp)
+                {
 
-                if(resp.error != ''){
-                    $('#msg_usuario_repit').text(resp.error);
-                    $('#nuevoUpdateUsuario').addClass('disabled_link3');
-                    $("#usu_usuario").addClass('INVALIC_ERROR');
-                }else {
-                    $('#msg_usuario_repit').text(null);
-                    $('#nuevoUpdateUsuario').removeClass('disabled_link3');
-                    $("#usu_usuario").removeClass('INVALIC_ERROR');
+                    console.log(resp);
+
+                    if(resp.error != ''){
+
+                        puedoPasar++;
+
+                        $('#msg_usuario_repit').text(resp.error);
+                        $('#nuevoUpdateUsuario').addClass('disabled_link3');
+                        $("#usu_usuario").addClass('INVALIC_ERROR');
+
+                    }else {
+
+                        $('#msg_usuario_repit').text(null);
+                        $('#nuevoUpdateUsuario').removeClass('disabled_link3');
+                        $("#usu_usuario").removeClass('INVALIC_ERROR');
+
+                    }
                 }
-            }
 
-        });
+            });
+
+        }else{
+
+            puedoPasar++;
+            $('#msg_usuario_repit').text( 'Debe ingresar un Usuario' );
+        }
+
+
+        var subaccion = ( $('#accionUsuario').data('id') == '0') ? 'nuevo' : 'modificar';
+
+        if( subaccion == 'nuevo'){
+            var iddoct = $('#usu_doctor'); //se comprueba el doctor si tienen usuario de nuevo
+            UsuarioOdctor( iddoct );
+        }
+
+        return puedoPasar;
     }
 
 
     $('#tipoUsuario').change(function() {
+
 
         var modificarcheck  = $('#chek_modificar');
         var eliminarcheck   = $('#chek_eliminar');
@@ -481,6 +526,32 @@ if($accion == 'dentist')
         }
 
         return puede;
+
+    }
+
+    //validacion de usuarios
+    function invalicUsuario()
+    {
+
+        var subaccion = ( $('#accionUsuario').data('id') == '0') ? 'nuevo' : 'modificar';
+
+        if( subaccion == 'nuevo') {
+
+            var puedoPasar = 0;
+            puedoPasar +=  UsuarioOdctor( $('#usu_doctor') );
+            puedoPasar +=  comprobar_usuario_en_uso();
+
+            if( puedoPasar > 0)
+            {
+                $('#nuevoUpdateUsuario').addClass('disabled_link3');
+            }
+            if( puedoPasar == 0)
+            {
+                $('#nuevoUpdateUsuario').removeClass('disabled_link3');
+            }
+
+        }
+
 
     }
 
@@ -642,9 +713,9 @@ if($accion == 'dentist')
                     $('#tipoUsuario').val(tipousuario).trigger('change');
 
                     $("#chek_consultar").prop('checked', ( permisos.consultar == "true" ) ? true : false);
-                    $("#chek_agregar").prop('checked',   ( permisos.agregar == "true" ) ? true : false);
+                    $("#chek_agregar").prop('checked'  , ( permisos.agregar == "true" ) ? true : false);
                     $("#chek_modificar").prop('checked', ( permisos.modificar == "true" ) ? true : false);
-                    $("#chek_eliminar").prop('checked', ( permisos.eliminar == "true" ) ? true : false);
+                    $("#chek_eliminar").prop('checked' , ( permisos.eliminar == "true" ) ? true : false);
 
 
                     $("#usu_doctor").val( doctor ).trigger('change').prop('disabled', true);

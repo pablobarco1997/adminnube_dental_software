@@ -237,7 +237,7 @@ if($rs->rowCount()>0)
         <div class="modal-content">
             <div class="modal-header modal-diseng">
                 <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" data-id="0" id="accionUsuario" >CREAR USURIO</h4>
+                <h4 class="modal-title" data-id="0" id="accionUsuario" >CREAR USUARIO</h4>
             </div>
             <div class="modal-body">
                 <div class="row">
@@ -245,7 +245,7 @@ if($rs->rowCount()>0)
 
                         <div class="form-group col-xs-12 col-md-12">
                             <label for="">Doctor</label>
-                            <select name="" id="usu_doctor" class="form-control select2_max_ancho" onchange="UsuarioOdctor($(this))">
+                            <select name="" id="usu_doctor" class="form-control select2_max_ancho" onchange="UsuarioOdctor($(this)); invalicUsuario();">
                                 <?= $option1 ?>
                             </select>
                             <small style="color: #9f191f" id="msg_doctorUsuario"></small>
@@ -253,23 +253,23 @@ if($rs->rowCount()>0)
 
                         <div class="form-group col-xs-12 col-md-12">
                             <label for="">Usuario</label>
-                            <input type="text" class="form-control input-sm" id="usu_usuario" onkeyup="comprobar_usuario_en_uso()">
+                            <input type="text" class="form-control input-sm" id="usu_usuario" onkeyup="comprobar_usuario_en_uso(); invalicUsuario();">
                             <small style="color: #9f191f" id="msg_usuario_repit"></small>
                         </div>
 
                         <div class="form-group col-xs-12 col-md-12">
                             <label for="">Password</label>
                             <div class="input-group">
-                                <input type="password" class="form-control input-sm" id="usu_password" onkeyup="keyConfirmarPassword()">
-                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('mostrar')"><i class="fa fa-eye"></i></div>
-                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('ocultar')"><i class="fa fa-eye-slash"></i></div>
+                                <input type="password" class="form-control input-sm" id="usu_password" onkeyup="keyConfirmarPassword(); invalicUsuario();">
+                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('mostrar'); invalicUsuario();"><i class="fa fa-eye"></i></div>
+                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('ocultar'); invalicUsuario();"><i class="fa fa-eye-slash"></i></div>
                             </div>
                             <small style="color: #9f191f" id="msg_password_d"></small>
                         </div>
 
                         <div class="form-group col-xs-12 col-md-12">
                             <label for="">Confirmar Password</label>
-                            <input type="password" class="form-control input-sm" id="usu_confir_password" onkeyup="keyConfirmarPassword()">
+                            <input type="password" class="form-control input-sm" id="usu_confir_password" onkeyup="keyConfirmarPassword(); invalicUsuario();">
                             <small style="color: #9f191f" id="msg_password"></small>
                         </div>
 
@@ -290,7 +290,7 @@ if($rs->rowCount()>0)
                                     <tbody>
                                         <tr>
                                             <td width="100%">
-                                                <select  id="tipoUsuario" class="form-control input-sm select2_max_ancho" >
+                                                <select  id="tipoUsuario" class="form-control input-sm select2_max_ancho" onchange="invalicUsuario();">
                                                     <option value=""></option>
                                                     <option value="1">Administrador</option>
                                                     <option value="2">Usuario Normal</option>
