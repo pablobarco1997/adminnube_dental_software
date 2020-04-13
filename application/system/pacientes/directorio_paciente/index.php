@@ -73,6 +73,8 @@ if(isset($_GET['view']))
 
 <script>
     $DOCUMENTO_URL_HTTP = "<?php echo DOL_HTTP ?>";
+    $HTTP_DIRECTORIO_ENTITY    = "<?php echo $conf->NAME_DIRECTORIO ?>";
+    $keyGlobal                 = "<?php echo KEY_GLOB   ?>"; //KEY GLOBAL
 </script>
 
 <script>

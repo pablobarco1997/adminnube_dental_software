@@ -1,4 +1,16 @@
 
+
+<?php
+
+    if( isset($_GET['view']))
+    {
+
+        if( $_GET['view'] == 'inicio')
+        {
+
+
+?>
+
 <div class="row">
         <div class="col-md-12 col-xs-12">
 
@@ -16,7 +28,7 @@
 
                            <div class="autocomplete form-group">
                                <div class="input-group">
-                                   <input type="search" autocomplete="off" onfocus="InputSearcheIndex_1(this)" class="form-control" name="myCountry" id="myInput" placeholder="Buscar pacientes" aria-describedby="basic-addon2">
+                                   <input type="search" autocomplete="off" onkeyup="searchPacientesGlob(this)" class="form-control" name="myCountry" id="myInput" placeholder="Buscar pacientes" aria-describedby="basic-addon2">
                                    <span class="input-group-addon" id="basic-addon2"><i class="fa fa-search"></i></span>
                                    <span style="display: none" id="pacien"></span>
                                </div>
@@ -55,7 +67,7 @@
                                </span>
                                <div class="info-box-content">
                                    <span class="info-box-text">PACIENTES REGISTRADOS</span>
-                                   <span class="info-box-number" id="nu_paciente">410</span>
+                                   <span class="info-box-number" id="nu_paciente"></span>
                                </div><!-- /.info-box-content -->
                            </div><!-- /.info-box -->
                        </div>
@@ -75,3 +87,30 @@
 
         </div>
  </div>
+
+<?php
+
+        }else{
+
+            echo "
+            <div class='row'>
+                <div class='col-md-8 col-xs-8 col-centered'>
+                    <h3 style='font-weight: bolder'>Ocurrio un error no se encontro la vista de inicio</h3>
+                </div>                
+            </div>";
+
+        }
+
+    }else{
+
+
+        echo "
+            <div class='row'>
+                <div class='col-md-8 col-xs-8 col-centered'>
+                    <h3 style='font-weight: bolder'>Ocurrio un error no se encontro la vista de inicio</h3>
+                </div>                
+            </div>";
+
+    }
+
+?>

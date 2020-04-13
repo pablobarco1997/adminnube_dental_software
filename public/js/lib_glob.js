@@ -108,20 +108,26 @@ function autocomplete(inp, arr)
 
 /*initiate the autocomplete function on the "myInput" element, and pass along the countries array as possible autocomplete values:*/
 
-function InputSearcheIndex_1(inputText)
+// alert( 25 );
+function searchPacientesGlob( inputText )
 {
-    var paciente = ObtenerPacienteslistaSearch();
-    console.log(paciente);
-    autocomplete(inputText, paciente);
+    console.log( inputText.value );
+
+    //busco el paciente - obtengo el arreglo de ese paciente
+    var Obj_paciente = ObtenerPacienteslistaSearch( inputText.value );
+
+    autocomplete( inputText , Obj_paciente );
+    console.log( Obj_paciente );
 }
 
-function ObtenerPacienteslistaSearch()
+//OBTENGO EL ARREGLO DE LAS LISTA DE PACIENTES - ADMIN
+function ObtenerPacienteslistaSearch( label )
 {
     var data = [];
     $.ajax({
         url:  $DOCUMENTO_URL_HTTP + '/application/system/pacientes/directorio_paciente/controller/directorio_paciente_controller.php',
         type:'POST',
-        data:{'ajaxSend':'ajaxSend', 'accion':'ObtenerPacienteslistaSearch'},
+        data:{'ajaxSend':'ajaxSend', 'accion':'ObtenerPacienteslistaSearch', 'label' : label},
         dataType:'json',
         async:false,
         success:function(resp) {
@@ -142,13 +148,14 @@ function valoresPacientes(id)
 }
 
 
-
+//buscar pacientes
 $('#buscarPaciente').on('click', function() {
 
     var $id =  $('#pacien').text();
-    if($id!="" && $('#myInput').val() !="")
+    if($id !="" && $('#myInput').val() !="")
     {
-        var $url = $DOCUMENTO_URL_HTTP + '/application/system/pacientes/admin_paciente/?view=form_datos_personales&id='+$id;
+        // var $url = $DOCUMENTO_URL_HTTP + '/application/system/pacientes/admin_paciente/?view=form_datos_personales&id='+$id;
+        var $url = $DOCUMENTO_URL_HTTP + '/application/system/pacientes/pacientes_admin?view=dop&key=' + $keyGlobal + '&id=' + $id;
         // alert($url);
         location.href = $url;
     }

@@ -16,7 +16,7 @@
                         <div class="center-block" style="width: 70%">
                             <div class="autocomplete">
                                 <div class="input-group">
-                                    <input type="search" autocomplete="off" onfocus="InputSearcheIndex_1(this)" class="form-control" name="myCountry" id="myInput" placeholder="Buscar pacientes..." aria-describedby="basic-addon2">
+                                    <input type="search" autocomplete="off" onkeyup="searchPacientesGlob(this)" class="form-control" name="myCountry" id="myInput" placeholder="Buscar">
                                     <span class="input-group-addon" id="basic-addon2"><i class="fa fa-search"></i></span>
                                     <span style="display: none" id="pacien"></span>
                                 </div>

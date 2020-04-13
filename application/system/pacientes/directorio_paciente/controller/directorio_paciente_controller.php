@@ -74,19 +74,28 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
         case 'ObtenerPacienteslistaSearch':
 
-            $data = array();
+            $data = [];
 
-            $sql = "SELECT * FROM tab_admin_pacientes";
-            $rs = $db->query($sql);
-            if($rs->rowCount() > 0)
-            {
-                while( $fila =  $rs->fetchObject() )
+            #nombre ingresado del paciente nombre apellido or
+            $nom = GETPOST('label');
+
+            if( !empty($nom) ){
+
+                $sql = "SELECT * FROM tab_admin_pacientes ps WHERE trim( concat(ps.nombre, '', ps.apellido) ) like trim( '$nom%' )";
+                $rs = $db->query($sql);
+
+//            print_r($sql);
+                if($rs->rowCount() > 0)
                 {
-                    $data[] = array(
-                        'nomb' =>  $fila->nombre .' '.$fila->apellido,
-                        'id'    => $fila->rowid
-                    );
+                    while( $obPaciente =  $rs->fetchObject() )
+                    {
+                        $data[] = array(
+                            'nomb'  =>  $obPaciente->nombre .' '.$obPaciente->apellido,
+                            'id'    => tokenSecurityId( $obPaciente->rowid )
+                        );
+                    }
                 }
+
             }
 
             echo json_encode($data);
