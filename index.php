@@ -49,15 +49,18 @@ global $conf, $db;
 
 <script>
 
-    $DOCUMENTO_URL_HTTP = "<?php echo DOL_HTTP ?>"; //URL  HTTP DOCUMENTO
+    $DOCUMENTO_URL_HTTP        = "<?php echo DOL_HTTP ?>"; //URL  HTTP DOCUMENTO
     $HTTP_DIRECTORIO_ENTITY    = "<?php echo $conf->NAME_DIRECTORIO ?>";
+    $keyGlobal                 = "<?php echo KEY_GLOB   ?>"; //KEY GLOBAL
 
 </script>
 
 <?php
+
     if(isset($_GET['view']) && trim($_GET['view']) == trim('inicio'))
     {
         print "<script src='".DOL_HTTP ."/public/js/home.js' ></script>";
     }
+
 ?>
 
