@@ -206,61 +206,77 @@ function UpdateEstadoCita(idestado, idcita, html, textEstado) //Actualizar Estad
 function notificaionEmail($idPaciente, $idcita, idestado, idcita )
 {
 
-    $('#emailEspere').fadeIn();
+
+    $('#emailEspere').text('Enviando mensaje espere ...');
+
+    // $(document).
+    // bind("ajaxStart", function(){
+    //     $('#emailEspere').text('Enviando mensaje espere ...');
+    // }) .bind("ajaxSend", function(){
+    //     $('#emailEspere').text('Enviando mensaje espere ...');
+    // }).bind("ajaxComplete", function(){
+    //     $('#emailEspere').text(null);
+    // });
+
 
     var error = '';
     var error_registrar_email_ = '';
-    $.ajax({
-        url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
-        type:'POST',
-        data:{
-            'ajaxSend': 'ajaxSend',
-            'accion': 'envio_email_notificacion',
-            'idpaciente':$idPaciente,
-            'idcita' : $idcita,
 
-            'asunto': $('#asunto_email').val(),
-            'from': $('#de_email').val(),
-            'to': $('#para_email').val(),
-            'subject': $('#titulo_email').val(),
-            'message': $('#messge_email').val(),
-        },
-        dataType:'json',
-        async: false,
-        success: function(resp){
-
-            error                   = resp.error_email;
-            error_registrar_email_  = resp.registrar;
+    setTimeout(function() {
 
 
-            if(error == '' && error_registrar_email_ == ""){
-                $('#asunto_email').val();
-                $('#de_email').val();
-                $('#para_email').val();
-                $('#titulo_email').val();
-                $('#messge_email').val();
+        $.ajax({
+            url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
+            type:'POST',
+            data:{
+                'ajaxSend': 'ajaxSend',
+                'accion': 'envio_email_notificacion',
+                'idpaciente':$idPaciente,
+                'idcita' : $idcita,
 
-                $('#notificar_email-modal').modal('hide');
-                UpdateEstadoCita(idestado, idcita, '', '' );
-                $('#emailEspere').fadeOut();
+                'asunto': $('#asunto_email').val(),
+                'from': $('#de_email').val(),
+                'to': $('#para_email').val(),
+                'subject': $('#titulo_email').val(),
+                'message': $('#messge_email').val(),
+            },
+            dataType:'json',
+            async: false,
+            complete: function(){
+                $('#emailEspere').text(null);
+            },
+            success: function(resp){
 
-            }else{
+                error                   = resp.error_email;
+                error_registrar_email_  = resp.registrar;
 
-                if(error !="" )
-                {
-                    notificacion(error, 'error');
+                if(error == "" && error_registrar_email_ == "") {
+
+                    $('#asunto_email').val();
+                    $('#de_email').val();
+                    $('#para_email').val();
+                    $('#titulo_email').val();
+                    $('#messge_email').val();
+
+                    $('#notificar_email-modal').modal('hide');
+                    UpdateEstadoCita(idestado, idcita, '', '' );
+                    $('#emailEspere').text(null);
+
+                }else{
+
+                    if(error!="" ){
+                        notificacion(error, 'error');
+                    }
+                    if(error_registrar_email_ != ""){
+                        notificacion(error_registrar_email_, 'error');
+                    }
+                    $('#emailEspere').text(null);
                 }
 
-                if(error_registrar_email_ != "")
-                {
-                    notificacion(error_registrar_email_, 'error');
-                }
-
-                $('#emailEspere').fadeOut();
             }
+        });
 
-        }
-    });
+    },1500);
 
     return error;
 

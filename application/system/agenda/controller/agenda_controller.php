@@ -895,7 +895,8 @@ function notificarCitaEmail($datos, $token_confirmacion)
     $mail = new \PHPMailer\PHPMailer\PHPMailer(true);
 
     #verifico si el email de acceso esta correcto
-    if($conf->EMPRESA->INFORMACION->conf_email != ""){
+    if($conf->EMPRESA->INFORMACION->conf_email != "")
+    {
 
         try{
 
@@ -905,7 +906,7 @@ function notificarCitaEmail($datos, $token_confirmacion)
             $mail->SMTPAuth   = true;
 
             // Enable SMTP authentication
-            #acceso de envio
+            #acceso para el envio de correo
             $mail->Username   = trim($conf->EMPRESA->INFORMACION->conf_email);             // SMTP username
             $mail->Password   = trim($conf->EMPRESA->INFORMACION->conf_password);                               // SMTP password
             $mail->SMTPSecure = 'tls';         // Enable TLS encryption; `PHPMailer::ENCRYPTION_SMTPS` also accepted
@@ -925,6 +926,12 @@ function notificarCitaEmail($datos, $token_confirmacion)
             // Attachments Enviar Archivos
             $mail->addAttachment('/var/tmp/file.tar.gz');         // Add attachments
             $mail->addAttachment('/tmp/image.jpg', 'new.jpg');    // Optional name */
+
+
+            # configuración estándar de PHPMailer
+            $mail->SMTPKeepAlive = true;
+            $mail->Mailer = "smtp";
+
 
             $messabody = "";
             if($message!=""){
@@ -955,17 +962,26 @@ function notificarCitaEmail($datos, $token_confirmacion)
                                 </div>"; #envio un formulariode confirmacion
             $mail->AltBody = "";
 
-//            echo '<pre>';
-//            print_r($mail); die();
-            $error = $mail->send();
+            if(!$mail->send()) {
+                $error = 0; #Correo no enviado
+            }else{
+                $error = 1; #Correo Enviado
+            }
 
+//            echo ' error de email =>   <pre>  ==> ';
+//            print_r( $error ); die();
+
+            /*
+            print_r('email_enviado');
+            print_r($error);
+            print_r('<br>');*/
             //emael no enviado
             if($error == 0){
-                $error = 'Ocurrio un problema con el servidor no pudo enviar el correo, intentelo de nuevo o consulte con soporte Tecnico';
+                $error = 'Ocurrio un problema con el servidor no pudo enviar el correo, intentelo de nuevo o consulte con soporte Tecnico' .'<br> <b> '. $mail->ErrorInfo .' </b>';
             }
 
         }catch (Exception $e){
-            $error = 'Ocurrio un error con la Operación " Notificar por e-mail " verifique el e-mail o Consulte con soporte Tecnico - ' . $mail->ErrorInfo .' - Error : Acceso de aplicaciones poco seguras - https://myaccount.google.com/u/1/lesssecureapps?rapt=AEjHL4MUc6sVgag8QGQq-fdisl2F5kETOCyzfQXY51-RqKtpVrpX3CsW1tPL-IWkXzK6LerTnHSPxirTQ3OrLtppXWFrXKwegg';
+            $error = 'Ocurrio un error con la Operación " Notificar por e-mail " verifique el e-mail o Consulte con soporte Tecnico - ' . $mail->ErrorInfo .' - Error : Acceso de aplicaciones poco seguras - https://myaccount.google.com/u/7/lesssecureapps';
         }
 
     }else{
@@ -973,8 +989,13 @@ function notificarCitaEmail($datos, $token_confirmacion)
         $error = 'No esta asignado el acceso de e-mail';
     }
 
+
+//    print_r($error); die();
+
     $error_insert_notific_email = "";
-    if($error == '' || $error == true){
+    #SI EL $error = 1 -- EL EMAIL SE ENVIO CORRECTAMENTE
+    if($error == 1 )
+    {
 
         $sql = "INSERT INTO `tab_notificacion_email` (`asunto`, `from`, `to`, `subject`, `message`, `estado`, `fk_paciente`, `fk_cita`, `fecha`) ";
         $sql .= "VALUES (";
@@ -1031,7 +1052,7 @@ function notificarCitaEmail($datos, $token_confirmacion)
     $Ouput = [
 
         'registrar'   => $error_insert_notific_email ,
-        'error_email' => ($error == true) ? "" : $error
+        'error_email' => ($error==1)?"":$error
 
     ];
 

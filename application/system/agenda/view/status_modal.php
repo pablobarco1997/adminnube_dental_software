@@ -47,10 +47,10 @@
                             </div>
                         </div>
 
-                        <div class="form-group" id="emailEspere" style="display: none">
+                        <div class="form-group" >
                             <label for="" class="control-label col-sm-2">&nbsp;&nbsp;</label>
                             <div class="col-sm-9">
-                                <small> Enviando mensaje espere ... </small>
+                                <small id="emailEspere" style="font-weight: bolder">  </small>
                             </div>
                         </div>
                     </div>
