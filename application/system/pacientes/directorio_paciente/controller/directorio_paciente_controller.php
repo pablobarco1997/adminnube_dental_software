@@ -79,12 +79,11 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             #nombre ingresado del paciente nombre apellido or
             $nom = GETPOST('label');
 
-            if( !empty($nom) ){
+            if( !empty($nom) )
+            {
 
-                $sql = "SELECT * FROM tab_admin_pacientes ps WHERE trim( concat(ps.nombre, '', ps.apellido) ) like trim( '$nom%' )";
+                $sql = "SELECT * FROM tab_admin_pacientes ps WHERE ps.nombre  like '%$nom%'  or ps.apellido like '$nom%' ";
                 $rs = $db->query($sql);
-
-//            print_r($sql);
                 if($rs->rowCount() > 0)
                 {
                     while( $obPaciente =  $rs->fetchObject() )
@@ -96,6 +95,12 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     }
                 }
 
+            }else{
+
+                $data[] = array(
+                    'nomb'  =>  'NO SE ENCONTRO RESULTADOS ...',
+                    'id'    =>  ''
+                );
             }
 
             echo json_encode($data);

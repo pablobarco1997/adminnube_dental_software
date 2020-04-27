@@ -45,7 +45,7 @@ if($rs->rowCount()>0){
     {
         $datos[] = (object)array(
             'nombre'          => $obj->nombre . ' '.  $obj->apellido,
-            'rud_dni'         => $obj->rut_dni,
+            'ruc_ced'         => $obj->ruc_ced,
             'email'           => $obj->email,
             'numeroCelular'   => $obj->telefono_movil,
         );
@@ -89,8 +89,8 @@ $pdf .= "<table width='100%' class=\"tables\">";
     $pdf .= "<thead>
                 <tr class='tables'>
                     <th>PACIENTE</th>
-                    <th>Rud/Cedula</th>
-                    <th>E-mail</th>
+                    <th>RUC/CED</th>
+                    <th>E-MAIL</th>
                     <th>TELEFONO</th>
                 </tr>
             </thead>
@@ -100,7 +100,7 @@ $pdf .= "<table width='100%' class=\"tables\">";
 
         $pdf .= "<tr>";
             $pdf .= "<td width='25%' class=\"tables\">".$val->nombre."</td>";
-            $pdf .= "<td width='25%' class=\"tables\">".$val->rud_dni."</td>";
+            $pdf .= "<td width='25%' class=\"tables\">".$val->ruc_ced."</td>";
             $pdf .= "<td width='25%' class=\"tables\">".$val->email."</td>";
             $pdf .= "<td width='25%' class=\"tables\">".$val->numeroCelular."</td>";
         $pdf .= "</tr>";
