@@ -28,6 +28,7 @@ if(isset($_SESSION['is_open']))
     <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
     <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
 
+    <link rel="shortcut icon" href=" <?= DOL_HTTP .'/application/system/login/img/dental_icon.png' ?>" type="image/x-icon" >
     <title>Login</title>
 </head>
 <style>
@@ -83,6 +84,10 @@ if(isset($_SESSION['is_open']))
         border-top-right-radius: 0px;
         border-bottom-right-radius: 0px;
     }
+    .btnlogin:focus{
+        outline: 0;
+        outline: none; !important;
+    }
 
     .outlogintext{
         /*border-radius: 15px;*/
@@ -105,32 +110,33 @@ if(isset($_SESSION['is_open']))
 
                 <div class="form-group col-sm-12 col-xs-12" style="padding: 10px">
 
-                    <h3 class="text-center">LOGIN</h3>
                     <br>
-                    <p class="text-center">
-                        <img  width="20%" src="<?php echo DOL_HTTP .'/application/system/login/img/avatar_login.png'?>" alt="">
-                    </p>
+
+                    <img  width="35%" class="img-rounded center-block" src="<?php echo DOL_HTTP .'/application/system/login/img/dental_icon.png'?>" alt="">
 
                     <div class="form-group">
                         <div class="col-3">
-                            <label for="usu" style="font-weight: bolder; font-size: 1.8rem">Usuario</label>
+                            <label for="usu" style="font-weight: bolder; font-size: 1.8rem">USUARIO</label>
                             <input class="effect-2 outlogintext" type="text" placeholder="Ingrese su Usuario" id="usu">
                             <span class="focus-border"></span>
+                            <small style="color: red;" id="msg_usuario"></small>
                         </div>
                     </div>
 
                     <div class="form-group">
                         <div class="col-3">
-                            <label for="pass" style="font-weight: bolder; font-size: 1.8rem" >Password</label>
+                            <label for="pass" style="font-weight: bolder; font-size: 1.8rem" >PASSWORD</label>
                             <input class="effect-2 outlogintext" type="password" placeholder="Ingrese su Password" id="pass">
                             <span class="focus-border"></span>
+                            <small style="color: red;" id="msg_password"></small>
                         </div>
                     </div>
 
                 </div>
 
                 <div style="width: 100%;  " >
-                    <input type="button" id="btn_logearse" value="Acceder" class="btn btnlogin" style="width: 100%;height: 50px;   !important; font-size: 1.5rem; font-weight: bolder; background-color: #00a157; color: #dddddd" >
+                    <input type="button" id="btn_logearse" value="LOGIN" class="btn btnlogin"
+                           style="width: 100%;height: 50px;   !important; font-size: 1.5rem; font-weight: bolder; background-color: #00a157; color: #ffffff; outline: none" >
                 </div>
 
             </div>
@@ -177,9 +183,9 @@ if(isset($_SESSION['is_open']))
                     Swal.fire({
                         type:  'error',
                         title: 'Oops...',
-                        text:  ' Ocurrió un error, No se encontro el USUARIO: ' + $('#usu').val() + ' , Porfavor compruebe la información antes de Iniciar Session ' + '',
+                        text:  ' Ocurrió un error, No se encontro el USUARIO: ' + $('#usu').val() + ' , compruebe la información antes de Iniciar Session ' + '',
                         // footer: '<a href>Why do I have this issue?</a>'
-                    })
+                    });
                 }
             }
 
@@ -187,7 +193,30 @@ if(isset($_SESSION['is_open']))
     }
 
     $('#btn_logearse').on('click', function() {
-        logearse();
+
+        var $puedo = 0;
+
+        var usu  =  $('#usu').val();
+        var pass = $('#pass').val();
+
+        if( usu == '' ) {
+            $puedo++;
+            $('#msg_usuario').text('Ingrese el usuario');
+        }
+        if( pass == '' ) {
+            $puedo++;
+            $('#msg_password').text('Ingrese la contraseña');
+        }
+
+        if( $puedo == 0 ){
+            logearse();
+        }
+
+        setTimeout(function() {
+            $('#msg_usuario').text(null);
+            $('#msg_password').text(null);
+        }, 2500);
+
     });
 
     $(document).ready(function() {
