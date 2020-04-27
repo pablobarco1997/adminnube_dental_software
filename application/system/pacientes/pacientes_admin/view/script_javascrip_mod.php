@@ -56,5 +56,5 @@ switch ($VISTAS)
 }
 ?>
 
-
+<!--JAVASECRIPT DEFAULT-->
 <script src="<?= DOL_HTTP.'/application/system/pacientes/pacientes_admin/'.$DIRECTORIO_ADMIN.'/js/'.$_JS_DOCMENT.'.js' ?>"></script>

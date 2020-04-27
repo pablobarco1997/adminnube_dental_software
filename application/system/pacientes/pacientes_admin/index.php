@@ -25,7 +25,7 @@ if(isset($_GET['id']))
 
     $idPaciente  = decomposeSecurityTokenId($_GET['id']); #id del paciente
 
-    #VISTAS FORMULARIOS ----------
+    #VISTAS FORMULARIOS ------------------------------------------------------------------------------------------------
     include_once 'view/vistas_mod.php';
 
 

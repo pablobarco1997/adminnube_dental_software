@@ -1,59 +1,64 @@
 <?php
 
-$array_datos_personales = (object)[
-   'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=dop&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente) ,
-   'active'  =>  ($VISTAS == "dop") ? "ActivaLista" : "",
-   'permiso' => ''
-];
+            $array_datos_personales = (object)[
+               'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=dop&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente) ,
+               'active'  =>  ($VISTAS == "dop") ? "ActivaLista" : "",
+               'permiso' => ''
+            ];
 
-$array_imagenes_archivos = (object)[
-    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=arch&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'' ,
-    'active'  =>  ($VISTAS == "arch") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_imagenes_archivos = (object)[
+                'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=arch&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'' ,
+                'active'  =>  ($VISTAS == "arch") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
-$array_plan_tratamiento = (object)[
-    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=plantram&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'' ,
-    'active'  =>  ($VISTAS == "plantram") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_plan_tratamiento = (object)[
+                'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=plantram&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'' ,
+                'active'  =>  ($VISTAS == "plantram") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
-$array_odontograma = (object)[
-    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=odot&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=listp' ,
-    'active'  =>  ($VISTAS == "odot") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_odontograma = (object)[
+                'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=odot&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=listp' ,
+                'active'  =>  ($VISTAS == "odot") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
-$array_citas_asociadas = (object)[
-    'url'     =>   DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=citasoci&key='.KEY_GLOB .'&id='.tokenSecurityId($idPaciente),
-    'active'  =>  ($VISTAS == "citasoci") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_citas_asociadas = (object)[
+                'url'     =>   DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=citasoci&key='.KEY_GLOB .'&id='.tokenSecurityId($idPaciente),
+                'active'  =>  ($VISTAS == "citasoci") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
-$array_documentAsociado = (object)[
-    'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=docummclin&key='.KEY_GLOB .'&id='.tokenSecurityId($idPaciente).'&v=listdocumment',
-    'active'  =>  ($VISTAS == "docummclin") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_documentAsociado = (object)[
+                'url'     =>  DOL_HTTP .'/application/system/pacientes/pacientes_admin/?view=docummclin&key='.KEY_GLOB .'&id='.tokenSecurityId($idPaciente).'&v=listdocumment',
+                'active'  =>  ($VISTAS == "docummclin") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
-$array_Pagos_pacientes = (object)[
-    'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=pagospaci&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=paym',
-    'active'  =>  ($VISTAS == "pagospaci") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_Pagos_pacientes = (object)[
+                'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=pagospaci&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=paym',
+                'active'  =>  ($VISTAS == "pagospaci") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
-$array_evoluciones = (object)[
-    'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=evoluc&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=list_evul',
-    'active'  =>  ($VISTAS == "evoluc") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_evoluciones = (object)[
+                'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=evoluc&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=list_evul',
+                'active'  =>  ($VISTAS == "evoluc") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
-$array_PagosRealizados = (object)[
-    'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=pagrealipricp&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=pagospartic',
-    'active'  =>  ($VISTAS == "pagrealipricp") ? "ActivaLista" : "",
-    'permiso' => ''
-];
+            $array_PagosRealizados = (object)[
+                'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=pagrealipricp&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=pagospartic',
+                'active'  =>  ($VISTAS == "pagrealipricp") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
+            $array_email_list = (object)[
+                'url'     => DOL_HTTP.'/application/system/pacientes/pacientes_admin/?view=mail&key='.KEY_GLOB.'&id='.tokenSecurityId($idPaciente).'&v=listpmail',
+                'active'  =>  ($VISTAS == "mail") ? "ActivaLista" : "",
+                'permiso' => ''
+            ];
 
 ?>
 
@@ -129,8 +134,8 @@ $array_PagosRealizados = (object)[
                                         <i class="fa fa-user"></i>&nbsp;&nbsp; DATOS PERSONALES </a>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == "form_carga_familiares") ? "ActivaLista" : "" ?>">
-                                    <a class="lista" href="<?= DOL_HTTP .'/application/system/pacientes/admin_paciente/?view=form_carga_familiares&id='.$idPaciente; ?>">&nbsp;&nbsp;
+                                <li class="lipaddi hide">
+                                    <a class="lista" href="">&nbsp;&nbsp;
                                         <i class="fa fa-link"></i>&nbsp;&nbsp; CARGA FAMILIARES </a>
                                 </li>
 
@@ -144,8 +149,8 @@ $array_PagosRealizados = (object)[
                                         <i class="fa fa-calendar"></i>&nbsp;&nbsp; CITAS </a>
                                 </li>
 
-                                <li class="lipaddi <?= ($VISTAS == " ") ? "ActivaLista" : "" ?>">
-                                    <a class="lista" href="">&nbsp;&nbsp;
+                                <li class="lipaddi <?= $array_email_list->active ?>">
+                                    <a class="lista" href="<?= $array_email_list->url ?>">&nbsp;&nbsp;
                                         <i class="fa fa-envelope"></i>&nbsp;&nbsp; MAILS </a>
                                 </li>
 
