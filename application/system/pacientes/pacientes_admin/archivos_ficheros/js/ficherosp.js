@@ -10,7 +10,7 @@ function LoadPacientesFicheros()
         // scrollX: true,
 
         ajax:{
-            url: $DOCUMENTO_URL_HTTP + '/application/system/pacientes/admin_paciente/controller/controller_adm_paciente.php',
+            url: $DOCUMENTO_URL_HTTP + '/application/system/pacientes/pacientes_admin/controller/controller_adm_paciente.php',
             type:'POST',
             data:{'ajaxSend':'ajaxSend', 'accion':'Ficheros_pacientes', 'idpaciente': $id_paciente} ,
             dataType:'json',

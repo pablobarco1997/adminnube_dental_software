@@ -63,7 +63,8 @@
                                                                          </div>
 
                                                                         <div class="form-group">
-                                                                            <label for="">convenio</label>
+<!--                                                                            Descuento o convenio-->
+                                                                            <label for="">Descuento</label>
                                                                             <select name="convenio" id="convenio" class="form-control">
                                                                                 <option value="0"> Ninguno </option>
                                                                                 <?php
@@ -126,7 +127,7 @@
                                                                         </div>
 
                                                                         <div class="form-group">
-                                                                            <label for="">Teléfono Fijo</label>
+                                                                            <label for="">Teléfono convencional</label>
                                                                             <input type="number" class="form-control" id="t_fijo">
                                                                         </div>
 
