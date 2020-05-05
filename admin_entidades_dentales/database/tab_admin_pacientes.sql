@@ -2,7 +2,7 @@ CREATE TABLE `tab_admin_pacientes` (
   `rowid` int(11) NOT NULL AUTO_INCREMENT,
   `nombre` varchar(70) DEFAULT NULL,
   `apellido` varchar(70) DEFAULT NULL,
-  `rut_dni` varchar(45) DEFAULT NULL,
+  `ruc_ced` varchar(45) DEFAULT NULL,
   `email` varchar(55) DEFAULT NULL,
   `fk_convenio` int(11) DEFAULT NULL,
   `numero_interno` varchar(55) DEFAULT NULL,
