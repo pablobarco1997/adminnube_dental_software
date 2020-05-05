@@ -28,6 +28,12 @@
         'permiso' => '',
     );
 
+    $Permissions_documentosClinicos = array(
+        'url'     => DOL_HTTP .'/application/system/documentos_clinicos/index.php?view=listdocumment',
+        'Active'  => (isset($Active)  && $Active == 'documento_clinicos') ? 'Active_link' : '' ,
+        'permiso' => '',
+    );
+
 ?>
 
 
@@ -45,12 +51,9 @@
 
 <li class="<?= $Permissions_inicio['Active'] ?>">
     <a href="<?= $Permissions_inicio['url'] ?>"><i class="fa fa-dashcube"></i>
-        <span>INICIO</span>
+        <span>inicio</span>
     </a>
 </li>
-
-
-
 
 <!--<li  class="" ><a href="#"><i class="fa fa-link"></i> <span>Another Link</span></a></li>-->
 <!--<li class="treeview">-->
@@ -70,28 +73,25 @@
 <!--MODULO AGENDA-->
 <li class="<?= $Permissions_agenda['Active'] ?>">
     <a href="<?= $Permissions_agenda['url'] ?>">
-        <i class="fa fa-list-alt"></i> <span>AGENDA</span>
+        <i class="fa fa-list-alt"></i> <span>agenda</span>
     </a>
 </li>
 
 <!--MODULO PACIENTES-->
 <li class="treeview <?= $Permissions_pacientes['Active'] ?> " style="cursor: pointer">
-
-    <a ><i class="fa fa-users"></i> <span>PACIENTES</span>
+    <a><i class="fa fa-users"></i> <span>pacientes</span>
         <span class="pull-right-container">
                 <i class="fa fa-angle-left pull-right"></i>
         </span>
     </a>
-
     <ul class="treeview-menu">
-
         <li><a href="<?= $Permissions_pacientes['url']['directorioPaciente'] ?>" >Directorio de pacientes</a></li>
         <li><a href="<?= $Permissions_pacientes['url']['nuevoPaciente'] ?>"      >Nuevo Paciente</a></li>
-
     </ul>
-
 </li>
 
-<!--MODULO CONFIGURACIONES-->
+<!--MODULO DE DOCUMENTOS CLINICOS DE UN PACIENTE-->
+<li class="<?= $Permissions_documentosClinicos['Active'] ?>"><a href="<?= $Permissions_documentosClinicos['url'] ?>"><i class="fa fa-file-text-o"></i><span>documentos clinicos</span></a></li>
 
-<li class="<?= $Permissions_configuration['Active'] ?>"><a href="<?= $Permissions_configuration['url'] ?>"><i class="fa fa-wrench"></i> <span>CONFIGURACIONES</span></a></li>
+<!--MODULO CONFIGURACIONES-->
+<li class="<?= $Permissions_configuration['Active'] ?>"><a href="<?= $Permissions_configuration['url'] ?>"><i class="fa fa-wrench"></i> <span>configuraciones</span></a></li>

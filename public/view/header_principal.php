@@ -34,27 +34,71 @@
 <!--Datepicker js-->
     <link rel="stylesheet" type="text/css" href="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.css" />
 <!--    font google-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">-->
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
+
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
+
+
+
+
+    <!-- REQUIRED JS SCRIPTS ===========================================================================================-->
+
+    <!-- jQuery 3 -->
+    <script src="<?php echo DOL_HTTP.'/public/bower_components/jquery/dist/jquery.js'?>"></script>
+    <!-- Bootstrap 3.4 -->
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/dist/js/bootstrap.js'?>"></script>
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/js/popover.js'?>"></script>
+    <!-- AdminLTE App -->
+    <script src="<?php echo DOL_HTTP .'/public/js/adminlte.min.js'?>"></script>
+    <!--datatable-->
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/datatable/datatables.net/js/jquery.dataTables.js'?>"></script>
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/datatable/datatables.net-bs/js/dataTables.bootstrap.js'?>"></script>
+    <!--select2-->
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/select2/select2.js'?>"></script>
+    <script src="<?php echo DOL_HTTP .'/public/bower_components/select2/select2_locale_es.js'?>"></script>
+    <!-- sweetalert2 -->
+    <script src="<?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.all.js'?>" ></script>
+    <!--    mask-->
+    <script src="<?php echo DOL_HTTP .'/public/lib/jquery.mask.min.js'?> "></script>
+    <script src="<?php echo DOL_HTTP .'/public/lib/jquery.maskMoney.js'?> "></script>
+    <!--javascript global-->
+    <script src="<?php echo DOL_HTTP .'/public/js/lib_glob.js' ?>"></script>
+
+    <!--daterangepicker-->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/momentjs/latest/moment.min.js"></script>
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/daterangepicker/daterangepicker.min.js"></script>
+
+    <!--Auto complete Bootstrap Typeahead JS-->
+    <!--<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-3-typeahead/4.0.1/bootstrap3-typeahead.min.js"></script>-->
+    <script src="<?php echo DOL_HTTP .'/public/js/bootstrap3-typeahead.min.js' ?>"></script>
+
+    <!--Notificaiones lib-->
+    <script src="<?php echo DOL_HTTP .'/public/js/notificaciones___lib.js' ?>"></script>
+
 
 </head>
 <style>
 
     *{
-        font-family: 'Varela Round', sans-serif ;
+        /*font-family: 'Varela Round', sans-serif ;*/
         /*font-size: 0.8rem !important;*/
+        font-family: 'Roboto', sans-serif;
     }
 
     h3{
-        font-family: 'Varela Round', sans-serif ;
+        /*font-family: 'Varela Round', sans-serif ;*/
+        font-family: 'Roboto', sans-serif;
     }
 
     h5{
-        font-family: 'Varela Round', sans-serif ;
+        /*font-family: 'Varela Round', sans-serif ;*/
+        font-family: 'Roboto', sans-serif;
     }
 
     div{
-        font-family: 'Varela Round', sans-serif ;
+        /*font-family: 'Varela Round', sans-serif ;*/
+        font-family: 'Roboto', sans-serif;
     }
 
 

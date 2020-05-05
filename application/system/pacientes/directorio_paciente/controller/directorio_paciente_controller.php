@@ -76,29 +76,52 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $data = [];
 
-            #nombre ingresado del paciente nombre apellido or
-            $nom = GETPOST('label');
+            $label = GETPOST('label');
 
-            if( !empty($nom) )
+            if( !empty($label) )
             {
 
-                $sql = "SELECT * FROM tab_admin_pacientes ps WHERE ps.nombre  like '%$nom%'  or ps.apellido like '$nom%' ";
+                #el tipo de busqueda del paciente nombre - apellido - cedula
+                $type = GETPOST('type');
+
+                $searchType = "";
+
+                if($type['cedulaP'] == 'true'){
+                    $searchType .= " and  ps.ruc_ced like '%$label%'";
+                }
+                if($type['apellidoP'] == 'true'){
+                    $searchType .= " and  ps.apellido like '$label%'";
+                }
+                if($type['nombreP'] == 'true'){
+                    $searchType .= " and ps.nombre  like '%$label%'";
+                }
+
+
+                #busqueda de paciente se concat search type
+                $sql = "SELECT * FROM tab_admin_pacientes ps WHERE ps.rowid > 0 ";
+                $sql .= $searchType;
+
+//                print_r($sql);
                 $rs = $db->query($sql);
-                if($rs->rowCount() > 0)
+                if($rs &&  $rs->rowCount() > 0 &&  !empty($searchType) )
                 {
                     while( $obPaciente =  $rs->fetchObject() )
                     {
+                        #SI EN CASO EL PACIENTE ES ESTADO E se alerta paciente inactivo
                         $data[] = array(
-                            'nomb'  =>  $obPaciente->nombre .' '.$obPaciente->apellido,
+                            'name'  => $obPaciente->ruc_ced .'  -  '. $obPaciente->nombre .' '.$obPaciente->apellido . (($obPaciente->estado=="E") ? " INACTIVO ": ""),
                             'id'    => tokenSecurityId( $obPaciente->rowid )
                         );
                     }
+
+                }else{
+
                 }
 
             }else{
 
                 $data[] = array(
-                    'nomb'  =>  'NO SE ENCONTRO RESULTADOS ...',
+                    'name'  =>  'NO SE ENCONTRO RESULTADOS ...',
                     'id'    =>  ''
                 );
             }

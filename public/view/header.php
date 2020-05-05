@@ -18,6 +18,12 @@
             <span class="sr-only">Toggle navigation</span>
         </a>
 
+        <div class="navbar-form navbar-left" role="search">
+            <div class="form-group" style="">
+                <input type="text" class=" input-sm" id="navbar-search-input" placeholder="buscar" style="background-color: #ffffff; border-radius: 0px !important; width: 300px">
+            </div>
+        </div>
+
         <?php include_once $DOL_DOCUMENT.'/public/view/dropdown.php'; ?>
 
     </nav>

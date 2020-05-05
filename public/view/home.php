@@ -11,6 +11,20 @@
 
 ?>
 
+<style>
+
+    .searchHome{
+        width: 100% !important;
+        border: 0;
+    }
+
+    .searchHome:focus{
+        outline: 0;
+        outline: none;
+    }
+
+</style>
+
 <div class="row">
         <div class="col-md-12 col-xs-12">
 
@@ -27,15 +41,34 @@
                        <div class="form-group col-md-8 col-lg-8 col-sm-8 ol-xs-12 col-centered" >
 
                            <div class="autocomplete form-group">
-                               <div class="input-group">
-                                   <input type="search" autocomplete="off" onkeyup="searchPacientesGlob(this)" class="form-control" name="myCountry" id="myInput" placeholder="Buscar pacientes" aria-describedby="basic-addon2">
-                                   <span class="input-group-addon" id="basic-addon2"><i class="fa fa-search"></i></span>
-                                   <span style="display: none" id="pacien"></span>
+                               <br>
+                               <label for="busquedaPaciente">BUQUEDA DE PACIENTES &nbsp; <i class="fa fa-search"></i> </label>
+                               <small style="display: block; color: #212f3d" > Puede seleccionar por tipos filtro de busqueda cedula - nombre - apellido</small>
+                               <div class="radio">
+                                   <label>
+                                       <input type="radio" name="rdbusqPaciente" id="rd_nombre" value="nombre" >
+                                       <small> nombre </small>
+                                   </label>
+                                   <label>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;
+                                       <input type="radio" name="rdbusqPaciente" id="rd_apellido" value="apellido">
+                                       <small> apellido </small>
+                                   </label>
+                                   <label>
+                                       &nbsp;&nbsp;&nbsp;&nbsp;
+                                       <input type="radio" name="rdbusqPaciente" id="rd_cedula" value="cedula" >
+                                       <small> cedula </small>
+                                   </label>
                                </div>
+                               <input type="text"   onkeyup="aplicasearchpaciente($(this))"  class=" searchHome seachPacienteHome" name="" id="busquedaPaciente" placeholder="Ingrese 5 carateres para iniciar la busqueda" aria-describedby="basic-addon2">
+<!--                               <div class="input-group">-->
+<!--                                   <span class="input-group-addon" id="basic-addon2"><i class="fa fa-search"></i></span>-->
+                               <span style="display: none" id="idpacienteAutocp"></span>
+<!--                               </div>-->
                            </div>
 
                            <div class="form-group">
-                               <button class="btn btnhover btn-block" style="color:  green; font-weight: bolder" id="buscarPaciente">Aplicar</button>
+                               <button class="btn btnhover btn-block" style="color:  green; font-weight: bolder" id="buscarPaciente">Buscar</button>
                            </div>
 
                        </div>

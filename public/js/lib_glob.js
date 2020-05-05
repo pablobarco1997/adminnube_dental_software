@@ -11,67 +11,85 @@ function autocomplete(inp, arr)
         closeAllLists();
         if (!val) { return false;}
         currentFocus = -1;
-        /*create a DIV element that will contain the items (values):*/
-        a = document.createElement("DIV");
+
+        /*crear un elemento DIV que contendrá los elementos (valores):*/
+        a = document.createElement("DIV"); //se crea un contenedor principal
         a.setAttribute("id", this.id + "autocomplete-list");
         a.setAttribute("class", "autocomplete-items");
         /*append the DIV element as a child of the autocomplete container:*/
         this.parentNode.appendChild(a);
-        /*for each item in the array...*/
-        for (i = 0; i < arr.length; i++) {
+
+        /*para cada elemento de la matriz ...*/
+        console.log(arr);
+        for (i = 0; i < arr.length; i++)
+        {
             /*check if the item starts with the same letters as the text field value:*/
-            if (arr[i]['nomb'].substr(0, val.length).toUpperCase() == val.toUpperCase()) {
+            if (arr[i]['nomb'].substr(0, val.length).toUpperCase() == val.toUpperCase())
+            {
 
-                var idPaciente = arr[i]['id'];
-                /*create a DIV element for each matching element:*/
-                b = document.createElement("DIV");
-                b.setAttribute('data-id', arr[i]['id']);
-                b.setAttribute('onclick', "valoresPacientes("+idPaciente+")");
-                b.setAttribute('onkeypress', "valoresPacientes("+idPaciente+")");
+            }
 
-                /*make the matching letters bold:*/
-                b.innerHTML = "<strong>" + arr[i]['nomb'].substr(0, val.length) + "</strong>";
-                b.innerHTML += arr[i]['nomb'].substr(val.length);
-                /*insert a input field that will hold the current array item's value:*/
-                b.innerHTML += "<input  data-id='"+arr[i]['id']+"' type='hidden' value='" + arr[i]['nomb'] + "'>";
-                /*execute a function when someone clicks on the item value (DIV element):*/
-                b.addEventListener("click", function(e) {
-                    /*insert the value for the autocomplete text field:*/
-                    inp.value = this.getElementsByTagName("input")[0].value;
-                    /*close the list of autocompleted values,
-                    (or any other open lists of autocompleted values:*/
-                    closeAllLists();
-                });
-                a.appendChild(b);
-            }
+            var idPaciente = arr[i]['id'];
+            /*crear un elemento DIV para cada elemento coincidente:*/
+
+            b = document.createElement("DIV");
+            b.setAttribute('data-id', arr[i]['id']);
+            b.setAttribute('onclick', "valoresPacientes("+idPaciente+")");
+            b.setAttribute('onkeypress', "valoresPacientes("+idPaciente+")");
+
+            /*make the matching letters bold:*/
+            b.innerHTML = "";
+            // b.innerHTML = "<strong>" + arr[i]['nomb'].substr(0, val.length) + "</strong>";
+
+            // b.innerHTML += arr[i]['nomb'].substr(val.length);
+            b.innerHTML += arr[i]['nomb'];
+            /*insert a input field that will hold the current array item's value:*/
+            b.innerHTML += "<input  data-id='"+arr[i]['id']+"' type='hidden' value='" + arr[i]['nomb'] + "'>";
+
+
+            /*ejecutar una función cuando alguien hace clic en el valor del elemento (elemento DIV):*/
+            b.addEventListener("click", function(e) {
+                /*insert the value for the autocomplete text field:*/
+                inp.value = this.getElementsByTagName("input")[0].value;
+                /*close the list of autocompleted values,
+                (or any other open lists of autocompleted values:*/
+                closeAllLists();
+            });
+
+            a.appendChild(b);
         }
+
     });
-    /*execute a function presses a key on the keyboard:*/
-    inp.addEventListener("keydown", function(e) {
-        var x = document.getElementById(this.id + "autocomplete-list");
-        if (x) x = x.getElementsByTagName("div");
-        if (e.keyCode == 40) {
-            /*If the arrow DOWN key is pressed,
-            increase the currentFocus variable:*/
-            currentFocus++;
-            /*and and make the current item more visible:*/
-            addActive(x);
-        } else if (e.keyCode == 38) { //up
-            /*If the arrow UP key is pressed,
-            decrease the currentFocus variable:*/
-            currentFocus--;
-            /*and and make the current item more visible:*/
-            addActive(x);
-        } else if (e.keyCode == 13) {
-            /*If the ENTER key is pressed, prevent the form from being submitted,*/
-            e.preventDefault();
-            if (currentFocus > -1) {
-                /*and simulate a click on the "active" item:*/
-                if (x) x[currentFocus].click();
-            }
-        }
-    });
+
+    /*ejecutar una función presiona una tecla en el teclado:*/
+
+    // inp.addEventListener("keydown", function(e) {
+    //     var x = document.getElementById(this.id + "autocomplete-list");
+    //     if (x) x = x.getElementsByTagName("div");
+    //     if (e.keyCode == 40) {
+    //         /*If the arrow DOWN key is pressed,
+    //         increase the currentFocus variable:*/
+    //         currentFocus++;
+    //         /*and and make the current item more visible:*/
+    //         addActive(x);
+    //     } else if (e.keyCode == 38) { //up
+    //         /*If the arrow UP key is pressed,
+    //         decrease the currentFocus variable:*/
+    //         currentFocus--;
+    //         /*and and make the current item more visible:*/
+    //         addActive(x);
+    //     } else if (e.keyCode == 13) {
+    //         /*If the ENTER key is pressed, prevent the form from being submitted,*/
+    //         e.preventDefault();
+    //         if (currentFocus > -1) {
+    //             /*and simulate a click on the "active" item:*/
+    //             if (x) x[currentFocus].click();
+    //         }
+    //     }
+    // });
+
     function addActive(x) {
+
         /*a function to classify an item as "active":*/
         if (!x) return false;
         /*start by removing the "active" class on all items:*/
@@ -81,18 +99,24 @@ function autocomplete(inp, arr)
         /*add class "autocomplete-active":*/
         x[currentFocus].classList.add("autocomplete-active");
     }
+
     function removeActive(x) {
         /*a function to remove the "active" class from all autocomplete items:*/
-        for (var i = 0; i < x.length; i++) {
+        for (var i = 0; i < x.length; i++)
+        {
             x[i].classList.remove("autocomplete-active");
         }
     }
-    function closeAllLists(elmnt) {
+
+    function closeAllLists(elmnt)
+    {
         /*close all autocomplete lists in the document,
         except the one passed as an argument:*/
         var x = document.getElementsByClassName("autocomplete-items");
-        for (var i = 0; i < x.length; i++) {
+        for (var i = 0; i < x.length; i++)
+        {
             if (elmnt != x[i] && elmnt != inp) {
+
                 x[i].parentNode.removeChild(x[i]);
             }
         }
@@ -111,23 +135,25 @@ function autocomplete(inp, arr)
 // alert( 25 );
 function searchPacientesGlob( inputText )
 {
-    console.log( inputText.value );
+    // console.log( inputText.value );
 
     //busco el paciente - obtengo el arreglo de ese paciente
     var Obj_paciente = ObtenerPacienteslistaSearch( inputText.value );
 
     autocomplete( inputText , Obj_paciente );
-    console.log( Obj_paciente );
+    // console.log( Obj_paciente );
 }
 
-//OBTENGO EL ARREGLO DE LAS LISTA DE PACIENTES - ADMIN
-function ObtenerPacienteslistaSearch( label )
-{
+/**BUSQUE DE PACIENTES A NIVEL GLOBAL **/
+/***OBTENGO EL ARREGLO DE LAS LISTA DE PACIENTES - ADMIN **/
+
+function ObtenerPacienteslistaSearch( label ) {
+
     var data = [];
     $.ajax({
         url:  $DOCUMENTO_URL_HTTP + '/application/system/pacientes/directorio_paciente/controller/directorio_paciente_controller.php',
         type:'POST',
-        data:{'ajaxSend':'ajaxSend', 'accion':'ObtenerPacienteslistaSearch', 'label' : label},
+        data:{'ajaxSend':'ajaxSend', 'accion':'ObtenerPacienteslistaSearch', 'label' : label , nombreP , apellidoP, cedulaP },
         dataType:'json',
         async:false,
         success:function(resp) {
@@ -142,26 +168,65 @@ function ObtenerPacienteslistaSearch( label )
     return data;
 }
 
-function valoresPacientes(id)
+function getidPacienteAutocomplete(id)
 {
-    $('#pacien').text(id);
+    var idp = (id=="")?"":id;
+    $('#idpacienteAutocp').text(idp);
 }
 
 
-//buscar pacientes
-$('#buscarPaciente').on('click', function() {
 
-    var $id =  $('#pacien').text();
-    if($id !="" && $('#myInput').val() !="")
-    {
-        // var $url = $DOCUMENTO_URL_HTTP + '/application/system/pacientes/admin_paciente/?view=form_datos_personales&id='+$id;
-        var $url = $DOCUMENTO_URL_HTTP + '/application/system/pacientes/pacientes_admin?view=dop&key=' + $keyGlobal + '&id=' + $id;
-        // alert($url);
-        location.href = $url;
-    }
+function aplicasearchpaciente($input)
+{
+    var urlget = $DOCUMENTO_URL_HTTP + '/application/system/pacientes/directorio_paciente/controller/directorio_paciente_controller.php';
 
-});
+    //Buscardo de arreglo matrix [ name:'name' , 'id':'valor_id' ]
 
+    $input.typeahead({
+        source: function (query , process)
+        {
+
+            var nombreP    = null;
+            var apellidoP  = null;
+            var cedulaP    = null;
+
+            if($('input:radio[name=rdbusqPaciente]:checked').val() == "nombre"){
+                nombreP="true";
+            }
+            if($('input:radio[name=rdbusqPaciente]:checked').val() == "apellido"){
+                apellidoP="true";
+            }
+            if($('input:radio[name=rdbusqPaciente]:checked').val() == "cedula"){
+                cedulaP="true";
+            }
+
+            //x tipo x nombre x apellido x cedula
+            var type = {'nombreP':nombreP, 'apellidoP':apellidoP, 'cedulaP':cedulaP};
+
+                  return $.get(urlget , { 'ajaxSend':'ajaxSend' , 'accion':'ObtenerPacienteslistaSearch' , 'label' : query, 'type': type }, function(data) {
+                                console.log(data);
+                                data = $.parseJSON(data);
+                                return process(data);
+                            });
+        },
+        minLength:5,
+        // scrollHeight:100
+    });
+
+    // SE obtienen el valor por cada cambio o change del input con el getActive
+    $input.change(function() {
+        var current = $input.typeahead("getActive");
+        if(current){
+            if(current.name == $input.val()){
+                 getidPacienteAutocomplete(current.id);
+            }
+        }
+    });
+
+}
+
+
+/** NOTIFICACIONES*/
 function notificacion(mensage, accion)
 {
     var label = "";
