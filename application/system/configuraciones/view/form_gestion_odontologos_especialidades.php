@@ -46,7 +46,7 @@ if($rs->rowCount()>0)
 
             <?php
 
-            #DENTISTA
+            #DENTISTA   ---------------------------------------------------------------------------------------------------------------------------------------------------------------
             if(isset($_GET["v"]) && $_GET["v"] == "dentist")
             {
 
@@ -56,7 +56,7 @@ if($rs->rowCount()>0)
                 <div class="form-group col-md-12">
                     <ul class="list-inline" style="border-bottom: 1px solid #333333; padding-bottom: 1.5px">
                         <li><a  style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  "  data-toggle="modal" data-target="#modal_conf_doctor"  onclick="cambiarattr()"> &nbsp;&nbsp;<i class="fa fa-user-md"></i> &nbsp;&nbsp; crear odontólogos</a></li>
-                        <li><a style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  " data-toggle="modal" data-target="#ModalCrearUsuario"  onclick="ModificarUsuario(0,0,'0')" > &nbsp;&nbsp;<i class="fa fa-user"></i> &nbsp;&nbsp; Crear Usuario</a></li>
+                        <li><a style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  " data-toggle="modal" data-target="#ModalCrearUsuario"  onclick="NuevoEditUsario(0,0,'0')" > &nbsp;&nbsp;<i class="fa fa-user"></i> &nbsp;&nbsp; Crear Usuario</a></li>
                         <li> <div class="checkbox btnhover" style="margin: 0px; padding: 5px; "><label for="desabilitado_doctores" style=" font-weight: bolder"><input type="checkbox" id="desabilitado_doctores"><i class="fa fa-user-times"></i> Ver lista de doctores desabilitados</label></div></li>
                     </ul>
                 </div>
@@ -100,7 +100,7 @@ if($rs->rowCount()>0)
 
                 <div class="form-group col-md-12">
                    <div class="form-group col-md-12 ">
-                        <span style="font-weight: bolder; color: #eb9627">
+                        <span style=" color: #eb9627">
                         <i class="fa fa-info-circle"></i>
                             Tener en cuenta que si elimina una especialidad, aquellos Odontólogos
                             relacionados con esta, se actualizaran a especialidad General incluyendo todas las citas asociadas con la especialidad
@@ -131,7 +131,7 @@ if($rs->rowCount()>0)
 
 
 
-<!--MODAL CREAR ODONTOLOGO -------------------------------------------------------------------------------------------->
+<!--MODAL CREAR ODONTOLOGO ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------->
 <div id="modal_conf_doctor" class="modal fade" role="dialog">
     <div class="modal-dialog modal-lg">
 
@@ -311,8 +311,8 @@ if($rs->rowCount()>0)
                 </div>
             </div>
             <div class="modal-footer">
-                <button type="button" class="btn btn-default" data-dismiss="modal">Close</button>
-                <button type="button" class="btn btn-success" id="nuevoUpdateUsuario">Aceptar</button>
+                <a class="btn btnhover " style="font-weight: bolder;" data-dismiss="modal" id=""> Close </a>
+                <a class="btn btnhover " style="font-weight: bolder; color: green" id="nuevoUpdateUsuario"> Aceptar </a>
             </div>
         </div>
     </div>
@@ -350,3 +350,14 @@ if($rs->rowCount()>0)
 
     </div>
 </div>
+
+
+<!--JAVASCRIPT DE ESPECIALIDADES-->
+<?php if(isset($_GET['view']) && GETPOST("v") == 'specialties'){?>
+    <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/odontespecialidades.js'; ?>"></script>
+<?php }?>
+
+<!--JAVASCRIPT DE ODONTOLOGOS-->
+<?php if(isset($_GET['view']) && GETPOST("v") == 'dentist'){?>
+    <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/NewEditoOdontUsuario.js'; ?>"></script>
+<?php }?>

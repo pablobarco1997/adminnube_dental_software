@@ -58,7 +58,21 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $UpdateEntidad = new CONECCION_ENTIDAD();
 
-            $rs = $UpdateEntidad::UPDATE_ENTIDAD($clinica,$direccion,$telefono,$celular,$email, $name_fichero,$pais, $ciudad , $conf->EMPRESA->ID_ENTIDAD, $conf_email, $conf_password);
+            #SE ACTUALIZA LA ENTIDAD DE LA EMPRESA
+            $rs = $UpdateEntidad
+                ::UPDATE_ENTIDAD(
+                        $clinica,
+                        $direccion,
+                        $telefono,
+                        $celular,
+                        $email,
+                        $name_fichero,
+                        $pais,
+                        $ciudad,
+                        $conf->EMPRESA->ID_ENTIDAD,
+                        $conf_email,
+                        $conf_password
+                );
 
             if($rs == 0) //No se Update
             {

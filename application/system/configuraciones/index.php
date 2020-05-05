@@ -34,9 +34,6 @@ if(isset($_GET['view']))
         background-color: rgba(128, 139, 150,0.2);
     }
 
-    table tbody tr td{
-        font-size: 1.3rem;
-    }
 
     #confulprest li{
         float: right;
@@ -44,6 +41,11 @@ if(isset($_GET['view']))
     }
 
 </style>
+
+<script>
+    $DOCUMENTO_URL_HTTP = "<?php echo DOL_HTTP ?>";
+    $DIRECTORIO         = "<?php echo $conf->NAME_DIRECTORIO ?>"; //DIRECTORIO DE LA CARPETA ESPECIAL CREADA PARA ESTA ENTIDAD
+</script>
 
     <!--header principal-->
 <?php include_once $DOL_DOCUMENT .'/public/view/header_principal.php'; ?>
@@ -135,20 +137,9 @@ if(isset($_GET['view']))
 <?php include_once DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
 <?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
 
-<script>
-    $DOCUMENTO_URL_HTTP = "<?php echo DOL_HTTP ?>";
-    $DIRECTORIO         = "<?php echo $conf->NAME_DIRECTORIO ?>"; //DIRECTORIO DE LA CARPETA ESPECIAL CREADA PARA ESTA ENTIDAD
-</script>
 
 <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/configuraciones.js'; ?>"></script>
 
-<?php if(isset($_GET['view']) && GETPOST("view") == 'form_prestaciones'){?>
-    <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/prestaciones.js'; ?>"></script>
-<?php }?>
-
-<?php if(isset($_GET['view']) && GETPOST("view") == 'form_gestion_odontologos_especialidades'){?>
-    <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/usuario_odontologos_espacialidades.js'; ?>"></script>
-<?php }?>
 
 <?php if(isset($_GET['view']) && GETPOST("view") == 'form_convenios_desc'){?>
     <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/convenios_config.js'; ?>"></script>

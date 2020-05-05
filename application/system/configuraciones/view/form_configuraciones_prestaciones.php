@@ -158,7 +158,7 @@
                 <br>
                 <div class="row">
                     <div class="col-xs-12">
-                        <button class="btn btnhover btn-block" id="guardar_prestacion" style="color: green;"> <b>CARGAR PRESTACIÓN</b></button>
+                        <button class="btn btnhover btn-block" id="guardar_prestacion" style="color: green;"> <b>GUARDAR</b></button>
                     </div>
                 </div>
 
@@ -334,3 +334,10 @@
 
     </div>
 </div>
+
+
+<!--JAVASCRIPT-->
+
+<?php if(isset($_GET['view']) && GETPOST("view") == 'form_prestaciones'){?>
+    <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/prestaciones.js'; ?>"></script>
+<?php }?>

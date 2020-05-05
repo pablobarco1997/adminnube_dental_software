@@ -208,7 +208,6 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             if($subaccion == 'usuario_rep'){ #usuario repetido
                 $sql .= " and usuario = '".GETPOST('usuario') ."'";
             }
-//            print_r($sql); die();
             $rs = $db->query($sql);
 
             if($rs->rowCount()>0){ #si encuentro Usuario
@@ -217,13 +216,22 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $error = "Este Doctor ya tiene asociado un Usuario";
                 }
                 if($subaccion=='usuario_rep'){
+
                     $error = "Este Usuario ya se encuentra en Uso, Ingrese un Usuario que no este en Uso";
 
-                    $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
-                    $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
-                }
+                    if(empty($error)){
+                        $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
+                        $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
+//                      print_r('aki'); die();
+                    }
+               }
 
+            }else{
+
+                $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
+                $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
             }
+
             if(!$rs){
                 $error = 'Ocurrió un error con la Operación, consulte con soporte Técnico';
             }
@@ -256,17 +264,29 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $tipoUsuario    = GETPOST('tipoUsuario');
             $permisos       = GETPOST('permisos');
 
+            $idEntidad      = $conf->EMPRESA->ID_ENTIDAD; #id de la entidad de la empresa de los usuarios
+
 //            die();
             if($subaccion == 'nuevo')
             {
 
+                #El sistema no permite tener dos usuario a un mismo odontologo
+                #SE VALIDA EL USUARIO DE NUEVO - SI YA TIENE EL USUSARIO REGISTRADO
                 $sqlinvalic = "SELECT * FROM tab_login_users where fk_doc = $doctor";
                 $rsinvalic  = $db->query($sqlinvalic);
 
                 #si tiene un usuario asignado
-                if($rsinvalic->rowCount() > 0){
+                if($rsinvalic->rowCount() > 0)
+                {
+
                     $error = 'Ya tiene Usuario asignado';
-                }else
+
+                }
+                else
+
+//
+//                $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
+//                $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
 
                     $sql = "INSERT INTO `tab_login_users` (`usuario`, `passwords` ,`fk_doc`, `permisos`, `tipo_usuario`, `passwor_abc`) ";
                     $sql .= "VALUES(";
@@ -279,7 +299,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $sql .= ");";
                     $rs = $db->query($sql);
 
-    //                print_r($sql);
+//                    print_r($sql); die();
                     if(!$rs){
                         $error = 'Ocurrió un error con la Operación crear Usuario, consulte con soporte Técnico';
                     }
@@ -287,7 +307,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
                         $datos = [];
 
-
+                        #SE CREA EL USUARIO EL LA BASE GLOBAL
                         $idusuarioCreado = $db->lastInsertId('tab_login_users');
                         $ob = getnombreDentiste($doctor);
 
@@ -301,6 +321,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
                         $error = GenerarUsuarioGlob($datos, $subaccion);
                     }
+
+
             }
 
             if($subaccion == 'modificar')
@@ -1056,7 +1078,7 @@ function list_odontolosGention($estado){
                 $ob = $rs->fetchObject();
                 $tieneUsuario = $ob->rowid;
 
-                $htmlUsuario = '<small style=" ;background-color: #e9edf2; " class="btn btn-xs" data-toggle="modal" data-target="#ModalCrearUsuario" onclick="ModificarUsuario('.$obj->rowid.','.$tieneUsuario.', 1)">&nbsp;<i class="fa fa-user"></i> Usuario</small>';
+                $htmlUsuario = '<small style=" ;background-color: #e9edf2; " class="btn btn-xs" data-toggle="modal" data-target="#ModalCrearUsuario" onclick="NuevoEditUsario('.$obj->rowid.','.$tieneUsuario.', 1)">&nbsp;<i class="fa fa-user"></i> Usuario</small>';
             }
 
             $row[] ='<a href="#modal_conf_doctor" data-toggle="modal" onclick="modificarOdontologo('.$obj->rowid.')">'. $obj->nombre_doc .' '. $obj->apellido_doc.' </a>' . $htmlUsuario;
