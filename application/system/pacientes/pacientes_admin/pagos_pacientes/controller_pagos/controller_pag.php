@@ -471,12 +471,20 @@ function realizar_PagoPacienteIndependiente( $datos, $idpaciente, $idplancab )
             if( $rsPag && $rsPag->rowCount()>0){
                 while ( $pag = $rsPag->fetchObject() )
                 {
+                    //pendiente
                     if( $pag->estado_pagado == 'PE' ){ //Pago pendiente no hay saldo abonado
                         $Apagar_plantram++;
                         $hay_saldo++;
                     }
 
+                    //saldo
                     if( $pag->estado_pagado == 'PS' ){ //Saldo Abonado
+                        $Apagar_plantram++;
+                        $hay_saldo++;
+                    }
+
+                    //pagadas
+                    if( $pag->estado_pagado == 'PA' ){ //SI una o varias Prestaciones Estan pagadas
                         $Apagar_plantram++;
                         $hay_saldo++;
                     }

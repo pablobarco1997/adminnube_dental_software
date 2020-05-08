@@ -85,7 +85,7 @@
                     <td id="Presu_totalPresu">0.00</td>
                 </tr>
                 <tr>
-                    <td>ABONADO</td>
+                    <td id="label_abonadoPagado">ABONADO</td>
                     <td id="Presu_Abonado">0.00</td>
                 </tr>
                 <tr>

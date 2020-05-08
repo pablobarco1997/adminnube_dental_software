@@ -582,6 +582,7 @@ if($accion == 'addplan')
         });
 
 
+        var totalPresupuesto = Total;
         //TOTAL REDONDEAR RESULTADO DE LAS PRESTACION
 
         Total_saldo   = parseFloat(Total) - $AbonadoGlob;
@@ -607,6 +608,10 @@ if($accion == 'addplan')
         $('#saldoPagado')
             .text( redondear(TOTAL_SALDO, 2, false) );
 
+        //se valida si esta pagada o esta abonado
+        if( totalPresupuesto == TOTAL_ABONADO) {
+            $('#label_abonadoPagado').text('PAGADO');
+        }
 
     }
 
