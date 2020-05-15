@@ -10,7 +10,7 @@
 
 
 <!--        breadcrumbs-->
-<div class="form-group col-md-6 col-xs-12 col-lg-6 pull-right">
+<div class="form-group col-md-6 col-xs-12 col-lg-6 pull-left">
     <?= Breadcrumbs_Mod($titulo, $url_breadcrumbs, $modulo); ?>
 </div>
 

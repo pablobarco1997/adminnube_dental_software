@@ -225,6 +225,7 @@ function Breadcrumbs_Mod( $titulo, $url, $module )
     $htmlBreadcrumbs = "";
     $CountBread = 0;
 
+    #cuando sea el modulo principal
     if( $module == true){
 
         $_SESSION['breadcrumbsAcu'] = 0;
@@ -234,6 +235,7 @@ function Breadcrumbs_Mod( $titulo, $url, $module )
 
     }else{
 
+        #cuando sea varios modulos
         if(is_array($_SESSION['breadcrumbs']) && count($_SESSION['breadcrumbs']) > 0){
 
             foreach ($_SESSION['breadcrumbs'] as $key => $value)
@@ -271,32 +273,37 @@ function Breadcrumbs_Mod( $titulo, $url, $module )
     if(!empty($titulo) )
     {
 
-        /*
-        $Breadcrumbs .= '<ol class="list-inline  pull-right breadcrumbsCss">';
+
+        $Breadcrumbs .= '<ul class="breadcrumb3 " >';
         for( $i = 0; $i <= $CountBread; $i++ )
         {
             if(isset($Breadcrumbs_Mod[$i])) //verifico si existe o hay valores
             {
-                $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' "> '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp; <img src="'.DOL_HTTP.'/logos_icon/logo_default/doble-angulo-apuntando-a-la-derecha.png" width="14px" height="14px" alt=""> </a></li>';
+                if($i==0){
+                    $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' "> '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp;</a></li>';
+                }else{
+                    $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp;</a></li>';
+
+                }
             }
         }
-        $Breadcrumbs .= '</ol>' ;
+        $Breadcrumbs .= '</ul>' ;
 
-        */
 
-        $htmlBreadcrumbs .= '<div class="btn-group btn-breadcrumb pull-right">';
-        $htmlBreadcrumbs .= '            <a href="#" class="btn btn-default"><i class="fa fa-dashcube"></i></a>';
-        for( $i = 0; $i <= $CountBread; $i++ )
-        {
-            if(isset($Breadcrumbs_Mod[$i])){
-                $htmlBreadcrumbs .= '<a href="'. $Breadcrumbs_Mod[$i]['url'] .'" class="btn btn-default"> '. $Breadcrumbs_Mod[$i]['titulo'] .' </a>';
-            }
-        }
-        $htmlBreadcrumbs .= '</div>';
+
+//        $htmlBreadcrumbs .= '<div class="btn-group btn-breadcrumb pull-right">';
+//        $htmlBreadcrumbs .= '            <a href="#" class="btn btn-default"><i class="fa fa-dashcube"></i></a>';
+//        for( $i = 0; $i <= $CountBread; $i++ )
+//        {
+//            if(isset($Breadcrumbs_Mod[$i])){
+//                $htmlBreadcrumbs .= '<a href="'. $Breadcrumbs_Mod[$i]['url'] .'" class="btn btn-default"> '. $Breadcrumbs_Mod[$i]['titulo'] .' </a>';
+//            }
+//        }
+//        $htmlBreadcrumbs .= '</div>';
 
     }
 
-    return $htmlBreadcrumbs;
+    return $Breadcrumbs;
 }
 
 ?>
