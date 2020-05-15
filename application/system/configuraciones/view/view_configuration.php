@@ -21,7 +21,7 @@
     <li class="list-group-item">
         <a href="<?= DOL_HTTP .'/application/system/configuraciones/index.php?view=form_gestion_odontologos_especialidades&v=dentist'; ?>" style="color: #1e282c">
             <i class="fa fa-wrench"></i> &nbsp;&nbsp;
-            CONFIGURAR GESTION ODONTOLOGOS
+            CONFIGURAR GESTION ODONTOLOGOS - ESPECIALIDADES - USUARIOS
         </a>
     </li>
 

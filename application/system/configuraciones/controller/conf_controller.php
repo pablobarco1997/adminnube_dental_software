@@ -22,7 +22,7 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $subaccion  = GETPOST('subaccion');
             $objeto     = GETPOST('datos');
-            $datos      = json_decode($objeto);
+            $datos      = (json_decode($objeto));
 
 //            print_r($datos);
 //            die();
@@ -35,10 +35,13 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             $email          = $datos->email;
             $ciudad         = $datos->ciudad;
             $especialidad   = $datos->especialidad;
+            $cedula_ruc     = $datos->cedula_ruc;
 
 
-            if($subaccion == 'nuevo'){
-                $rs  = nuevoUpdateOdontologos($nombre, $apellido, $celular, $telefono, $email, $direccion, $ciudad, $especialidad);
+            if($subaccion == 'nuevo')
+            {
+
+                $rs  = nuevoUpdateOdontologos($nombre, $apellido, $celular, $telefono, $email, $direccion, $ciudad, $especialidad, $cedula_ruc);
 
                 if($rs == false){
                     $error = "Ocurrió un error con la Operación";
@@ -78,11 +81,13 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             if($subaccion == 'modificar'){
 
                 $id = GETPOST('id');
-//                print_r($ciudad);
-                $rs = UpdateOdontologos($nombre, $apellido, $celular, $telefono, $email, $direccion, $ciudad, $especialidad, GETPOST('id'));
+
+                $rs = UpdateOdontologos($nombre, $apellido, $celular, $telefono, $email, $direccion, $ciudad, $especialidad, GETPOST('id'), $cedula_ruc);
+
                 if($rs == false){
                     $error = "Ocurrió un error con la Operación";
                 }
+
 
                 if( $rs == true )
                 {
@@ -256,17 +261,20 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             $error='';
 
+
             $subaccion = GETPOST('subaccion');
 
             $doctor         = GETPOST('doctor');
             $usuario        = GETPOST('usuario');
-            $passd          = explode('-', GETPOST('passwords'));
+            $passd          = GETPOST('passwords');
             $tipoUsuario    = GETPOST('tipoUsuario');
             $permisos       = GETPOST('permisos');
 
             $idEntidad      = $conf->EMPRESA->ID_ENTIDAD; #id de la entidad de la empresa de los usuarios
 
-//            die();
+            $objOdontolo = getnombreDentiste($doctor);  #Obtengo el objeto del odontologo completo
+
+
             if($subaccion == 'nuevo')
             {
 
@@ -278,33 +286,33 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 #si tiene un usuario asignado
                 if($rsinvalic->rowCount() > 0)
                 {
-
-                    $error = 'Ya tiene Usuario asignado';
-
+                    $error = '<b>odontolog@ '.$objOdontolo->nombre_doc.' '.$objOdontolo->apellido_doc.'</b><br>Ya tiene Usuario asignado';
                 }
-                else
+                else{
 
-//
+                    //
 //                $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
 //                $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
 
-                    $sql = "INSERT INTO `tab_login_users` (`usuario`, `passwords` ,`fk_doc`, `permisos`, `tipo_usuario`, `passwor_abc`) ";
+                    $sql = "INSERT INTO `tab_login_users` (`usuario`, `passwords` ,`fk_doc`, `permisos`, `tipo_usuario`, `passwor_abc`, `cedula`) ";
                     $sql .= "VALUES(";
                     $sql .= "'$usuario',";
-                    $sql .= " md5('".$passd[1]."'),"; #encrypt md5
+                    $sql .= " md5('".base64_decode($passd)."'),"; #encrypt md5
                     $sql .= "'$doctor',";
                     $sql .= "'".json_encode($permisos)."',";
                     $sql .= "'$tipoUsuario',";
-                    $sql .= "'".$passd[0]."' "; #encryt base64
+                    $sql .= "'".$passd."' ,"; #encryt base64
+                    $sql .= "'".$objOdontolo->cedula."' ";
                     $sql .= ");";
                     $rs = $db->query($sql);
 
-//                    print_r($sql); die();
+
                     if(!$rs){
                         $error = 'Ocurrió un error con la Operación crear Usuario, consulte con soporte Técnico';
                     }
                     if($rs){
 
+                        #datos para USUARIO GLOBAL
                         $datos = [];
 
                         #SE CREA EL USUARIO EL LA BASE GLOBAL
@@ -314,14 +322,16 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                         $datos['nombre']       = $ob->nombre_doc;
                         $datos['apellido']     = $ob->apellido_doc;
                         $datos['celular']      = $ob->celular;
-                        $datos['pass']         = $passd[1];
+                        $datos['pass']         = $passd;
                         $datos['email']        = $ob->email;
                         $datos['usuario']      = $usuario;
                         $datos['id_usuario']   = $idusuarioCreado;
+                        $datos['idcedula']     = $ob->cedula;
 
                         $error = GenerarUsuarioGlob($datos, $subaccion);
                     }
 
+                }
 
             }
 
@@ -371,6 +381,10 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 }
 
             }
+
+//            print_r($error);
+//            die();
+
             $output = [
                 'error' => $error
             ];
@@ -869,18 +883,50 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             ];
             echo json_encode($output);
             break;
+
+
+        #USUARIOS ODONTOLOGOS
+        case 'infoUsuarioOdontic':
+
+            #OBTENGO EL USUARIO PARA MODIFICARLO
+            $obtenerUsuario = array();
+            $idusuMod = GETPOST('idmodusu');
+
+            $cual  = GETPOST('cual');
+
+            $error ="";
+
+            if($cual == 'list'){
+
+                $data = infolistUsuarios($cual,$idusuMod);
+            }
+
+            if( $cual == 'objecto'){
+                $data = infolistUsuarios($cual,$idusuMod);
+            }
+
+
+            $output = [
+                'error'     => $error,
+                'data'      => $data,
+            ];
+
+
+            echo json_encode($output);
+
+            break;
     }
 
 
 }
 
-function nuevoUpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $email, $direccion, $ciudad, $especialidad)
+function nuevoUpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $email, $direccion, $ciudad, $especialidad, $cedula_ruc)
 {
     global $db, $conf;
 
     $error = false;
 
-    $sql  = "INSERT INTO `tab_odontologos` (`nombre_doc`, `apellido_doc`, `celular`, `telefono_convencional`, `email`, `ciudad`, `direccion`, `fk_especialidad` ) ";
+    $sql  = "INSERT INTO `tab_odontologos` (`nombre_doc`, `apellido_doc`, `celular`, `telefono_convencional`, `email`, `ciudad`, `direccion`, `fk_especialidad` , `cedula` ) ";
     $sql .= "VALUES (";
     $sql .= "'$nombre',";
     $sql .= "'$apellido',";
@@ -889,9 +935,11 @@ function nuevoUpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $em
     $sql .= "'$email',";
     $sql .= "'$ciudad',";
     $sql .= "'$direccion',";
-    $sql .= " ".!empty($especialidad) ? 0 : $especialidad ." ";
+    $sql .= " ".(!empty($especialidad) ? 0 : $especialidad )."".',';
+    $sql .= "'$cedula_ruc'";
     $sql .= ")";
 
+//    print_r($sql); die();
     $rs = $db->query($sql);
 
     if($rs){ $error = true;  }
@@ -899,7 +947,7 @@ function nuevoUpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $em
     return $error;
 }
 
-function UpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $email, $direccion, $ciudad, $especialidad, $id)
+function UpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $email, $direccion, $ciudad, $especialidad, $id, $cedula_ruc)
 {
     global  $db;
 
@@ -907,12 +955,16 @@ function UpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $email, 
 
     $fk_especi = !empty($especialidad) ? $especialidad : 0 ;
     $sql1  = " UPDATE `tab_odontologos` SET `nombre_doc` = '$nombre', `apellido_doc` = '$apellido', `celular` = '$celular', ";
-    $sql1 .= "`telefono_convencional` = '$telefo_conve', `email` = '$email', `ciudad` = '$ciudad', `direccion` = '$direccion', `fk_especialidad` = $fk_especi WHERE (`rowid` = '$id')";
+    $sql1 .= "`telefono_convencional` = '$telefo_conve', `email` = '$email', `ciudad` = '$ciudad', `direccion` = '$direccion', `fk_especialidad` = $fk_especi , `cedula` = '$cedula_ruc'   WHERE (`rowid` = '$id')";
     $rs = $db->query($sql1);
 
 //    print_r($sql1); die();
 
     if($rs){
+
+
+        /**SE ACTUALIZA EL USUSAIO SI ES NECESARIO O ESTA ASOCIADO*/
+
         $error= true;
 
         $Entidad_login = new CONECCION_ENTIDAD();
@@ -933,6 +985,7 @@ function UpdateOdontologos($nombre, $apellido, $celular, $telefo_conve, $email, 
             $datos['email']        = $ob->email;
             $datos['usuario']      = $us->usuario;
             $datos['id_usuario']   = $us->rowid;
+            $datos['idcedula']     = $cedula_ruc;
 
             $resul = GenerarUsuarioGlob($datos, 'modificar');
 
@@ -951,25 +1004,28 @@ function GenerarUsuarioGlob($datos = array(), $subaccion)
     global  $conf, $user;
 
     $error = '';
-    $nombreUsuario   = $datos["nombre"];
-    $apellidoUsuario = $datos["apellido"];
-    $celularUsuario  = $datos["celular"];
+    $nombreUsuario      = $datos["nombre"];
+    $apellidoUsuario    = $datos["apellido"];
+    $celularUsuario     = $datos["celular"];
 
-    $passUsuario     = $datos["pass"]; #password
-    $usuUsuario      = $datos["usuario"]; #Usuario
+    $passUsuario        = $datos["pass"]; #password
+    $usuUsuario         = $datos["usuario"]; #Usuario
 
-    $id_usuario      = $datos["id_usuario"];
-    $email           = $datos["email"]; #Email
+    $id_usuario         = $datos["id_usuario"];
+    $email              = $datos["email"]; #Email
+
+    $idcedula           = $datos["idcedula"]; #cedula
+
 
     $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
 
     if($subaccion == "nuevo")
     {
-        $error = $Entidad_Login::LOGIN_USUARIO_ENTITY("nuevo", $usuUsuario,$passUsuario, $email, $conf->EMPRESA->ID_ENTIDAD, $nombreUsuario, $apellidoUsuario, 0 , $id_usuario);
+        $error = $Entidad_Login::LOGIN_USUARIO_ENTITY("nuevo", $usuUsuario,$passUsuario, $email, $conf->EMPRESA->ID_ENTIDAD, $nombreUsuario, $apellidoUsuario, 0 , $id_usuario, $idcedula);
     }
     if($subaccion=="modificar")
     {
-        $error = $Entidad_Login::LOGIN_USUARIO_ENTITY("modificar", $usuUsuario,$passUsuario, $email, $conf->EMPRESA->ID_ENTIDAD, $nombreUsuario, $apellidoUsuario, $user->id_entidad_login , $id_usuario);
+        $error = $Entidad_Login::LOGIN_USUARIO_ENTITY("modificar", $usuUsuario,$passUsuario, $email, $conf->EMPRESA->ID_ENTIDAD, $nombreUsuario, $apellidoUsuario, $user->id_entidad_login , $id_usuario, $idcedula);
     }
 
     if($error==1){
@@ -1042,6 +1098,7 @@ function list_odontolosGention($estado){
             s.direccion,
             s.rowid,
             s.estado,
+            s.cedula, 
             IFNULL((SELECT 
                             e.nombre_especialidad
                         FROM
@@ -1071,18 +1128,22 @@ function list_odontolosGention($estado){
 
             $tieneUsuario = 0; #obtendre el id del Usuario Creado
 
-            $htmlUsuario = '';
-            $sqlUsu = "SELECT rowid FROM tab_login_users s WHERE s.fk_doc = $obj->rowid";
+            $htmlUsuario=""; $nomUsuario="";
+            $sqlUsu = "SELECT * FROM tab_login_users s WHERE s.fk_doc = $obj->rowid";
             $rs = $db->query($sqlUsu);
             if($rs->rowCount()>0){
                 $ob = $rs->fetchObject();
                 $tieneUsuario = $ob->rowid;
 
-                $htmlUsuario = '<small style=" ;background-color: #e9edf2; " class="btn btn-xs" data-toggle="modal" data-target="#ModalCrearUsuario" onclick="NuevoEditUsario('.$obj->rowid.','.$tieneUsuario.', 1)">&nbsp;<i class="fa fa-user"></i> Usuario</small>';
+                $nomUsuario = "<a href='#' class='btn-xs btnhover btn'><i class=\"fa fa-user\"></i>   $ob->usuario </a>  ";
+//                $htmlUsuario = '<small style=" ;background-color: #e9edf2; " class="btn btn-xs hide" data-toggle="modal" data-target="#ModalCrearUsuario" onclick="NuevoEditUsario('.$obj->rowid.','.$tieneUsuario.', 1)">&nbsp;<i class="fa fa-user"></i> Usuario</small>';
             }
 
-            $row[] ='<a href="#modal_conf_doctor" data-toggle="modal" onclick="modificarOdontologo('.$obj->rowid.')">'. $obj->nombre_doc .' '. $obj->apellido_doc.' </a>' . $htmlUsuario;
-            $row[] = $obj->celular;
+            #Link de usuario
+            $Nom = '<a href="#modal_conf_doctor" class="btn btn-xs  btnhover " style="color:#333333" data-toggle="modal"  onclick="modificarOdontologo('.$obj->rowid.')">'. $obj->nombre_doc .' '. $obj->apellido_doc.' </a>';
+
+            $row[] = $Nom . ' <small style="display: block;">'. $nomUsuario .'</small>';
+            $row[] = $obj->cedula; #Cedula del odontolog@
             $row[] = $obj->direccion;
             $row[] = $obj->email;
             $row[] = ( $obj->especialidad == '0') ? 'General' :  $obj->especialidad;
@@ -1149,6 +1210,103 @@ function list_convenios($id = "", $uno)
     }
 
     return $data;
+}
+
+function infolistUsuarios($cual, $idusuMod)
+{
+    global $db, $conf;
+
+
+    $objetoUsuario = array();
+
+    $idUsuarioOdontLogeado = $conf->login_id;
+
+    $data = array();
+
+    $sql = "SELECT 
+                        us.rowid as id , 
+                        us.usuario , 
+                        us.passwor_abc , 
+                        us.estado , 
+                        us.cedula ,
+                        concat(od.nombre_doc ,' ', od.apellido_doc) as nomdoc , 
+                        us.tipo_usuario as tipusuarioNum, 
+                        if(us.tipo_usuario=1,'administrador','normal') as tipoUsuario , 
+                        us.permisos
+                    FROM
+                        tab_login_users us,
+                        tab_odontologos od
+                        WHERE 
+                        us.fk_doc = od.rowid";
+    $sql .= " and  us.fk_doc !=  ".$idUsuarioOdontLogeado;
+
+    if($cual=='objecto'){
+        $sql .= ' and us.rowid ='.$idusuMod;
+    }
+
+    $rsUs = $db->query($sql);
+    if($rsUs && $rsUs->rowCount()>0){
+        while ($usdoc =  $rsUs->fetchObject())
+        {
+
+            if($cual == 'objecto'){
+                $objetoUsuario = $usdoc;
+            }
+
+            $objPerimisos = json_decode($usdoc->permisos);
+
+            $permisos = "";
+            $estado   = array();
+
+            $permisos .= "<ul>";
+
+            if($objPerimisos->consultar=="true"){
+                $permisos .= "<li>consultar</li>";
+            }
+            if($objPerimisos->agregar=="true"){
+                $permisos .= "<li>agregar</li>";
+            }
+            if($objPerimisos->modificar=="true"){
+                $permisos .= "<li>modificar</li>";
+            }
+            if($objPerimisos->eliminar=="true"){
+                $permisos .= "<li>eliminar</li>";
+            }
+            $permisos .= "</ul>";
+
+            #estado
+            #ACTIVO A
+            #INACTIVO I
+            if($usdoc->estado == 'A'){
+                $estado = "ACTIVO";
+            }
+            if($usdoc->estado == 'I'){
+                $estado = "INACTIVO";
+            }
+
+            $row = array();
+
+            $row[] = "";
+            $row[] = $usdoc->usuario ."<a href='#' style='display: block'><small>Odontolg@ &nbsp; - &nbsp; $usdoc->nomdoc </small></a>";
+            $row[] = $usdoc->tipoUsuario;
+            $row[] = "<small> ".  $permisos ." </small> ";
+            $row[] = $estado;
+
+            #paramerts
+            $row[] = $usdoc->estado;
+            $row[] = $usdoc->id;
+
+            $data[] = $row ;
+        }
+    }
+
+    if($cual=="list"){
+        return $data;
+    }
+    if($cual=="objecto"){
+        return $objetoUsuario;
+    }
+
 }
 
 ?>

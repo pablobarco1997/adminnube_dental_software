@@ -14,7 +14,7 @@ if($accion == 'dentist')
             destroy:true,
             ajax:{
                 url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
-                type:'POST',
+                type:'GET',
                 data:{'ajaxSend':'ajaxSend', 'accion':'list_odontologos', 'estado':estado},
                 dataType:'json',
             },
@@ -64,6 +64,7 @@ if($accion == 'dentist')
         var celular      = $('#celular_doct');
         var email        = $('#email_doct');
         var ciudad       = $('#ciudad_doct');
+        var ruc_cedula   = $('#rucedula_doct');
         var especialidad = $('#especialidad_doct').find(':selected').val();
 
 
@@ -95,6 +96,20 @@ if($accion == 'dentist')
             email.removeClass('INVALIC_ERROR');
         }
 
+        if( celular.val() == ''){
+            $puedo++;
+            celular.addClass('INVALIC_ERROR');
+        }else{
+            celular.removeClass('INVALIC_ERROR');
+        }
+
+        if( ruc_cedula.val() == ''){
+            $puedo++;
+            ruc_cedula.addClass('INVALIC_ERROR');
+        }else{
+            ruc_cedula.removeClass('INVALIC_ERROR');
+        }
+
         //subaaccion modal
 
         var subaccion = '';
@@ -116,6 +131,7 @@ if($accion == 'dentist')
             'ciudad'    :ciudad.val(),
             'especialidad': especialidad,
             // 'icon'        : fichero,
+            'cedula_ruc': ruc_cedula.val(),
         };
 
         if($puedo == 0){
@@ -180,15 +196,16 @@ if($accion == 'dentist')
 
                 console.log(resp);
 
-                var datos        = resp.error;
-                var nombre       = $('#nombre_doct');
-                var apellido     = $('#apellido_doct');
-                var telefono     = $('#TelefonoConvencional_doct');
-                var direccion    = $('#direccion_doct');
-                var celular      = $('#celular_doct');
-                var email        = $('#email_doct');
-                var ciudad       = $('#ciudad_doct');
-                var especialidad = $('#especialidad_doct');
+                var datos         = resp.error;
+                var nombre        = $('#nombre_doct');
+                var apellido      = $('#apellido_doct');
+                var telefono      = $('#TelefonoConvencional_doct');
+                var direccion     = $('#direccion_doct');
+                var celular       = $('#celular_doct');
+                var email         = $('#email_doct');
+                var ciudad        = $('#ciudad_doct');
+                var especialidad  = $('#especialidad_doct');
+                var rucedula_doct = $('#rucedula_doct');
 
                 var img = $('#icon_usuario_doct');
 
@@ -199,6 +216,7 @@ if($accion == 'dentist')
                 direccion.val( datos.direccion );
                 email.val( datos.email );
                 ciudad.val( datos.ciudad );
+                rucedula_doct.val( datos.cedula );
                 especialidad.val( datos.fk_especialidad ).trigger('change');
 
                 if(datos.icon != ''){
@@ -251,8 +269,9 @@ if($accion == 'dentist')
         $('#celular_doct').val(null);
         $('#email_doct').val(null);
         $('#ciudad_doct').val(null);
+        $('#rucedula_doct').val(null);
         $('#especialidad_doct').val(0).trigger('change');
-
+        $('#icon_usuario_doct').attr('src',  $DOCUMENTO_URL_HTTP + '/logos_icon/logo_default/doct-icon.png' );
     }
 
 
@@ -280,70 +299,6 @@ if($accion == 'dentist')
 
     /**CREACION MODIFICAR USUARIO DEL PACIENTE**/
 
-    function NuevoEditUsario(idodontologo, idusuario, $subaccion)
-    {
-
-        //modificar
-        if( $subaccion.toString() == '1')
-        {
-            //se remueve la funcion validacion de usuario  UsuarioOdctor()
-            $("#usu_doctor").attr('onchange', '').prop('disabled', false).prop('disabled', true);
-            //se quita las funciones
-            $('#usu_usuario').attr('onkeyup','comprobar_usuario_en_uso()');
-            $('#accionUsuario').attr('data-id', idusuario); //id usuario
-            // console.log( $('#accionUsuario') );
-            // $("#usu_doctor").attr('onchange', '');
-            $('#msg_doctorUsuario').text(null);
-            $('#msg_password_d').text(null);
-            $('#msg_password').text(null);
-            $('#msg_permisos').text(null);
-
-            fecth_modUsuarioDoct( idusuario ); //obtengo los valeres listo para modificar
-
-            $('#accionUsuario').text('MODIFICAR USUARIO');
-            $('#msg_usuario_repit').text(null);
-            $('#usu_usuario').removeClass('INVALIC_ERROR');
-
-        }
-
-        //nuevo
-        if($subaccion.toString() == "0")
-        {
-
-            $('#accionUsuario').attr('data-id', 0);
-            // console.log( $('#accionUsuario') );
-
-            //clear
-            $('#tipoUsuario').val(null).trigger('change');
-            $('#usu_doctor').val(null).trigger('change');
-
-            $('#usu_usuario').val(null);
-            $('#usu_password').val(null);
-            $('#usu_confir_password').val(null);
-
-            $('#chek_consultar').prop('checked', false);
-            $('#chek_agregar').prop('checked', false);
-            $('#chek_modificar').prop('checked', false);
-            $('#chek_eliminar').prop('checked', false);
-
-            //onkeyup funciones  --------------------------- invalicUsuario();
-            $('#usu_usuario').attr('onkeyup','comprobar_usuario_en_uso();');
-            //se aplica la funcion crear usuario
-            $("#usu_doctor").attr('onchange', 'UsuarioOdctor($(this))').prop('disabled', false);
-
-            $('#accionUsuario').text('NUEVO USUARIO');
-
-            $('#msg_doctorUsuario').text(null);
-            $('#msg_usuario_repit').text(null);
-            $('#msg_password_d').text(null);
-            $('#msg_password').text(null);
-            $('#msg_permisos').text(null);
-
-
-        }
-
-    }
-
     function encrytar_base64(dato) {
         return btoa(dato);
     }
@@ -351,35 +306,6 @@ if($accion == 'dentist')
         return atob(dato);
     }
 
-    function keyConfirmarPassword()
-    {
-        if( $('#usu_password').val() != $('#usu_confir_password').val())
-        {
-            $('#msg_password').text('Password Incorrecto');
-            $('#usu_confir_password').addClass('INVALIC_ERROR');
-            $('#nuevoUpdateUsuario').addClass('disabled_link3').attr('disabled', true);
-        }else{
-            $('#msg_password').text(null);
-            $('#usu_confir_password').removeClass('INVALIC_ERROR');
-            $('#nuevoUpdateUsuario').removeClass('disabled_link3').attr('disabled', false);
-        }
-
-        if( $('#usu_password').val() != '' ){
-            $('#usu_password').removeClass('INVALIC_ERROR');
-            $('#msg_password_d').text(null);
-        }
-    }
-    function passwordMostrarOcultar( por )
-    {
-        if(por == 'mostrar'){
-            $('#usu_password').attr('type','text');
-            $('#usu_confir_password').attr('type','text');
-        }
-        if(por == 'ocultar'){
-            $('#usu_password').attr('type','password');
-            $('#usu_confir_password').attr('type','password');
-        }
-    }
     //Compruba q usuario esta en uso
     function comprobar_usuario_en_uso()
     {
@@ -689,46 +615,6 @@ if($accion == 'dentist')
 
     });
 
-    function fecth_modUsuarioDoct( $idUsuario )
-    {
-        if( $idUsuario != '')
-        {
-
-            $.ajax({
-                url: $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php',
-                type:'POST',
-                data: {'ajaxSend':'ajaxSemd', 'accion':'fech_usuariodoct', 'id':$idUsuario},
-                dataType:'json',
-                async:false,
-                success: function(resp){
-                    console.log(resp);
-
-                    var obj = resp;
-                    var doctor               = obj.fk_doc;
-                    var usuario              = obj.usuario;
-                    var password             = obj.passwor_abc;
-                    var confir_password      = obj.passwor_abc;
-                    var tipousuario          = obj.tipo_usuario;
-                    var permisos             = JSON.parse(obj.permisos);
-
-
-                    $('#tipoUsuario').val(tipousuario).trigger('change');
-
-                    $("#chek_consultar").prop('checked', ( permisos.consultar == "true" ) ? true : false);
-                    $("#chek_agregar").prop('checked'  , ( permisos.agregar == "true" ) ? true : false);
-                    $("#chek_modificar").prop('checked', ( permisos.modificar == "true" ) ? true : false);
-                    $("#chek_eliminar").prop('checked' , ( permisos.eliminar == "true" ) ? true : false);
-
-
-                    $("#usu_doctor").val( doctor ).trigger('change').prop('disabled', true);
-                    $('#usu_usuario').val( usuario );
-                    $('#usu_password').val( descrytar_base64(password) );
-                    $('#usu_confir_password').val( descrytar_base64(confir_password) );
-                }
-
-            });
-        }
-    }
 
 
 

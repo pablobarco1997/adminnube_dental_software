@@ -17,12 +17,22 @@ if($rs->rowCount()>0)
     }
 }
 
+
+$v = null;
+if(isset($_GET['v'])){
+    $v = $_GET['v'];
+}
+
 ?>
 
 <script>
     //accion si es especialidad o Doctor     MODULO
     $accion = "<?= $accionDoctorEspicialidad ?>";
 </script>
+
+<style>
+
+</style>
 
 <div class="box box-solid">
 
@@ -41,22 +51,26 @@ if($rs->rowCount()>0)
                     <li><a class="btn " href="<?= DOL_HTTP .'/application/system/configuraciones/index.php?view=form_gestion_odontologos_especialidades&v=dentist'; ?>" style="border-left: 2px solid #212f3d; color: #333333"> <i class="fa fa-user-md"></i> &nbsp; Odontólogos</a> </li>
                     <li>&nbsp;&nbsp;</li>
                     <li><a class="btn " href="<?= DOL_HTTP .'/application/system/configuraciones/index.php?view=form_gestion_odontologos_especialidades&v=specialties'; ?>" style="border-left: 2px solid #212f3d; color: #333333" > <i class="fa fa-align-center"></i> &nbsp; Especialidades</a></li>
+                    <li>&nbsp;&nbsp;</li>
+                    <li><a class="btn " href="<?= DOL_HTTP .'/application/system/configuraciones/index.php?view=form_gestion_odontologos_especialidades&v=users&list=true'; ?>" style="border-left: 2px solid #212f3d; color: #333333" > <i class="fa fa-user"></i> &nbsp; Usuarios</a></li>
+
                 </ul>
+                <br>
             </div>
 
             <?php
 
             #DENTISTA   ---------------------------------------------------------------------------------------------------------------------------------------------------------------
-            if(isset($_GET["v"]) && $_GET["v"] == "dentist")
+            if(isset($v) && $v == "dentist")
             {
 
             ?>
 
             <div class="row">
                 <div class="form-group col-md-12">
-                    <ul class="list-inline" style="border-bottom: 1px solid #333333; padding-bottom: 1.5px">
+                    <ul class="list-inline" style="border-bottom: 1px solid #333333; border-top: 1px solid #333333;  padding-bottom: 1.5px">
                         <li><a  style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  "  data-toggle="modal" data-target="#modal_conf_doctor"  onclick="cambiarattr()"> &nbsp;&nbsp;<i class="fa fa-user-md"></i> &nbsp;&nbsp; crear odontólogos</a></li>
-                        <li><a style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  " data-toggle="modal" data-target="#ModalCrearUsuario"  onclick="NuevoEditUsario(0,0,'0')" > &nbsp;&nbsp;<i class="fa fa-user"></i> &nbsp;&nbsp; Crear Usuario</a></li>
+                        <li><a style="cursor: pointer; font-weight: bolder; color: #333333" class="btn btnhover  hide" data-toggle="modal" data-target="#ModalCrearUsuario"  onclick="NuevoEditUsario(0,0,'0')" > &nbsp;&nbsp;<i class="fa fa-user"></i> &nbsp;&nbsp; Crear Usuario</a></li>
                         <li> <div class="checkbox btnhover" style="margin: 0px; padding: 5px; "><label for="desabilitado_doctores" style=" font-weight: bolder"><input type="checkbox" id="desabilitado_doctores"><i class="fa fa-user-times"></i> Ver lista de doctores desabilitados</label></div></li>
                     </ul>
                 </div>
@@ -70,7 +84,7 @@ if($rs->rowCount()>0)
                             <thead>
 <!--                                <th width="5%"></th>-->
                                 <th width="18%">NOMBRE APELLIDO</th>
-                                <th width="15%">CELULAR</th>
+                                <th width="15%">CEDULA</th>
                                 <th width="15%">DIRECCIÓN</th>
                                 <th width="18%">E-MAIL</th>
                                 <th width="15%">ESPACIALIDAD</th>
@@ -87,42 +101,166 @@ if($rs->rowCount()>0)
             <?php
 
                 #ESPECIALIDAD   <------------------------------------------------------------------------------------------------------------------------------------------------------------->
-                if(isset($_GET["v"]) && $_GET["v"] == "specialties")
+                if(isset($v) && $v == "specialties")
                 {
 
             ?>
 
-                <div class="form-group">
-                    <ul class="list-inline" style="border-bottom: 1px solid #333333; padding-bottom: 2px">
-                        <li><a class="btnhover btn"  data-toggle="modal" data-target="#ModalConfEspecialidades" style="font-weight: bolder; color: #333333"> <i class="fa fa-list"></i> &nbsp; crear especialidad </a> </li>
-                    </ul>
-                </div>
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <ul class="list-inline" style="border-bottom: 1px solid #333333; border-top: 1px solid #333333; padding-bottom: 2px">
+                            <li><a class="btnhover btn"  data-toggle="modal" data-target="#ModalConfEspecialidades" style="font-weight: bolder; color: #333333"> <i class="fa fa-list"></i> &nbsp; crear especialidad </a> </li>
+                        </ul>
+                    </div>
 
-                <div class="form-group col-md-12">
-                   <div class="form-group col-md-12 ">
+                    <div class="form-group col-md-12">
+                        <div class="form-group col-md-12 ">
                         <span style=" color: #eb9627">
                         <i class="fa fa-info-circle"></i>
                             Tener en cuenta que si elimina una especialidad, aquellos Odontólogos
                             relacionados con esta, se actualizaran a especialidad General incluyendo todas las citas asociadas con la especialidad
                             eliminada
                         </span>
-                   </div>
-                </div>
+                        </div>
+                    </div>
 
-                <div class="form-group col-md-12">
-                    <div class="table-responsive">
-                        <table width="100%" class="table table-striped" id="gention_especialidades">
-                            <thead>
+                    <div class="form-group col-md-12">
+                        <div class="table-responsive">
+                            <table width="100%" class="table table-striped" id="gention_especialidades">
+                                <thead>
                                 <th width="30%">FECHA CREACION</th>
                                 <th width="30%">ESPECIALIDAD</th>
                                 <th width="30%">DESCRIPCIÓN</th>
                                 <th ></th>
-                            </thead>
-                        </table>
+                                </thead>
+                            </table>
+                        </div>
                     </div>
                 </div>
 
+
             <?php } ?>
+
+
+            <?php
+
+                #USUARIOS ASOCIADOS A UN ODONTOLOGOS  ---------------------------------------------------------------------------------------------
+                if( isset($v) && $v == "users")
+                {
+            ?>
+
+                <div class="row">
+                    <div class="form-group col-md-12">
+                        <ul class="list-inline" style="border-bottom: 1px solid #333333; border-top: 1px solid #333333; padding-bottom: 2px">
+                            <!--                              <li><a class="btnhover btn" data-toggle="modal" data-target="#ModalCrearUsuario"  style="font-weight: bolder; color: #333333"> <i class="fa fa-user-plus"></i> &nbsp; Crear Usuario </a> </li>-->
+                            <li><a class="btnhover btn" href="<?= DOL_HTTP .'/application/system/configuraciones/index.php?view=form_gestion_odontologos_especialidades&v=users&creat=true'?>"  style="font-weight: bolder; color: #333333"> <i class="fa fa-user-plus"></i> &nbsp; Crear Usuario </a> </li>
+                        </ul>
+                    </div>
+
+                <?php if( isset($_GET['list']) ){?>
+                      <div class="form-group col-md-12 col-xs-12">
+                          <div class="table-responsive">
+                              <table class="table table-striped" id="usuariolistinfo">
+                                  <thead>
+                                        <tr>
+                                            <th></th>
+                                            <th>USUARIO</th>
+                                            <th>TIPO DE USUARIO</th>
+                                            <th>PERMISOS</th>
+                                            <th>ESTADO</th>
+                                        </tr>
+                                  </thead>
+                              </table>
+                          </div>
+                      </div>
+                <?php  } ?>
+
+                <?php if( isset($_GET['creat']) ||  isset($_GET['mod']) ){  ?>
+
+
+                    <div class="form-group col-md-12 col-xs-12">
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <label for="">Doctor</label>
+                            <select name="" id="usu_doctor" class="form-control select2_max_ancho">
+                                <?= $option1 ?>
+                            </select>
+                            <small style="color: #9f191f" id="msg_doctorUsuario"></small>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <label for="">Usuario</label>
+                            <input type="text" class="form-control " id="usu_usuario" >
+                            <small style="color: #9f191f" id="msg_usuario_repit"></small>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <label for="">Password</label>
+                            <div class="input-group">
+                                <input type="password" class="form-control input-sm" id="usu_password" onkeyup="keyConfirmarPassword();">
+                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('mostrar');"><i class="fa fa-eye"></i></div>
+                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('ocultar');"><i class="fa fa-eye-slash"></i></div>
+                            </div>
+                            <small style="color: #9f191f" id="msg_password_d"></small>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <label for="">Confirmar Password</label>
+                            <input type="password" class="form-control input-sm" id="usu_confir_password" onkeyup="keyConfirmarPassword();">
+                            <small style="color: #9f191f" id="msg_password"></small>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <hr>
+                            <label class="bold">ASIGNAR PERMISOS</label>
+                            <div class="table-responsive">
+                                <table class="table" width="100%">
+                                    <thead style="background-color: #e9edf2">
+                                    <tr>
+                                        <th width="15%" style="font-size: 1.3rem">TIPO USUARIO</th>
+                                        <th width="15%" style="font-size: 1.3rem">CONSULTAR</th>
+                                        <th width="15%" style="font-size: 1.3rem">AGREGAR</th>
+                                        <th width="15%" style="font-size: 1.3rem">MODIFICAR</th>
+                                        <th width="15%" style="font-size: 1.3rem">ELIMINAR</th>
+                                    </tr>
+                                    </thead>
+                                    <tbody>
+                                    <tr style="background-color: #f4f4f4">
+                                        <td width="100%">
+                                            <select  id="tipoUsuario" class="form-control select2_max_ancho" >
+                                                <!--                                                    <option value=""></option>-->
+                                                <option value="1">Administrador</option>
+                                                <option value="2">Usuario Normal</option>
+                                            </select>
+                                            <small style="color: #9f191f" id="msg_permisos"></small>
+                                        </td>
+                                        <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_consultar" disabled class="disabled_link3"> </td>
+                                        <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_agregar" disabled class="disabled_link3">   </td>
+                                        <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_modificar" disabled class="disabled_link3"> </td>
+                                        <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_eliminar" disabled class="disabled_link3">  </td>
+                                    </tr>
+                                    </tbody>
+
+                                </table>
+                            </div>
+                            <br>
+                        </div>
+
+                        <div class="form-group col-xs-12 col-md-12">
+                            <div class="pull-right">
+                                <a class="btn btnhover " style="font-weight: bolder; color: green" id="nuevoUpdateUsuario"> Guardar </a>
+                            </div>
+                        </div>
+
+                    </div>
+
+                <?php  } ?>
+
+                </div>
+            <?php
+                }
+                //END CREAT UPDATE INCATIVAR USUARIO ELIMINAR  -------------------------------------------------------------------------------
+            ?>
 
         </div>
 
@@ -169,13 +307,19 @@ if($rs->rowCount()>0)
                                     <input type="text" name="" class="form-control input-sm" id="apellido_doct" >
                                 </div>
 
+
                                 <div class="form-group col-md-6">
                                     <label for="">celular</label>
                                     <input type="text" name="" class="form-control input-sm" id="celular_doct" >
                                 </div>
 
                                 <div class="form-group col-md-6">
-                                    <label for="">Telefono</label>
+                                    <label for="">cedula</label>
+                                    <input type="text" name="" class="form-control input-sm" id="rucedula_doct" >
+                                </div>
+
+                                <div class="form-group col-md-6">
+                                    <label for="">Teléfono fijo</label>
                                     <input type="text" name="" class="form-control input-sm" id="TelefonoConvencional_doct" >
                                 </div>
 
@@ -229,96 +373,6 @@ if($rs->rowCount()>0)
 </div>
 
 
-<!--CREAR USUARIO CON SUS PERMISOS ================================================================================= -->
-<div id="ModalCrearUsuario" class="modal fade" role="dialog">
-    <div class="modal-dialog modal-lg">
-
-        <!-- Modal content-->
-        <div class="modal-content">
-            <div class="modal-header modal-diseng">
-                <button type="button" class="close" data-dismiss="modal">&times;</button>
-                <h4 class="modal-title" data-id="0" id="accionUsuario" >CREAR USUARIO</h4>
-            </div>
-            <div class="modal-body">
-                <div class="row">
-                    <div class="center-block" style="width: 70%">
-
-                        <div class="form-group col-xs-12 col-md-12">
-                            <label for="">Doctor</label>
-                            <select name="" id="usu_doctor" class="form-control select2_max_ancho" onchange="UsuarioOdctor($(this)); invalicUsuario();">
-                                <?= $option1 ?>
-                            </select>
-                            <small style="color: #9f191f" id="msg_doctorUsuario"></small>
-                        </div>
-
-                        <div class="form-group col-xs-12 col-md-12">
-                            <label for="">Usuario</label>
-                            <input type="text" class="form-control input-sm" id="usu_usuario" onkeyup="comprobar_usuario_en_uso(); invalicUsuario();">
-                            <small style="color: #9f191f" id="msg_usuario_repit"></small>
-                        </div>
-
-                        <div class="form-group col-xs-12 col-md-12">
-                            <label for="">Password</label>
-                            <div class="input-group">
-                                <input type="password" class="form-control input-sm" id="usu_password" onkeyup="keyConfirmarPassword(); invalicUsuario();">
-                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('mostrar'); invalicUsuario();"><i class="fa fa-eye"></i></div>
-                                <div class="input-group-addon btn" onclick="passwordMostrarOcultar('ocultar'); invalicUsuario();"><i class="fa fa-eye-slash"></i></div>
-                            </div>
-                            <small style="color: #9f191f" id="msg_password_d"></small>
-                        </div>
-
-                        <div class="form-group col-xs-12 col-md-12">
-                            <label for="">Confirmar Password</label>
-                            <input type="password" class="form-control input-sm" id="usu_confir_password" onkeyup="keyConfirmarPassword(); invalicUsuario();">
-                            <small style="color: #9f191f" id="msg_password"></small>
-                        </div>
-
-                        <div class="form-group col-xs-12 col-md-12">
-                            <hr>
-                            <label class="bold">ASIGNAR PERMISOS</label>
-                            <div class="table-responsive">
-                                <table class="table" width="100%">
-                                    <thead style="background-color: #e9edf2">
-                                        <tr>
-                                            <th width="15%" style="font-size: 1.3rem">TIPO USUARIO</th>
-                                            <th width="15%" style="font-size: 1.3rem">CONSULTAR</th>
-                                            <th width="15%" style="font-size: 1.3rem">AGREGAR</th>
-                                            <th width="15%" style="font-size: 1.3rem">MODIFICAR</th>
-                                            <th width="15%" style="font-size: 1.3rem">ELIMINAR</th>
-                                        </tr>
-                                    </thead>
-                                    <tbody>
-                                        <tr>
-                                            <td width="100%">
-                                                <select  id="tipoUsuario" class="form-control input-sm select2_max_ancho" onchange="invalicUsuario();">
-                                                    <option value=""></option>
-                                                    <option value="1">Administrador</option>
-                                                    <option value="2">Usuario Normal</option>
-                                                </select>
-                                                <small style="color: #9f191f" id="msg_permisos"></small>
-                                            </td>
-                                            <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_consultar" disabled class="disabled_link3"> </td>
-                                            <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_agregar" disabled class="disabled_link3">   </td>
-                                            <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_modificar" disabled class="disabled_link3"> </td>
-                                            <td  width="100%" class="text-center" style="font-size: 4rem"> <input type="checkbox" id="chek_eliminar" disabled class="disabled_link3">  </td>
-                                        </tr>
-                                    </tbody>
-                                </table>
-                            </div>
-                        </div>
-
-                    </div>
-                </div>
-            </div>
-            <div class="modal-footer">
-                <a class="btn btnhover " style="font-weight: bolder;" data-dismiss="modal" id=""> Close </a>
-                <a class="btn btnhover " style="font-weight: bolder; color: green" id="nuevoUpdateUsuario"> Aceptar </a>
-            </div>
-        </div>
-    </div>
-</div>
-
-
 <!--MODAL ESPECIALIDADES ---------------------------------------------------------------------------------------------->
 <div id="ModalConfEspecialidades" class="modal fade" role="dialog">
     <div class="modal-dialog">
@@ -352,6 +406,7 @@ if($rs->rowCount()>0)
 </div>
 
 
+
 <!--JAVASCRIPT DE ESPECIALIDADES-->
 <?php if(isset($_GET['view']) && GETPOST("v") == 'specialties'){?>
     <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/odontespecialidades.js'; ?>"></script>
@@ -360,4 +415,9 @@ if($rs->rowCount()>0)
 <!--JAVASCRIPT DE ODONTOLOGOS-->
 <?php if(isset($_GET['view']) && GETPOST("v") == 'dentist'){?>
     <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/NewEditoOdontUsuario.js'; ?>"></script>
+<?php }?>
+
+<!--JAVASCRIPT DE USUARIOS-->
+<?php if(isset($_GET['view']) && GETPOST("v") == 'users'){?>
+    <script src="<?= DOL_HTTP .'/application/system/configuraciones/js/UsuariosOdonti.js'; ?>"></script>
 <?php }?>
