@@ -130,12 +130,11 @@ if(isset($_GET['view']) && $_GET['view'] == 'agendadd'){
 
 <div class="row">
     <div class="form-group col-lg-12 col-xs-12 col-md-12">
-        <div class="col-md-6 col-xs-12 pull-left"></div>
+        <div class="col-md-6 col-xs-12 pull-left">
+            <?php echo Breadcrumbs_Mod($titulo, $url_breadcrumb, $module) ?>
+        </div>
         <div class="col-md-6 col-xs-12 pull-right">
             <h3 class="pull-right">AGENDAR CITA</h3>
-            <div class="form-group col-xs-12 col-md-12 col-lg-12 no-margin no-padding">
-                <?php echo Breadcrumbs_Mod($titulo, $url_breadcrumb, $module) ?>
-            </div>
         </div>
     </div>
 </div>
@@ -144,7 +143,7 @@ if(isset($_GET['view']) && $_GET['view'] == 'agendadd'){
     <div class="form-group col-lg-12 col-md-12">
         <div class="form-horizontal">
             <div class="form-group">
-                <label for="" class="control-label col-sm-4 col-md-4 col-xs-12">nombre paciente</label>
+                <label for="" class="control-label col-sm-4 col-md-4 col-xs-12">Paciente</label>
                 <div class="col-sm-5 col-md-5 col-xs-12">
                     <select  id="agndar_paciente" class="form-control select2_max_ancho">
                         <option value=""></option>
