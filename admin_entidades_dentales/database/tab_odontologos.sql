@@ -13,6 +13,7 @@ CREATE TABLE `tab_odontologos` (
   `tms` timestamp NULL DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP,
   `estado` varchar(45) DEFAULT 'A',
   `icon` varchar(150) DEFAULT NULL,
+  `cedula` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`rowid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
 ;

@@ -7,6 +7,7 @@ CREATE TABLE `tab_login_users` (
   `tipo_usuario` varchar(45) DEFAULT '2',
   `passwor_abc` varchar(1000) DEFAULT NULL,
   `estado` varchar(5) DEFAULT 'A',
+  `cedula` varchar(20) DEFAULT NULL,
   PRIMARY KEY (`rowid`)
 ) ENGINE=InnoDB AUTO_INCREMENT=0 DEFAULT CHARSET=utf8
 ;
