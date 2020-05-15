@@ -101,6 +101,10 @@
         font-family: 'Roboto', sans-serif;
     }
 
+    .table  tr {
+         font-size: 1.4rem !important;
+     }
+
 
 </style>
 <body class="skin-blue sidebar-mini sidebar-collapse">

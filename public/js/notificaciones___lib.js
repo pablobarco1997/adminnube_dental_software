@@ -21,7 +21,7 @@ function Actulizar_notificacion_citas(idcita)
     $.ajax({
         url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
         type:'POST',
-        data:{'ajaxSend': 'ajaxSend', 'accion': 'EstadoslistCitas', 'idestado':4, 'idcita':idcita,  },
+        data:{'ajaxSend': 'ajaxSend', 'accion': 'EstadoslistCitas', 'idestado':4, 'idcita':idcita },
         dataType:'json',
         async: false,
         success:function (resp) {
@@ -31,6 +31,13 @@ function Actulizar_notificacion_citas(idcita)
         }
     });
 }
+
+
+// $('ul#menuNotificacion').click(function (e) {
+//     // alert(4556);
+//     e.stopPropagation();
+//     $('.dropdown-menu').toggle();
+// });
 
 /*
 /**FILTRAR X RANGO DE FECHA*/

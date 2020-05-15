@@ -10,7 +10,7 @@
         <span class="label label-warning" id="nume_notificacion"><?= $conf->NOTIFICACIONES->Numero->NumeroNotificaciones ?></span>
     </a>
 
-    <ul class="dropdown-menu " style="width: 400px ;height: 400px; overflow-y: auto">
+    <ul class="dropdown-menu " id="menuNotificacion" style="width: 400px ;height: 400px; overflow-y: auto">
 
         <li class="header">  <?= $conf->NOTIFICACIONES->Numero->NumeroNotificaciones ?> NOTIFICACIONES </li>
 
