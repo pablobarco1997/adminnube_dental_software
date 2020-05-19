@@ -280,9 +280,9 @@ function Breadcrumbs_Mod( $titulo, $url, $module )
             if(isset($Breadcrumbs_Mod[$i])) //verifico si existe o hay valores
             {
                 if($i==0){
-                    $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' "> '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp;</a></li>';
+                    $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' " title="'. $Breadcrumbs_Mod[$i]['titulo'] .'" style="padding-left: 25px; font-family: \'Quicksand\', sans-serif !important;"  > '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp;</a></li>';
                 }else{
-                    $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' ">  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp;</a></li>';
+                    $Breadcrumbs .= '<li><a href=" '. $Breadcrumbs_Mod[$i]['url'] .' " title="'. $Breadcrumbs_Mod[$i]['titulo'] .'" style="font-family: \'Quicksand\', sans-serif !important;"  >  &nbsp;&nbsp;&nbsp;&nbsp;&nbsp; '. $Breadcrumbs_Mod[$i]['titulo'] .' &nbsp;</a></li>';
 
                 }
             }

@@ -74,6 +74,3 @@ function list_global_diaria_citas(){
 
 
 }
-
-
-list_global_diaria_citas();

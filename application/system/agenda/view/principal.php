@@ -91,7 +91,7 @@
                     <div class="callbox">
                         <div class="form-group">
                             <div class="checkbox <?= $permisos->consultar  ?>">
-                                <label for="listcitasCanceladasEliminadas" class="btnhover">
+                                <label for="listcitasCanceladasEliminadas" class="btnhover hide">
                                     <a style="color: #333333"  class="btn  <?= $permisos->consultar  ?>">
                                         <input type="checkbox" id="listcitasCanceladasEliminadas">  MOSTRAR CITAS CANCELADAS O ELIMINADAS
                                     </a>
@@ -111,8 +111,8 @@
 <div class="row">
     <div class="form-group col-lg-12 col-md-12">
 
-        <div class="form-group col-md-4 col-xs-12">
-            <label for="">Fecha</label>
+        <div class="form-group col-md-3 col-xs-12">
+            <label for="">Rango de Fecha</label>
             <div class="input-group form-group rango" style="margin: 0">
                 <input type="text" class="form-control filtroFecha <?= $permisos->consultar  ?> " readonly id="startDate" value="">
                 <span class="input-group-addon" style="border-radius: 0"><i class="fa fa-calendar"></i></span>
@@ -120,10 +120,10 @@
         </div>
 
 
-        <div class="form-group  col-md-4 col-xs-12">
+        <div class="form-group  col-md-5 col-xs-12">
             <label for="">Doctor</label>
-            <select name="" id="filtro_doctor" class="filtrar_doctor select2_max_ancho <?= $permisos->consultar  ?>" >
-                <option value=""></option>
+            <select name="" id="filtro_doctor" multiple class="filtrar_doctor select2_max_ancho <?= $permisos->consultar  ?>" >
+<!--                <option value=""></option>-->
                 <?php
 
 
@@ -157,6 +157,30 @@
                 }
                 ?>
             </select>
+        </div>
+
+        <div class="form-group col-md-5 col-xs-12">
+
+            <label for="">buscar Pacientes</label>
+
+            <div class="checkbox <?= $permisos->consultar  ?>">
+                <label for="pacientes_habilitados" class="">
+                    <a style="color: #333333"  class=" <?= $permisos->consultar  ?>">
+                        <input type="checkbox" id="pacientes_habilitados">  Pacientes habilitados
+                    </a> <br>
+                </label>
+            </div>
+            <div class="checkbox">
+                <label for="pacientes_desabilitados">
+                    <a style="color: #333333"  class=" <?= $permisos->consultar  ?>">
+                        <input type="checkbox" id="pacientes_desabilitados">  Pacientes desabilitados
+                    </a>
+                </label>
+            </div>
+
+<!--            busca los pacientes por habilitados y desavilitados-->
+            <select name="" id="buscarxPaciente" multiple class="select2_max_ancho buscarxPaciente"></select>
+
         </div>
 
         <div class="form-group col-md-4 pull-right">

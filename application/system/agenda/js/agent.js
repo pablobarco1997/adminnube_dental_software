@@ -1,8 +1,5 @@
 
-var doctor  = $("#filtro_doctor").find(":selected").val();
-var estados = $("#filtroEstados").val();
-
-function loadtableAgenda($doctor, $estado)
+function loadtableAgenda()
 {
     $('#tableAgenda').DataTable({
         searching: false,
@@ -14,18 +11,28 @@ function loadtableAgenda($doctor, $estado)
 
         ajax:{
             url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
-            type:'POST',
+            type:'GET',
             data:
                 {
                     'ajaxSend'  : 'ajaxSend',
                     'accion'    : 'listCitas',
-                    'doctor'    : $doctor,
-                    'estados'   : $estado,
+
+                    'doctor'    : ($("#filtro_doctor").val()!="")?$("#filtro_doctor").val().toString():"",
+                    'estados'   : ($("#filtroEstados").val()!="")?$("#filtroEstados").val().toString():"",
                     'fecha'     : $('.filtroFecha').val(),
                     'eliminada_canceladas' : ( ( $('#listcitasCanceladasEliminadas').is(':checked')==true) ? "checked" : "") ,
+                    'buscar_xpaciente': ($('#buscarxPaciente').val()!="")?$('#buscarxPaciente').val().toString():""
                 },
-
             dataType:'json',
+        },
+        'createdRow':function(row, data, index){
+
+            console.log(data[7]);
+
+            if( data[7] == 6){
+                $(row).css('backgroundColor','#58D68D');
+            }
+
         },
         language:{
             "sProcessing":     "Procesando...",
@@ -57,29 +64,8 @@ function loadtableAgenda($doctor, $estado)
         //
         // },
     });
-}
-
-function inputs_lib()
-{
-    $('.filtrar_doctor').select2({
-        placeholder: 'Seleccionar un doctor',
-        allowClear:true,
-        language:'es',
-    });
-
-    $('#pacienteCita').select2({
-        placeholder: 'Pacientes',
-        allowClear: true,
-        language:'es'
-    });
-
-    $('.filtrar_estados').select2({
-        placeholder:'Seleccione estados cita'
-    });
-
 
 }
-
 
 
 //Numero de citas
@@ -113,6 +99,7 @@ function NOTIFICACION_CITAS_NUMEROS(tipo)
 //Funciones Cambio de estados 
 function EstadosCitas(idestado, idcita, html, idpaciente) //Comprotamientos de los estados de las citas
 {
+
     var textEstado = html.data('text');
 
     // alert(idestado);
@@ -153,7 +140,18 @@ function EstadosCitas(idestado, idcita, html, idpaciente) //Comprotamientos de l
 
         case 6: // Atendido
 
-            UpdateEstadoCita(idestado, idcita, html, textEstado );
+            $.get($DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php" , {'ajaxSend':'ajaxSend', 'accion':'consultar_estado_cita_atrazada', 'idcita':idcita } , function(data) {
+
+                var dato = $.parseJSON(data);
+
+                if(dato.result == 'atrazada'){
+                    notificacion('Esta cita se encuentra atrazada no puede cambiar a estado <b>Atendido</b>', 'question');
+                }else{
+                    UpdateEstadoCita(idestado, idcita, html, textEstado );
+                }
+
+            });
+
             break;
 
         case 7: // No asiste
@@ -173,6 +171,10 @@ function EstadosCitas(idestado, idcita, html, idpaciente) //Comprotamientos de l
             $("#sendwhap").addClass('disabled_link3');
 
             UpdateEstadoCita(idestado, idcita, html, textEstado );
+            break;
+
+        default:
+
             break;
 
 
@@ -336,7 +338,7 @@ function create_plandetratamiento($idpaciente, $idcitadet, $iddoct, $html)
 
     });
 
-    loadtableAgenda(doctor, estados); //reload table agenda
+    loadtableAgenda(); //reload table agenda
 }
 
 function keyemail_invalic()
@@ -430,21 +432,62 @@ function UpdateCitasCommentAdicional(iddetcita)
     }
 }
 
+$('#pacientes_habilitados , #pacientes_desabilitados').change(function() {
+
+    var dataPacientes = [];
+
+    var url = $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php";
+
+    var pamarts = { 'accion':'pacientes_activodesact', 'ajaxSend':'ajaxSend', 'habilitado': $('#pacientes_habilitados').prop('checked') , 'desabilitado':$('#pacientes_desabilitados').prop('checked') };
+
+    var puede = 0;
+
+    if( $('#pacientes_habilitados').prop('checked') ){
+        puede++;
+    }
+    if( $('#pacientes_desabilitados').prop('checked') ){
+        puede++;
+    }
+
+
+    if( puede > 0){
+
+        var option = "";
+        $.get(url , pamarts ,  function (data) {
+
+            dataPacientes = $.parseJSON(data);
+
+            // $('#buscarxPaciente').empty();
+
+            $.each(dataPacientes, function(i, item) {
+                console.log(item);
+                option += '<option value="'+item.id+'">'+item.text+'</option>';
+            });
+
+            $('.buscarxPaciente').html( option );
+
+            $('#buscarxPaciente').select2({
+                placeholder:'buscar pacientes' ,
+                // language:'es'
+            });
+
+        });
+
+    }
+
+});
+
+
 //APLICAR FILTRO DE BUSQUEDA O LIMPIAR
 $(".aplicar").click(function() {
 
-    loadtableAgenda($('#filtro_doctor').find(':selected').val(), $('#filtroEstados').val());
-    console.log(estados);
-
-    //Aplicar Cambios citas diarias global
-    list_global_diaria_citas();
-
+    loadtableAgenda();
 });
 
 //MOSTRAR CITAS ELIMINADAS O CANCELADAS
 $('#listcitasCanceladasEliminadas').change(function(){
 
-    loadtableAgenda( $('#filtro_doctor').find(':selected').val(), $('#filtroEstados').val() );
+    loadtableAgenda();
 
 });
 
@@ -453,7 +496,7 @@ $(".limpiar").click(function() {
 
     $("#filtro_doctor").val(null).trigger('change');
     $('#filtroEstados').val(null).trigger('change');
-    loadtableAgenda(doctor, estados);
+    loadtableAgenda();
 
 });
 
@@ -525,33 +568,31 @@ $(document).ready(function() {
 
 
 
-    loadtableAgenda(doctor, estados);
+    loadtableAgenda();
 
-    $('[name="especialidad['+0+'].detalle"]').select2({
-        placeholder:"Seleccione una especialidad",
-        allowClear: true,
-        language:"es"
+    NOTIFICACION_CITAS_NUMEROS(null);
+
+    $('.filtrar_doctor').select2({
+        placeholder: 'Seleccionar un doctor',
+        // allowClear:true,
+        language:'es',
     });
 
-    $('[name="duraccion['+0+'].detalle"]').select2({
-        placeholder:"Seleccione una especialidad",
+    $('#pacienteCita').select2({
+        placeholder: 'Pacientes',
         allowClear: true,
-        language:"es"
+        language:'es'
     });
 
-    $('[name="hora['+0+'].detalle"]').select2({
-        placeholder:"Seleccione una especialidad",
-        allowClear: true,
-        language:"es"
+    $('.filtrar_estados').select2({
+        placeholder:'Seleccione estados cita'
     });
 
-    $('[name="doctor['+0+'].detalle"]').select2({
-        placeholder:"Seleccione una especialidad",
-        allowClear: true,
-        language:"es"
+    $('#buscarxPaciente').select2({
+        placeholder:'buscar pacientes',
+        // language:'es',
     });
 
-    NOTIFICACION_CITAS_NUMEROS(0);
 
-    inputs_lib();
+
 });

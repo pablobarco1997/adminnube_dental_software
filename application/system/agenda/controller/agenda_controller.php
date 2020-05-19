@@ -43,13 +43,17 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
         case 'listCitas':
 
-            $estados = GETPOST("estados");
-            $doctor  = GETPOST("doctor");
-            $fecha   = GETPOST("fecha");
-            $MostrarCitasCanceladasEliminadas = GETPOST('eliminada_canceladas');
+            $estados                            = GETPOST("estados");
+            $doctor                             = GETPOST("doctor");
+            $fecha                              = GETPOST("fecha");
+            $MostrarCitasCanceladasEliminadas   = GETPOST('eliminada_canceladas');
+            $citasFuturas                       = GETPOST('citas_futuras'); #muesta citas futuras
 
-            $fechaInicio ="";
-            $fechaFin    ="";
+            $pacientes                          = GETPOST('buscar_xpaciente');
+
+            $fechaInicio        ="";
+            $fechaFin           ="";
+
             if(!empty($fecha))
             {
                 $fecha       = explode('-',GETPOST("fecha"));
@@ -58,12 +62,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             }
 
 //            print_r($fechaFin.'   '. $fechaInicio); die();
-            $numerosEstados="";
-            if(is_array($estados)){
-                $numerosEstados = implode(',', $estados);
-            }
 
-            $rows = list_citas($doctor,$numerosEstados, $fechaInicio, $fechaFin, $MostrarCitasCanceladasEliminadas );
+            $rows = list_citas( $doctor, $estados, $fechaInicio, $fechaFin, $MostrarCitasCanceladasEliminadas, $pacientes );
 
             $output = [
                 'data' => $rows,
@@ -481,11 +481,79 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             echo json_encode($output);
             break;
+
+            #busca los pacientes habilitados y desavilitados
+        case 'pacientes_activodesact':
+
+            $hablitados    = GETPOST('habilitado');
+            $desabilitado  = GETPOST('desabilitado');
+
+            $result = [];
+            $sqlpaciente = "SELECT rowid , concat(nombre,' ',apellido) as nom FROM tab_admin_pacientes estado where rowid  > 0";
+            if($hablitados=="true"||$desabilitado=="true")
+            {
+                if($hablitados=="true"){
+                    $sqlpaciente .= " and estado = 'A' ";
+                }
+                if($desabilitado=="true"){
+                    $sqlpaciente .= " and estado = 'E' ";
+                }
+            }else{
+                $sqlpaciente .= " and rowid = 0";
+            }
+
+//            print_r($sqlpaciente);
+            $rs = $db->query($sqlpaciente);
+            if($rs && $rs->rowCount()>0)
+            {
+                while ($obj = $rs->fetchObject() )
+                {
+                    $result[] = array( 'id' => $obj->rowid , 'text' => $obj->nom );
+                }
+            }
+
+//            print_r($result); die();
+            echo json_encode($result);
+            break;
+
+        case 'consultar_estado_cita_atrazada':
+
+            $idcita = GETPOST('idcita');
+            $result = "";
+
+            $sqlcitaAtrzada = "
+                    SELECT 
+                     -- validaciones
+                     -- citas atrazados con estado no confirmado
+                     d.rowid , 
+                     IF( now() > CAST(d.fecha_cita AS DATETIME)  
+                                && d.fk_estado_paciente_cita in(2,1,3,4,7,8,9,10)  , 
+                                    concat('Atrazada ', (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) , 
+                                            '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , ''
+                                            ) as cita_atrazada
+                    FROM 
+                    tab_pacientes_citas_cab c , tab_pacientes_citas_det d
+                    WHERE c.rowid = d.fk_pacient_cita_cab AND d.rowid = $idcita limit 1";
+
+            $rsatrzada = $db->query($sqlcitaAtrzada);
+            if($rsatrzada)
+            {
+                $ob = $rsatrzada->fetchObject();
+
+                if( $ob->cita_atrazada != "" )
+                {
+                    $result = "atrazada";
+                }
+
+            }
+
+            echo json_encode(array( 'result' => $result ));
+            break;
     }
 
 }
 
-function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $MostrarCitasCanceladasEliminadas)
+function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $MostrarCitasCanceladasEliminadas, $paciente)
 {
 
     global $db, $permisos;
@@ -495,47 +563,67 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
     $fecha_hoy = date("Y-m-d");
 
 
-    $sql = "select 
-            d.fecha_cita  as fecha_cita,
-            d.hora_inicio , 
-            d.hora_fin ,
-            d.rowid  as id_cita_det,
+    $sql = "SELECT 
             
-            (select concat(p.nombre ,' ',p.apellido) from tab_admin_pacientes p where p.rowid = c.fk_paciente) as paciente,
-            (select rowid from tab_admin_pacientes p where p.rowid = c.fk_paciente) as idpaciente,
-            (select telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil,
-            
-            (select concat(o.nombre_doc,' ', o.apellido_doc) from tab_odontologos o where o.rowid = d.fk_doc) as doct ,
-            (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as estado,
-            (select s.color from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as color,
-            d.fk_estado_paciente_cita , 
-            c.comentario ,
-            ifnull((select es.nombre_especialidad FROM tab_especialidades_doc es where es.rowid = d.fk_especialidad),'General') as especialidad,
-            
-            (select p.telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil,
-            
-            d.fk_doc as iddoctor , 
-            (select p.email from tab_admin_pacientes p where p.rowid = c.fk_paciente) as email, 
-            d.comentario_adicional as comentario_adicional,
-            c.fk_paciente as idpaciente  ,
-            
-             -- validaciones
-             
-             -- citas atrazados con estado no confirmado
-             IF( now() > CAST(d.fecha_cita AS DATETIME)   && d.fk_estado_paciente_cita in(2,1,3,4,7,8,9,10)  , concat('Atrazada NO CONFIRMADO ', '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , '') as cita_atrazada
-                        
-         from 
+                    d.fecha_cita  as fecha_cita,
+                    
+                    d.hora_inicio , 
+                    
+                    d.hora_fin ,
+                    
+                    d.rowid  as id_cita_det,
+                    
+                    (select concat(p.nombre ,' ',p.apellido) from tab_admin_pacientes p where p.rowid = c.fk_paciente) as paciente,
+                    
+                    (select rowid from tab_admin_pacientes p where p.rowid = c.fk_paciente) as idpaciente,
+                    
+                    (select telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil,
+                    
+                    (select concat(o.nombre_doc,' ', o.apellido_doc) from tab_odontologos o where o.rowid = d.fk_doc) as doct ,
+                    
+                    (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as estado,
+                    
+                    (select s.color from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) as color,
+                    
+                    d.fk_estado_paciente_cita , 
+                    
+                    c.comentario ,
+                    
+                    ifnull((select es.nombre_especialidad FROM tab_especialidades_doc es where es.rowid = d.fk_especialidad),'General') as especialidad,
+                    
+                    (select p.telefono_movil from tab_admin_pacientes p where p.rowid = c.fk_paciente) as telefono_movil,
+                    
+                    d.fk_doc as iddoctor , 
+                    
+                    (select p.email from tab_admin_pacientes p where p.rowid = c.fk_paciente) as email, 
+                    
+                    d.comentario_adicional as comentario_adicional,
+                    
+                    c.fk_paciente as idpaciente  ,
+                    
+                     -- validaciones
+                     -- citas atrazados con estado no confirmado
+                     IF( now() > CAST(d.fecha_cita AS DATETIME)  
+                                && d.fk_estado_paciente_cita in(2,1,3,4,7,8,9,10)  , 
+                                    concat('Atrazada ', (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) , 
+                                            '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , ''
+                                            ) as cita_atrazada
+									
+									            
+         FROM 
+         
              tab_pacientes_citas_cab c , tab_pacientes_citas_det d
+             
              where c.rowid = d.fk_pacient_cita_cab ";
 
     if(!empty($doctor))
     {
-        $sql .= " and d.fk_doc = ".$doctor;
+        $sql .= " and d.fk_doc in(".$doctor.")";
     }
 
     if(!empty($estado))
     {
-        $sql .= " and d.fk_estado_paciente_cita in($estado)";
+        $sql .= " and d.fk_estado_paciente_cita in(".$estado.") ";
     }
 
     if(!empty($fechaInicio) && !empty($fechaFin))
@@ -548,9 +636,15 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
         $sql .= " and d.estado = 'E' or  d.fk_estado_paciente_cita = 9 ";
     }
 
+    if(!empty($paciente))
+    {
+        $sql .= " and c.fk_paciente in($paciente) ";
+    }
+
     $sql .= " order by d.fecha_cita desc ";
 
     $sql .= " ".$permisos->consultar;
+
 //    echo '<pre>'; print_r($sql); die();
     $rs = $db->query($sql);
 
@@ -743,6 +837,10 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
                     </div>";
 
             $row[] = $html6;
+
+
+            #estado id
+            $row[] = $acced->fk_estado_paciente_cita;
 
             $data[] = $row;
 

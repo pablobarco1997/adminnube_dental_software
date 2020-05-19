@@ -109,22 +109,3 @@ if(isset($_GET['view']))
     $keyGlobal                 = "<?= KEY_GLOB ?>"; //KEY GLOBAL
 
 </script>
-
-<script src="<?php echo DOL_HTTP .'/application/system/agenda/js/lista_diaria_global.js';?>"></script>
-
-<!--INGRESO DE SCRIPTS-->
-<?php
-
-    #lista de agendas
-    if(isset($_GET['list']))
-    {
-        echo ($_GET['list']=="diaria") ? '<script src="'.DOL_HTTP.'/application/system/agenda/js/agent.js"></script>' : '';
-    }
-
-    #agendar citas
-    if($view == 'agendadd')
-    {
-        echo '<script src="'.DOL_HTTP.'/application/system/agenda/js/agentcreate.js"></script>';
-    }
-
-?>

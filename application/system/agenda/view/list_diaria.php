@@ -41,7 +41,7 @@
         transform: rotateZ(45deg);
     }
     .custom-checkbox-myStyle input[type="checkbox"]:checked + label:before {
-        border-color: #212f3d;
+        border-color: #15528A;
         background: #15528A;
     }
     .custom-checkbox-myStyle input[type="checkbox"]:checked + label:after {
@@ -87,3 +87,15 @@
     </div>
 
 </div>
+
+
+
+<?php
+
+#lista de agendas
+if(isset($_GET['list']))
+{
+    echo ($_GET['list']=="diaria") ? '<script src="'.DOL_HTTP.'/application/system/agenda/js/agent.js"></script>' : '';
+}
+
+?>

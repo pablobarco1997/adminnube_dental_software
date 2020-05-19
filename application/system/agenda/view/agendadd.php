@@ -283,3 +283,11 @@ if(isset($_GET['view']) && $_GET['view'] == 'agendadd'){
         </div>
     </div>
 </div>
+
+<?php
+#agendar citas
+if($view == 'agendadd')
+{
+    echo '<script src="'.DOL_HTTP.'/application/system/agenda/js/agentcreate.js"></script>';
+}
+?>
