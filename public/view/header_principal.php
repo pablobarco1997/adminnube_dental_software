@@ -48,7 +48,7 @@
     <script src="<?php echo DOL_HTTP.'/public/bower_components/jquery/dist/jquery.js'?>"></script>
     <!-- Bootstrap 3.4 -->
     <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/dist/js/bootstrap.js'?>"></script>
-    <script src="<?php echo DOL_HTTP .'/public/bower_components/bootstrap/js/popover.js'?>"></script>
+<!--    <script src="--><?php //echo DOL_HTTP .'/public/bower_components/bootstrap/js/popover.js'?><!--"></script>-->
     <!-- AdminLTE App -->
     <script src="<?php echo DOL_HTTP .'/public/js/adminlte.min.js'?>"></script>
     <!--datatable-->
@@ -76,6 +76,8 @@
     <!--Notificaiones lib-->
     <script src="<?php echo DOL_HTTP .'/public/js/notificaciones___lib.js' ?>"></script>
 
+<!--    font google para breadcrumb-->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400&display=swap" rel="stylesheet">
 
 </head>
 <style>

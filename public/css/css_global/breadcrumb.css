@@ -76,7 +76,7 @@
 .breadcrumb3 {
     list-style: none;
     overflow: hidden;
-    font-size: 11px;
+    font-size: 12px;
     /*margin: 40px;*/
     padding: 0;
 }
@@ -86,7 +86,7 @@
 .breadcrumb3 li a {
     color: white;
     text-decoration: none;
-    padding: 5px 0 5px 30px;
+    padding: 3px 0 3px 15px;
     background: #212f3d; /* fallback color */
     background: #212f3d;
     position: relative;
