@@ -109,7 +109,7 @@
         $(function() {
 
             var timeOut  = 1000;
-            var timeReal = 5000;
+            var timeReal = 3000;
 
             var url   = $DOCUMENTO_URL_HTTP + "/application/controllers/controller_peticiones_globales.php";
             var paramt = { 'ajaxSend':'ajaxSend', 'accion':'notification_'};
