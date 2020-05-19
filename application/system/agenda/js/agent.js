@@ -27,7 +27,7 @@ function loadtableAgenda()
         },
         'createdRow':function(row, data, index){
 
-            console.log(data[7]);
+            // console.log(data[7]);
 
             if( data[7] == 6){
                 $(row).css('backgroundColor','#58D68D');
@@ -494,6 +494,7 @@ $('#listcitasCanceladasEliminadas').change(function(){
 $(".limpiar").click(function() {
 
 
+    $("#buscarxPaciente").val(null).trigger('change');
     $("#filtro_doctor").val(null).trigger('change');
     $('#filtroEstados').val(null).trigger('change');
     loadtableAgenda();

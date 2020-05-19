@@ -147,6 +147,7 @@
         </div>
 
 <!--        OTRAS OPCIONES DE FILTRO  -->
+
         <div class="form-group col-xs-12 col-md-12 col-lg-12 collapse" id="contentFilter">
 
             <div class="form-group col-xs-12 col-md-4 col-sm-6">
@@ -158,8 +159,8 @@
             </div>
 
             <div class="form-group col-xs-12 col-md-4 col-sm-6">
-                <label for="filtrPlantram|">Plan de Tramamiento</label>
-                <select id="filtrPlantram" class="form-control select2_max_ancho">
+                <label for="filtrPlantram">Plan de Tramamiento</label>
+                <select id="filtrPlantram" class="form-control">
                     <?= $optionPlamtramFiltro ; ?>
                 </select>
             </div>
@@ -167,7 +168,9 @@
             <div class="form-group col-md-12 col-xs-12">
                 <a  class="btn btnhover btn-block" id="filtrar_evoluc" style="font-weight:  bolder; color: green">Buscar</a>
             </div>
+
         </div>
+
 <!--       END OPCIONES CREACION DE PLANDES DE TRATAMIENTO-->
 
 

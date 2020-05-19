@@ -124,6 +124,11 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             echo json_encode($output);
             break;
 
+        case 'notification_':
+
+
+            break;
+
     }
 
 }

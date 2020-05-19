@@ -24,9 +24,12 @@
 
 <!--    datatable-->
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/datatable/datatables.net-bs/css/dataTables.bootstrap.css'?>">
-<!--    select2-->
+
+    <!--    select2-->
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/select2/select2-bootstrap.css' ?>" >
     <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/select2/select2.css' ?>" >
+
+
 <!--    sweetarlert2 -->
     <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.css'?> ">
 <!--    input search css-->
@@ -54,9 +57,12 @@
     <!--datatable-->
     <script src="<?php echo DOL_HTTP .'/public/bower_components/datatable/datatables.net/js/jquery.dataTables.js'?>"></script>
     <script src="<?php echo DOL_HTTP .'/public/bower_components/datatable/datatables.net-bs/js/dataTables.bootstrap.js'?>"></script>
+
     <!--select2-->
     <script src="<?php echo DOL_HTTP .'/public/bower_components/select2/select2.js'?>"></script>
     <script src="<?php echo DOL_HTTP .'/public/bower_components/select2/select2_locale_es.js'?>"></script>
+<!--    <script src="--><?php //echo DOL_HTTP .'/public/bower_components/select2-4.1.0beta/dist/js/select2.full.min.js'?><!--"></script>-->
+
     <!-- sweetalert2 -->
     <script src="<?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.all.js'?>" ></script>
     <!--    mask-->

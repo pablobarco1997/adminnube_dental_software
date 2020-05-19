@@ -98,3 +98,41 @@
     </ul>
 
 </li>
+
+<!--NOTIFICACIONES EN TIEMPO REAL-->
+<script>
+
+    $( window ).on("load", function() {
+
+        // console.log('ready done');
+
+        $(function() {
+
+            var timeOut  = 1000;
+            var timeReal = 5000;
+
+            var url   = $DOCUMENTO_URL_HTTP + "/application/controllers/controller_peticiones_globales.php";
+            var paramt = { 'ajaxSend':'ajaxSend', 'accion':'notification_'};
+
+            setTimeout(function() {
+
+                $.get(url, paramt )
+                    .done(function(data) {
+                        console.log(data);
+                    });
+
+            },timeOut);
+
+            setInterval(function () {
+
+                $.get(url, paramt , function(data){
+                    console.log(data);
+                });
+
+            },timeReal);
+
+        });
+
+    });
+
+</script>
