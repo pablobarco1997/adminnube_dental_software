@@ -35,6 +35,12 @@ if(isset($_GET['view']))
 
 </style>
 
+<script>
+    $DOCUMENTO_URL_HTTP        = "<?php echo DOL_HTTP ?>";
+    $HTTP_DIRECTORIO_ENTITY    = "<?php echo $conf->NAME_DIRECTORIO ?>";
+    $keyGlobal                 = "<?php echo KEY_GLOB   ?>"; //KEY GLOBAL
+</script>
+
 <!--header principal-->
 <?php include_once DOL_DOCUMENT .'/public/view/header_principal.php';?>
 
@@ -71,11 +77,6 @@ if(isset($_GET['view']))
 <?php include_once DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
 <?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
 
-<script>
-    $DOCUMENTO_URL_HTTP = "<?php echo DOL_HTTP ?>";
-    $HTTP_DIRECTORIO_ENTITY    = "<?php echo $conf->NAME_DIRECTORIO ?>";
-    $keyGlobal                 = "<?php echo KEY_GLOB   ?>"; //KEY GLOBAL
-</script>
 
 <script>
     var permisosConsultar    = "<?php $permisos->consultar; ?>";

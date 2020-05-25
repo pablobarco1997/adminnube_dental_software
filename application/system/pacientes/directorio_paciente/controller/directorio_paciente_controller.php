@@ -14,10 +14,10 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
     {
         case 'direct_pacient_list':
 
-            $estado = GETPOST('estado');
-            $data = array();
-            $sql = "SELECT * FROM tab_admin_pacientes WHERE rowid > 0 ";
+            $estado  = GETPOST('estado');
+            $data    = array();
 
+            $sql = "SELECT * FROM tab_admin_pacientes WHERE rowid > 0 ";
             if(!empty($estado))
             {
                 if($estado == 'E'){ $sql .= " and estado = 'E' "; }
@@ -42,11 +42,14 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     $token = tokenSecurityId($fila->rowid); #ME RETORNA UN TOKEN
                     $view  = "dop"; #view vista de datos personales admin pacientes
 
+                    #ruc cedula
+                    $RUC_CEDULA = (!empty($fila->ruc_ced))?$fila->ruc_ced:'no asignado';
+
                     $row[] = $fila->nombre;
                     $row[] = $fila->apellido;
                     #$row[] = "<a id='ruddni_link' class='link_pacientes_id' data-id='$fila->rowid' href='".DOL_HTTP."/application/system/pacientes/admin_paciente?view=form_datos_personales&id=$fila->rowid'>$fila->rut_dni</a>";
                     $row[] = "<a id='ruddni_link' class='link_pacientes_id' data-id='$fila->rowid' 
-                                    href='".DOL_HTTP."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token'> $fila->ruc_ced </a> ";
+                                    href='".DOL_HTTP."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token'> <b>$RUC_CEDULA</b> </a> ";
                     $row[] = $fila->email;
                     $row[] = (($fila->telefono_movil == "") ? "No asignado" : $fila->telefono_movil);
 

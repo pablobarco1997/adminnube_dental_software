@@ -38,9 +38,16 @@ if(isset($_GET['id']))
 
 //print_r($idPaciente);
 
-
-
 ?>
+
+<script>
+
+    $id_paciente               = "<?=  $idPaciente ?>"; //ID DE PACIENTE
+    $DOCUMENTO_URL_HTTP        = "<?=  DOL_HTTP ?>"; //URL  HTTP DOCUMENTO
+    $HTTP_DIRECTORIO_ENTITY    = "<?=  $conf->NAME_DIRECTORIO ?>";  //ENTIDAD DE LA EMPRESA PARA JAVASCRIPT
+    $keyGlobal                 = "<?=  GETPOST('key') ?>"; //KEY GLOBAL
+
+</script>
 
 <!--header principal-->
 <?php include_once DOL_DOCUMENT .'/public/view/header_principal.php';?>
@@ -90,15 +97,6 @@ if(isset($_GET['id']))
     </div>
 </div>
 
-<script>
-
-
-    $id_paciente               = "<?=  $idPaciente ?>"; //ID DE PACIENTE
-    $DOCUMENTO_URL_HTTP        = "<?=  DOL_HTTP ?>"; //URL  HTTP DOCUMENTO
-    $HTTP_DIRECTORIO_ENTITY    = "<?=  $conf->NAME_DIRECTORIO ?>";  //ENTIDAD DE LA EMPRESA PARA JAVASCRIPT
-    $keyGlobal                 = "<?=  GETPOST('key') ?>"; //KEY GLOBAL
-
-</script>
 
 <?php include_once DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
 <?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
