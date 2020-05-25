@@ -69,30 +69,36 @@ function loadtableAgenda()
 
 
 //Numero de citas
-function NOTIFICACION_CITAS_NUMEROS(tipo)
+function NOTIFICACION_CITAS_NUMEROS()
 {
 
-    var parametrs = [];
+    var parameters = {
+        "ajaxSend": "ajaxSend",
+        "accion"  : "numero_citas_pacientes_hoy",
+    };
 
-    if(tipo == 0) //Nuemero de citas
-    {
-        parametrs = {
-            "ajaxSend": "ajaxSend",
-            "accion"  : "Numero_Citas",
-        };
-    }
+    var url = $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php";
 
-    $.ajax({
-        url: $DOCUMENTO_URL_HTTP + "/application/system/agenda/controller/agenda_controller.php",
-        type:'POST',
-        data:parametrs,
-        dataType:'json',
-        async:false,
-        success: function(res) {
-            $("#numCitas").text(res);
-        }
+    $.get(url , parameters , function(data) {
+
+        var datos = $.parseJSON(data);
+
+        $("#numCitas").text( datos.result );
 
     });
+
+
+    setInterval(function(){
+
+        $.get(url , parameters , function(data) {
+
+            var datos = $.parseJSON(data);
+
+            $("#numCitas").text( datos.result );
+
+        });
+
+    },3500)
 }
 
 
@@ -567,11 +573,31 @@ $(document).ready(function() {
     });
 
 
+    /**PETICIONES EN TIEMPO REAL*/
+    var time_agenda;
 
+    function TimeRealAgenda() {
+
+        time_agenda = setInterval(function() {
+            loadtableAgenda();
+        },3000);
+    }
 
     loadtableAgenda();
 
-    NOTIFICACION_CITAS_NUMEROS(null);
+    //Cuando no me  coloque sobre la table realizara peticione en tiempo real
+    $('#tableAgenda thead , tbody').mouseleave(function(){
+        TimeRealAgenda();
+    });
+
+    //cuenado me coloque sobre la table STOP a peticiones en tiempo real
+    $('#tableAgenda thead , tbody').mouseleave(function(){
+        clearInterval(time_agenda);
+    });
+
+
+
+    NOTIFICACION_CITAS_NUMEROS();
 
     $('.filtrar_doctor').select2({
         placeholder: 'Seleccionar un doctor',

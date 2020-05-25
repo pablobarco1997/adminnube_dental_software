@@ -145,30 +145,33 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
 
             break;
 
-        case "Numero_Citas":
+        case "numero_citas_pacientes_hoy":
 
-            $numero=0;
+            $numero = 0;
 
             #NUMEROS DE CITAS PARA LA FECHA ACTUAL CON ESTADO NO CONFIRMADO - ID DEL ESTADO == 2
-            $sqlCount = "select 
-                            count(*) as nu
-                        from 
-                        tab_pacientes_citas_cab c , tab_pacientes_citas_det d ,  tab_pacientes_estado_citas s 
-                        where  c.rowid = d.fk_pacient_cita_cab and d.fk_estado_paciente_cita = s.rowid and c.rowid > 0 ";
-            $sqlCount .= " and d.fk_estado_paciente_cita = 2 and d.fecha_cita = '".date('Y-m-d')."' ";
-            $sqlCount .= " limit 1";
+            $sqlCount = "SELECT 
+                            COUNT(*) AS numeros_de_citas
+                        FROM
+                            tab_pacientes_citas_cab    c,
+                            tab_pacientes_citas_det    d,
+                            tab_pacientes_estado_citas s
+                        WHERE
+                            c.rowid = d.fk_pacient_cita_cab
+                                AND d.fk_estado_paciente_cita = s.rowid
+                                AND c.rowid > 0 ";
+            $sqlCount .= "  AND cast(d.fecha_cita  as date) = cast(NOW() as date) ";
+            $sqlCount .= "  AND d.fk_estado_paciente_cita not in(9,6,7,9) ";
+            $sqlCount .= "  LIMIT 1 ";
 
             $rs1 = $db->query($sqlCount);
-
             if($rs1->rowCount() > 0)
             {
-                $numero = $rs1->fetchObject()->nu;
+                $numero = $rs1->fetchObject()->numeros_de_citas;
             }
 
-//            print_r($sqlCount);
-//            die();
+            echo json_encode( array('result' => $numero) );
 
-            echo json_encode($numero);
             break;
 
         case "consul_hora_fecha_listglobal":
@@ -525,16 +528,35 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                     SELECT 
                      -- validaciones
                      -- citas atrazados con estado no confirmado
-                     d.rowid , 
-                     IF( now() > CAST(d.fecha_cita AS DATETIME)  
-                                && d.fk_estado_paciente_cita in(2,1,3,4,7,8,9,10)  , 
-                                    concat('Atrazada ', (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) , 
-                                            '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , ''
-                                            ) as cita_atrazada
+                     d.rowid,
+                     
+                     IF(NOW() > CAST(d.fecha_cita AS DATETIME),
+                         CONCAT('Atrazada ',
+                                      (SELECT 
+                                           CONCAT(s.text)
+                                        FROM
+                                            tab_pacientes_estado_citas s
+                                        WHERE
+                                        s.rowid = d.fk_estado_paciente_cita
+                                      ),
+                                '<br> Fecha : ',
+                                DATE_FORMAT(d.fecha_cita, '%Y/%m/%d'),
+                                '<br>Hora: ',
+                                d.hora_inicio,
+                                ' a ',
+                                d.hora_fin
+                                ),
+                                
+                            '') AS cita_atrazada
+                        
                     FROM 
-                    tab_pacientes_citas_cab c , tab_pacientes_citas_det d
-                    WHERE c.rowid = d.fk_pacient_cita_cab AND d.rowid = $idcita limit 1";
+                    tab_pacientes_citas_cab c , 
+                    tab_pacientes_citas_det d
+                    WHERE 
+                    c.rowid = d.fk_pacient_cita_cab 
+                    AND d.rowid = $idcita limit 1";
 
+//            echo '<pre>'; print_r($sqlcitaAtrzada); die();
             $rsatrzada = $db->query($sqlcitaAtrzada);
             if($rsatrzada)
             {
@@ -604,7 +626,7 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
                      -- validaciones
                      -- citas atrazados con estado no confirmado
                      IF( now() > CAST(d.fecha_cita AS DATETIME)  
-                                && d.fk_estado_paciente_cita in(2,1,3,4,7,8,9,10)  , 
+                                && d.fk_estado_paciente_cita in(2,1,3,4,7,8,9,10,5)  , 
                                     concat('Atrazada ', (select concat(s.text) from tab_pacientes_estado_citas s where s.rowid = d.fk_estado_paciente_cita) , 
                                             '<br> Fecha : ' , date_format(d.fecha_cita, '%Y/%m/%d') , '<br>Hora: ' , d.hora_inicio ,' a ' , d.hora_fin) , ''
                                             ) as cita_atrazada
@@ -664,7 +686,8 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
 
 
 
-            $numeroCita = "<img  src='". DOL_HTTP. "/logos_icon/logo_default/cita-medica.png' class=' img-sm img-rounded'  >  -";
+            #numero o codigo de cita
+            $numeroCita = "<img  src='". DOL_HTTP. "/logos_icon/logo_default/cita-medica.ico' class=' img-sm img-rounded'  >  -";
             $row[] = $numeroCita . str_pad($acced->id_cita_det, 5, "0", STR_PAD_LEFT);
 
             $html1 = "";
@@ -682,6 +705,8 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
             #ID IMPORTANTE YA QUE ES UN TOKEN CREADO COMO UN ID DE LA CITAS GENERADO EN UN BINARIO HEXADECIMAL
             $token = tokenSecurityId( $acced->idpaciente); #ME RETORNA UN TOKEN
             $view  = "dop"; #view vista de datos personales admin pacientes
+
+            #url datos personales
             $Url_datospersonales = DOL_HTTP ."/application/system/pacientes/pacientes_admin?view=$view&key=".KEY_GLOB."&id=$token";
 
             $html2 = "";
@@ -707,12 +732,12 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
                                     $tieneComentarioadicional = "disabled_link3";
                                 }
 
-                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' class='$tienePlanTratamiento' onclick='create_plandetratamiento($acced->idpaciente, $acced->id_cita_det, $acced->iddoctor , $(this));'  >Plan de Tratamiento</a> </li>";
-                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". DOL_HTTP ."/application/system/pacientes/pacientes_admin/?view=pagospaci&key=".KEY_GLOB."&id=". tokenSecurityId($acced->idpaciente) ."&v=paym' >Recaudación</a> </li>";
-                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.1rem;' href='". $Url_datospersonales ."' >Datos personales</a> </li>";
-                                $html2 .= "<li class='hide'>   <a style='cursor: pointer; font-size: 1.1rem;' >Cambiar  fecha/cita</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.2rem;' class='$tienePlanTratamiento' onclick='create_plandetratamiento($acced->idpaciente, $acced->id_cita_det, $acced->iddoctor , $(this));'  >Plan de Tratamiento</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.2rem;' href='". DOL_HTTP ."/application/system/pacientes/pacientes_admin/?view=pagospaci&key=".KEY_GLOB."&id=". tokenSecurityId($acced->idpaciente) ."&v=paym' >Recaudación</a> </li>";
+                                $html2 .= "<li>   <a style='cursor: pointer; font-size: 1.2rem;' href='". $Url_datospersonales ."' >Datos personales</a> </li>";
+                                $html2 .= "<li class='hide'>   <a style='cursor: pointer; font-size: 1.2rem;' >Cambiar  fecha/cita</a> </li>";
 
-                                $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.1rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det, $(this))' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
+                                $html2 .= "<li>   <a  style='cursor: pointer; font-size: 1.2rem;' data-toggle=\"modal\" data-target=\"#modal_coment_adicional\" onclick='clearModalCommentAdicional($acced->id_cita_det, $(this))' class='$tieneComentarioadicional'  >Agregar Comentario Adicional</a> </li>";
 
                          $html2 .= "</ul>";
                     $html2 .= "</div> 
@@ -810,11 +835,11 @@ function list_citas($doctor, $estado = array(),  $fechaInicio, $fechaFin, $Mostr
 
                                 if($acced->fk_estado_paciente_cita == $rowxs->rowid )//muestra la cita con el estado seleccionado
                                 {
-                                    $html3 .= "<li> <a class='activeEstadoCita' $todosdata   style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a> </li>";
+                                    $html3 .= "<li> <a class='activeEstadoCita' $todosdata   style='cursor: pointer; font-size: 1.2rem;' >$rowxs->text</a> </li>";
                                 }
                                 else{
 
-                                    $html3 .= "<li> <a class=' $addclases '  data-text='$rowxs->text' $todosdata  onclick='EstadosCitas($rowxs->rowid, $acced->id_cita_det, $(this), $acced->idpaciente)' style='cursor: pointer; font-size: 1.1rem;' >$rowxs->text</a> </li>";
+                                    $html3 .= "<li> <a class=' $addclases '  data-text='$rowxs->text' $todosdata  onclick='EstadosCitas($rowxs->rowid, $acced->id_cita_det, $(this), $acced->idpaciente)' style='cursor: pointer; font-size: 1.2rem;' >$rowxs->text</a> </li>";
 
                                 }
                             }

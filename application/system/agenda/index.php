@@ -29,9 +29,19 @@ if(isset($_GET['view']))
 ?>
 
 
+<!--SCRIPT-->
+<script>
+
+    $DOCUMENTO_URL_HTTP        = "<?= DOL_HTTP ?>";
+    $keyGlobal                 = "<?= KEY_GLOB ?>"; //KEY GLOBAL
+
+</script>
+
+
 <!--header principal-->
 <?php include_once DOL_DOCUMENT .'/public/view/header_principal.php';?>
 <link rel="stylesheet" href="<?= DOL_HTTP .'/application/system/agenda/css/dropdown_hovereffect.css'?>">
+
 
 <div class="wrapper">
     <!-- Main Header -->
@@ -101,11 +111,3 @@ if(isset($_GET['view']))
 </div>
 <?php include_once DOL_DOCUMENT.'/public/view/modal_search_paciente.php'?>
 <?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
-
-<!--SCRIPT-->
-<script>
-
-    $DOCUMENTO_URL_HTTP        = "<?= DOL_HTTP ?>";
-    $keyGlobal                 = "<?= KEY_GLOB ?>"; //KEY GLOBAL
-
-</script>
