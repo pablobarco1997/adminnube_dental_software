@@ -113,19 +113,17 @@ function passwordMostrarOcultar( por )
     }
 }
 
-function fetchUsuario(id)
+function fetchUsuarioRepetido($paramet_usuario)
 {
     var url = $DOCUMENTO_URL_HTTP + '/application/system/configuraciones/controller/conf_controller.php';
-    var pamarts = { 'ajaxSend':'ajaxSend' , 'accion':'infoUsuarioOdontic' , 'idmodusu' : id, 'cual':'objecto' };
+    // var pamarts = { 'ajaxSend':'ajaxSend' , 'accion':'infoUsuarioOdontic' , 'idmodusu' : id, 'cual':'objecto' };
+    var pamarts = { 'ajaxSend':'ajaxSend' , 'accion':'consultar_usuario' , 'paramUsuario':$paramet_usuario };
 
     var objUsuario = null;
     $.get(url  , pamarts, function(data){
         objUsuario = $.parseJSON(data);
-        return objUsuario;
+
     });
-
-
-    return objUsuario;
 }
 
 

@@ -215,16 +215,18 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
             }
             $rs = $db->query($sql);
 
-            if($rs->rowCount()>0){ #si encuentro Usuario
-
-                if($subaccion=='doct_usuario'){
+            if($rs->rowCount()>0)
+            {
+                #si encuentro Usuario
+                if($subaccion=='doct_usuario')
+                {
                     $error = "Este Doctor ya tiene asociado un Usuario";
                 }
-                if($subaccion=='usuario_rep'){
-
+                if($subaccion=='usuario_rep')
+                {
                     $error = "Este Usuario ya se encuentra en Uso, Ingrese un Usuario que no este en Uso";
-
-                    if(empty($error)){
+                    if(empty($error))
+                    {
                         $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
                         $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
 //                      print_r('aki'); die();
@@ -291,8 +293,8 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
                 else{
 
                     //
-//                $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
-//                $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
+                    $Entidad_Login = new CONECCION_ENTIDAD(); //OBTENGO LAS FUNCIONES DE LA FUNCION PRINCIPAL
+                    $error = $Entidad_Login->COMPROBAR_USUARIO_REPETIDO( GETPOST('usuario') , $idEntidad );  #compruebo el usuario global
 
                     $sql = "INSERT INTO `tab_login_users` (`usuario`, `passwords` ,`fk_doc`, `permisos`, `tipo_usuario`, `passwor_abc`, `cedula`) ";
                     $sql .= "VALUES(";

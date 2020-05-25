@@ -24,19 +24,25 @@ if(isset($_SESSION['is_open']))
     <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.css'?> ">
 
     <link rel="stylesheet" href=" <?php echo DOL_HTTP .'/public/css/css_global/lib_glob_style.css'?> ">
+    <!-- Font Awesome -->
+    <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/font-awesome/css/font-awesome.min.css'?>">
+    <!-- Ionicons -->
+    <link rel="stylesheet" href="<?php echo DOL_HTTP .'/public/bower_components/Ionicons/css/ionicons.min.css'?>">
+
     <!--    font google-->
-    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">
-    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/css?family=Roboto|Varela+Round">-->
+<!--    <link rel="stylesheet" href="https://fonts.googleapis.com/icon?family=Material+Icons">-->
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 
     <link rel="shortcut icon" href=" <?= DOL_HTTP .'/application/system/login/img/dental_icon.png' ?>" type="image/x-icon" >
     <title>Login</title>
+
 </head>
 <style>
 
     *{
-        font-family: 'Varela Round', sans-serif;
 
-
+        font-family: 'Roboto', sans-serif;
     }
     body{
         /*background-image: url("*/<?php //echo DOL_HTTP .'/application/system/login/img/photo_main.jpg'?>/*");*/
@@ -49,7 +55,7 @@ if(isset($_SESSION['is_open']))
         /*background-color: #EBEDEF;*/
         padding: 5px;
         border: none;
-        font-weight: bolder;
+        /*font-weight: bolder;*/
     }
     .form-uic{
         width: 100%;
@@ -116,7 +122,7 @@ if(isset($_SESSION['is_open']))
 
                     <div class="form-group">
                         <div class="col-3">
-                            <label for="usu" style="font-weight: bolder; font-size: 1.8rem">USUARIO</label>
+                            <label for=""> <i class="fa fa-2x fa-fw fa-user"></i> </label>
                             <input class="effect-2 outlogintext" type="text" placeholder="Ingrese su Usuario" id="usu">
                             <span class="focus-border"></span>
                             <small style="color: red;" id="msg_usuario"></small>
@@ -125,7 +131,7 @@ if(isset($_SESSION['is_open']))
 
                     <div class="form-group">
                         <div class="col-3">
-                            <label for="pass" style="font-weight: bolder; font-size: 1.8rem" >PASSWORD</label>
+                            <label for=""> <i class="fa fa-2x fa-fw fa-unlock-alt"></i> </label>
                             <input class="effect-2 outlogintext" type="password" placeholder="Ingrese su Password" id="pass">
                             <span class="focus-border"></span>
                             <small style="color: red;" id="msg_password"></small>
@@ -135,8 +141,7 @@ if(isset($_SESSION['is_open']))
                 </div>
 
                 <div style="width: 100%;  " >
-                    <input type="button" id="btn_logearse" value="LOGIN" class="btn btnlogin"
-                           style="width: 100%;height: 50px;   !important; font-size: 1.5rem; font-weight: bolder; background-color: #00a157; color: #ffffff; outline: none" >
+                    <input type="button" id="btn_logearse" value="LOGIN" class="btn btnlogin"  style="width: 100%;height: 50px;   !important; font-size: 1.5rem; background-color: #00a157; color: #ffffff; outline: none" >
                 </div>
 
             </div>
@@ -153,6 +158,7 @@ if(isset($_SESSION['is_open']))
 <script src="../../../public/bower_components/jquery/dist/jquery.js"></script>
 <script src="../../../public/bower_components/bootstrap/dist/js/bootstrap.js"></script>
 <script src="<?php echo DOL_HTTP .'/public/lib/sweetalert2/sweetalert2.js'?>" ></script>
+
 <script>
 
     function logearse()
@@ -180,12 +186,12 @@ if(isset($_SESSION['is_open']))
 
                 }else{
 
-                    Swal.fire({
-                        type:  'error',
-                        title: 'Oops...',
-                        text:  ' Ocurrió un error, No se encontro el USUARIO: ' + $('#usu').val() + ' , compruebe la información antes de Iniciar Session ' + '',
-                        // footer: '<a href>Why do I have this issue?</a>'
-                    });
+                    var text = " <i class='fa fa-fw fa-user'></i> Usuario: " + $('#usu').val() + " <br> " +
+                        "<b>" +
+                        "<small> usuario no encontrado <br> <span class=''> compruebe la información antes de iniciar <i class='fa fa-fw fa-times-circle'></i> </span> </small>" +
+                        "</b>";
+
+                    Swal.fire('Error' , text, 'error');
                 }
             }
 
