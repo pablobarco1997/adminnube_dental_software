@@ -25,12 +25,89 @@ function Actulizar_notificacion_citas(idcita)
         dataType:'json',
         async: false,
         success:function (resp) {
-            if(resp.error == ""){
+
+            if(resp.error == "")
+            {
                 location.reload(true);
             }
+
         }
+
     });
 }
+
+
+// CONSULTAR CITAS TIEMPO REAL
+
+var interval_notification;
+
+
+var timeOut  = 1000;
+var timeReal = 4000;
+
+var url    = $DOCUMENTO_URL_HTTP + "/application/controllers/controller_peticiones_globales.php";
+var paramt = { 'ajaxSend':'ajaxSend', 'accion':'notification_'};
+
+setTimeout(function() {
+
+    $.get(url, paramt , function(data) {
+
+        var HTML = $.parseJSON(data);
+        Htmlnotificacion( HTML.data, HTML.N_noti );
+    });
+
+},timeOut);
+
+interval_notification = setInterval(function () {
+
+    $.get(url, paramt , function(data){
+
+        var HTML = $.parseJSON(data);
+        Htmlnotificacion( HTML.data, HTML.N_noti );
+
+    });
+
+},timeReal);
+
+$( window ).on("load", function() {
+
+    $('.notiflist , .media').mouseleave(function() {
+
+        interval_notification = setInterval(function(){
+
+            $.get(url, paramt , function(data){
+
+                var HTML = $.parseJSON(data);
+                Htmlnotificacion( HTML.data, HTML.N_noti );
+            });
+
+        },timeReal);
+
+    });
+
+    $('.notiflist , .media').mouseenter(function() {
+        clearInterval( interval_notification );
+    });
+
+
+});
+
+
+function Htmlnotificacion( $data , $N )
+{
+    // console.log( $data );
+
+    $('.notiflist').html( $data );
+
+    $('#N_Notificaciones').text( ($N==0)?0:$N );
+    $('#N_noti').text( ($N==0)?0:$N );
+}
+
+
+
+
+
+
 
 
 // $('ul#menuNotificacion').click(function (e) {

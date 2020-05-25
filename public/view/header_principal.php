@@ -4,6 +4,7 @@
 <head>
     <meta charset="utf-8">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
+
     <title>DENTAL SOTFWARE</title>
 
     <link rel="shortcut icon" href="<?= !empty($conf->EMPRESA->INFORMACION->logo) ? DOL_HTTP.'/logos_icon/'.$conf->NAME_DIRECTORIO.'/'.$conf->EMPRESA->INFORMACION->logo :  DOL_HTTP .'/logos_icon/logo_default/icon_software_dental.png'?>" type = "image/x-icon">
@@ -42,8 +43,8 @@
 
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@300;400&display=swap" rel="stylesheet">
 
-
-
+    <!--    font google para breadcrumb-->
+    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400&display=swap" rel="stylesheet">
 
     <!-- REQUIRED JS SCRIPTS ===========================================================================================-->
 
@@ -82,8 +83,6 @@
     <!--Notificaiones lib-->
     <script src="<?php echo DOL_HTTP .'/public/js/notificaciones___lib.js' ?>"></script>
 
-<!--    font google para breadcrumb-->
-    <link href="https://fonts.googleapis.com/css2?family=Quicksand:wght@300;400&display=swap" rel="stylesheet">
 
 </head>
 <style>
@@ -115,6 +114,8 @@
 
 
 </style>
+
+
 <body class="skin-blue sidebar-mini sidebar-collapse">
 
 <!--LOADDING HTML CSS -->

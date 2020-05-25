@@ -127,10 +127,109 @@ if(isset($_GET['ajaxSend']) || isset($_POST['ajaxSend']))
         case 'notification_':
 
 
+            $notification = $conf->ObtnerNoficaciones($db, false);
+
+            $info = info_noti( $notification );
+
+//            echo '<pre>';
+//            print_r($notification);
+//            die();
+
+            $output = [
+              'data'   => $info ,
+              'N_noti' => $notification['numero']
+            ];
+
+            echo json_encode($output);
             break;
 
     }
 
 }
+
+
+function info_noti( $data = array() )
+{
+
+    global $conf;
+
+    $HTML = "";
+
+    foreach ($data['data'] as $key => $v)
+    {
+
+        #notificaciones de citas
+        if( $v->tipo_notificacion == 'NOTIFICAIONES_CITAS_PACIENTES' )
+        {
+
+
+            $hora_desde_A = substr($v->horaIni, 0, 5 ) ." A " . substr($v->horafin, 0, 5 ); //Corto
+
+            $HTML_CITAS_PACIENTES = "
+                                                <li style='margin-bottom: 2px; padding: 5px' class='listNotificacion' >
+                                                
+                                                    <div class='form-group col-md-12 col-xs-12 no-margin no-padding'>
+                                                        
+                                                        <div class='media' style='border-top: 1px solid #f4f4f4; padding:10px 10px'>
+                                                            <a class='pull-left'> <img src='".DOL_HTTP."/logos_icon/logo_default/cita-medica.ico' class='img-rounded img-md' alt=''> </a>
+                                                            <div class='media-body'>
+                                                            
+                                                                <div class='text-justify' style='font-size: 1.2rem;'>
+                                                                    <b>Doctor -   &nbsp;</b>".(strtoupper($v->doctor_cargo))."<br>
+                                                                    <b>Paciente - &nbsp;</b>".(strtoupper($v->nombe_paciente))."<br>
+                                                                    <b>Fecha -    &nbsp;</b>$v->fecha<br>
+                                                                    <b>Hora -     &nbsp;</b>$hora_desde_A<br>
+                                                                    
+                                                                    ";
+
+            $HTML_CITAS_PACIENTES               .= ($v->comment!='')?"<b>Comentario -</b>&nbsp;&nbsp; $v->comment":"";
+
+            $HTML_CITAS_PACIENTES .=    "
+                                                                    <button class='btn-sm btn btn-block btnhover' onclick='Actulizar_notificacion_citas($v->id_detalle_cita)' style='font-weight: bolder; color: green'>EN SALA DE ESPERA</button>
+                                                                </div>
+                                                               
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                    
+                                                </li>
+                                                
+                                        ";
+
+            $HTML .= $HTML_CITAS_PACIENTES;
+
+        }
+
+
+        #notificaiones x pacientes - confirmaciones de pacientes via email
+        if( $v->tipo_notificacion == 'NOTIFICACION_CONFIRMAR_PACIENTE' )
+        {
+            $HTML_NOTIFICACION_X_PACIENTES_EMAIL = "
+                                                <li style='margin-bottom: 2px; padding: 5px' class='listNotificacion' >
+                                                    <div class='form-group col-md-12 col-xs-12 no-margin no-padding'>
+                                                        <div class='media'>
+                                                            <a class='pull-left'> <img src='".DOL_HTTP."/logos_icon/".$conf->NAME_DIRECTORIO."/".$v->icon_paciente."' class='img-rounded img-md' alt=''> </a>    
+                                                            <div class='media-body'>
+                                                                <h5 class='media-heading'>
+                                                                    <b>Paciente -</b> &nbsp;&nbsp;   $v->paciente <br>
+                                                                    <b>información adicional -</b> &nbsp;&nbsp;   $v->accion <br>
+                                                                    <button class='btn-xs btn btn-block btnhover'  onclick='to_accept_noti_confirmpacient($v->id)' style='font-weight: bolder; color: green'>ACEPTAR</button> 
+                                                                </h5>
+                                                            </div>
+                                                        </div>
+                                                    </div>
+                                                </li>
+                                            ";
+
+            $HTML .= $HTML_NOTIFICACION_X_PACIENTES_EMAIL;
+        }
+
+
+    }
+
+    return $HTML;
+
+}
+
 
 ?>

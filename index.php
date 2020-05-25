@@ -22,6 +22,14 @@ if(isset($_GET['view']))
 global $conf, $db;
 ?>
 
+<script>
+
+    $DOCUMENTO_URL_HTTP        = "<?php echo DOL_HTTP ?>"; //URL  HTTP DOCUMENTO
+    $HTTP_DIRECTORIO_ENTITY    = "<?php echo $conf->NAME_DIRECTORIO ?>";
+    $keyGlobal                 = "<?php echo KEY_GLOB   ?>"; //KEY GLOBAL
+
+</script>
+
 <!--header principal-->
 <?php include_once DOL_DOCUMENT .'/public/view/header_principal.php';?>
 
@@ -47,13 +55,6 @@ global $conf, $db;
 <!--    footer principal-->
 <?php include_once DOL_DOCUMENT .'/public/view/footer_principal.php';?>
 
-<script>
-
-    $DOCUMENTO_URL_HTTP        = "<?php echo DOL_HTTP ?>"; //URL  HTTP DOCUMENTO
-    $HTTP_DIRECTORIO_ENTITY    = "<?php echo $conf->NAME_DIRECTORIO ?>";
-    $keyGlobal                 = "<?php echo KEY_GLOB   ?>"; //KEY GLOBAL
-
-</script>
 
 <?php
 

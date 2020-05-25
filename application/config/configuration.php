@@ -63,6 +63,9 @@
         #OBTENER NOTIFICACIONES DEL SISTEMA
         function ObtnerNoficaciones($db, $puedoAxu)
         {
+
+                $GlobNotificacion = array();
+
                 #ESTA VARIABLE CAPTURAR EL NUMERO DE NOTIFICACIONES QUE EXTIS
                 $numeroNotificaciones = 0;
 
@@ -134,6 +137,24 @@
                             'iddoctorcargo'         =>  $CitasConsult->iddoctorcargo,
                         );
 
+                        $GlobNotificacion[] = (object)array(
+
+                            'tipo_notificacion'     => 'NOTIFICAIONES_CITAS_PACIENTES' ,
+
+                            'fecha'                 => date('Y-m-d', strtotime( str_replace('-', '/', $CitasConsult->fecha_create))),
+                            'horaIni'               =>  $CitasConsult->hora_inicio,
+                            'horafin'               =>  $CitasConsult->hora_fin ,
+
+                            'nombe_paciente'        =>  $CitasConsult->nombre,
+                            'comment'               =>  $CitasConsult->comentario,
+                            'doctor_cargo'          =>  $CitasConsult->doctor_cargo,
+                            'icon'                  =>  $CitasConsult->icon,
+
+                            'id_detalle_cita'       =>  $CitasConsult->id_detalle_cita,
+                            'idpaciente'            =>  $CitasConsult->idpaciente,
+                            'iddoctorcargo'         =>  $CitasConsult->iddoctorcargo,
+                        );
+
                         $numeroNotificaciones++;
                     }
                 }
@@ -168,6 +189,15 @@
                             'id'                     => $NotiConfirmPacientes->rowid
                         );
 
+                        $GlobNotificacion[] = (object)array(
+                            'tipo_notificacion'      => 'NOTIFICACION_CONFIRMAR_PACIENTE' ,
+                            'paciente'               => $NotiConfirmPacientes->paciente ,
+                            'icon_paciente'          => $NotiConfirmPacientes->icon_paciente ,
+                            'accion'                 => $confirmacion   ,
+                            'tab'                    => 'tab_noti_confirmacion_cita_email',
+                            'id'                     => $NotiConfirmPacientes->rowid
+                        );
+
                         $numeroNotificaciones++;
                     }
                 }
@@ -179,8 +209,9 @@
 
                 );
 
+//                $GlobNotificacion = (object)array('NumeroNotificaciones' => $numeroNotificaciones);
 
-                return "";
+                return array('data' => $GlobNotificacion , 'numero' => $numeroNotificaciones);
 
 
         }

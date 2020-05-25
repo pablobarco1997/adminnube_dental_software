@@ -42,10 +42,11 @@
 
 
 
+<li class="header">NAVIGATION</li>
 
 
 
-<li class=" <?php if(isset($Active) && $Active =='inicio'){ echo 'disabled_link3'; } ?>">
+<li class=" <?php if(isset($Active) && $Active =='inicio'){ echo 'disabled_link3'; } ?> hide">
     <a href="#buscarPacienteModal" data-toggle="modal"><i class="fa fa-search"></i> <span>Buscar</span></a>
 </li>
 
